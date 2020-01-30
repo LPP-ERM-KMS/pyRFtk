@@ -1,29 +1,26 @@
 ################################################################################
 #                                                                              #
-# Copyright 2015, 2016, 2017, 2018, 2019, 2020                                 #
+# Copyright 2018-2020                                                          #
 #                                                                              #
 #                   Laboratory for Plasma Physics                              #
 #                   Royal Military Academy                                     #
 #                   Brussels, Belgium                                          #
 #                                                                              #
-#                   Fusion for Energy                                          #
-#                                                                              #
-#                   EFDA / EUROfusion                                          #
-#                                                                              #
-#                   ITER Organization                                          #
+#                   ITER Organisation                                          #
 #                                                                              #
 # Author : frederic.durodie@rma.ac.be                                          #
 #                          @gmail.com                                          #
 #                          @ccfe.ac.uk                                         #
 #                          @telenet.be                                         #
+#                          .lpprma@tlenet.be                                   #
 #                                                                              #
-# Licensed under the EUPL, Version 1.1 or – as soon they will be approved by   #
+# Licensed under the EUPL, Version 1.2 or – as soon they will be approved by   #
 # the European Commission - subsequent versions of the EUPL (the "Licence");   #
 #                                                                              #
 # You may not use this work except in compliance with the Licence.             #
 # You may obtain a copy of the Licence at:                                     #
 #                                                                              #
-# http://ec.europa.eu/idabc/eupl                                               #
+# https://joinup.ec.europa.eu/collection/eupl/eupl-text-11-12                  #
 #                                                                              #
 # Unless required by applicable law or agreed to in writing, software          #
 # distributed under the Licence is distributed on an "AS IS" basis,            #
@@ -33,9 +30,21 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2020-01-29 13:40:18'
-__version__ = '2019-03-25 for ITER contract WWS896'
+"""
+Created on 29 Jan 2020
 
-print('pyRFtk version :', __version__)
-print('       updated :', __updated__)
+@author: frederic
 
+"""
+
+from pyRFtk import TouchStoneClass3a as _ts
+
+tsf = _ts.TouchStone(filepath='../test data/Z_IterCY8vr2R_Low-4cm_RefTOP.s24p')
+print(tsf)
+tsf.COEFFS_PER_LINE=12
+print(tsf)
+tsf.COEFFS_PER_LINE=0
+print(tsf)
+
+  
+    

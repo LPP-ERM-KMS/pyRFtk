@@ -47,6 +47,11 @@ Frederic Durodie 2009-04-21
 | 19 Dec 19 | NEED TO CORRECT BUG FOR CONSEQUTIVE CALLS TO .Datas()               |
 |           |                                                                     |
 +-----------+---------------------------------------------------------------------+
+| 29 Jan 20 | added COEFFS_PER_LINE                                               |
+|           |   self.COEFFS_PER_LINE = 4 [default]                                |
++-----------+---------------------------------------------------------------------+
+| 15 Jan 20 | finally corrected reading (HFSS) of not normalized touchstone files |
++-----------+---------------------------------------------------------------------+
 | 28 Aug 19 | added reading (HFSS) of not normalized touchstone files             |
 +-----------+---------------------------------------------------------------------+
 | 08 Aug 19 | 1) refactor internal representation:                                |
@@ -114,7 +119,7 @@ Frederic Durodie 2009-04-21
 
 """
 
-__updated__ = '2020-01-20 15:04:15'
+__updated__ = '2020-01-29 11:58:13'
 
 
 #===============================================================================
@@ -221,6 +226,8 @@ class TouchStone:
     """
 
     def __init__(self,filepath=None,tformat=None, data=None, **kwargs):
+        
+        self.COEFFS_PER_LINE = 4
         
         # override/set portnames
         portnames = kwargs.pop('portnames', [])
@@ -393,7 +400,9 @@ class TouchStone:
             n = len(('%'+freq_frac) % np.max(self.freqs))
             freq_fmt = ('%%%d' % n) + freq_frac + ' '
             freq_fmt_len = n + 1
-            
+        
+        CN = self.COEFFS_PER_LINE
+        CN = self.nports if CN == 0 else CN
         for fk, d in zip(self.freqs, self.datas):
             s += freq_fmt % fk
 
@@ -409,8 +418,8 @@ class TouchStone:
                     else: # can only be MA
                         s += '   %+17.7e %+8.3f' % (np.abs(dij),np.angle(dij,1))
                         
-                    if (kc % 4 is 3) and (kc is not self.nports-1):
-                        if kc is 3:
+                    if (kc % CN is (CN-1)) and (kc is not self.nports-1):
+                        if kc is (CN-1):
                             s += ' !    row %d' % (kr+1)
                         s += '\n'+' '*freq_fmt_len
                 s += '\n'
@@ -1590,7 +1599,8 @@ class TouchStone:
 # W r i t e F i l e
 #
 
-    def WriteFile(self, fpath, comments=None, prependto=None, appendto=None):
+    def WriteFile(self, fpath, comments=None, prependto=None, appendto=None,
+                  coeffs_per_line=4):
         """
         write a touchstone file
         """
@@ -1610,7 +1620,9 @@ class TouchStone:
             self.comments += [c for c in appendto.split('\n')]
 
         with open(fpath,'w') as f:
+            tmp = self.COEFFS_PER_LINE
             f.write(str(self))
+            self.COEFFS_PER_LINE = tmp
         
         if comments:
             self.comments = selfcomments[:] # restore original comments
@@ -2159,8 +2171,8 @@ if __name__ == '__main__':
     from Utilities.printMatrices import printMA
     
     TSF = findpath('ReImZ_Z_Step7_Sc2short17.s24p','..') 
-    tests = [210]
-    
+    tests = [210]         
+
     #---------------------------------------------------------------------------
     if 200 in tests:
         print('-' * 128)
