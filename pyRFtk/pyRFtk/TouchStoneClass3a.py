@@ -47,8 +47,13 @@ Frederic Durodie 2009-04-21
 | 19 Dec 19 | NEED TO CORRECT BUG FOR CONSEQUTIVE CALLS TO .Datas()               |
 |           |                                                                     |
 +-----------+---------------------------------------------------------------------+
+| 03 Feb 20 | added LINE_ENDING                                                   |
+|           |   self.LINE_ENDING = '\r\n' [default DOS line endings]              |
+|           | see also parameter line_ending='\r\n' in WriteFile()                |
++-----------+---------------------------------------------------------------------+
 | 29 Jan 20 | added COEFFS_PER_LINE                                               |
 |           |   self.COEFFS_PER_LINE = 4 [default]                                |
+|           | see also parameter coefs_per_line=4 in WriteFile()                  |
 +-----------+---------------------------------------------------------------------+
 | 15 Jan 20 | finally corrected reading (HFSS) of not normalized touchstone files |
 +-----------+---------------------------------------------------------------------+
@@ -228,6 +233,7 @@ class TouchStone:
     def __init__(self,filepath=None,tformat=None, data=None, **kwargs):
         
         self.COEFFS_PER_LINE = 4
+        self.LINE_ENDING = '\r\n' # so the files a compatible with DOS
         
         # override/set portnames
         portnames = kwargs.pop('portnames', [])
@@ -326,52 +332,53 @@ class TouchStone:
         write a touchstone file
         """
         s = ''
-
+        eoln = self.LINE_ENDING
+        
         if not data:
             f = self.Freqs()
             fmin, fmax, dfs = np.min(f), np.max(f), np.diff(f)
             
-            s += '! %d ports %d frequencies from %.f to %.f %s\n' % (
-                self.nports, len(self.Freqs()),fmin,fmax,self.funit)
+            s += '! %d ports %d frequencies from %.f to %.f %s' % (
+                self.nports, len(self.Freqs()),fmin,fmax,self.funit) + eoln
             
-        s += '! TouchStone file (TouchStoneClass version %s)\n' % __version__
-        s += '! Date : %s \n' % time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
+        s += '! TouchStone file (TouchStoneClass version %s)' % __version__ + eoln
+        s += '! Date : %s' % time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()) + eoln
         
         if len(self.comments) > 0 :
             for line in self.comments :
-                s += '!REM %s\n' % line
+                s += '!REM %s' % line + eoln
 
         if len(self.ports) > 0 :
-            s += '!PORTS ' + ', '.join(self.ports) + '\n'
+            s += '!PORTS ' + ', '.join(self.ports) + eoln
             
         if len(self.markers) :
-            s += '!MARKERS '+(('%.3f '*len(self.markers))%tuple(self.markers))+'\n'
+            s += '!MARKERS '+(('%.3f '*len(self.markers))%tuple(self.markers))+eoln
             
         if self.shape :
-            s += '!SHAPE %d %d \n' % self.shape
+            s += '!SHAPE %d %d' % self.shape + eoln
             
         if self.part:
             if type(self.part) is tuple:
-                s += '!PART '+ ('%s '*len(self.part)) % self.part + ' \n'
+                s += '!PART '+ ('%s '*len(self.part)) % self.part + eoln
             else:
-                s += '!PART %s \n' % self.part
+                s += '!PART %s' % self.part + eoln
                 
         if self.numbering:
             if type(self.numbering) is tuple:
-                s += '!NUMBERING '+('%s '*len(self.numbering))%self.numbering+' \n'
+                s += '!NUMBERING '+('%s '*len(self.numbering))%self.numbering+eoln
             else:
-                s += '!NUMBERING %s \n' % self.numbering
+                s += '!NUMBERING %s' % self.numbering+eoln
                         
         if self.ts_source:
-            s += '! source: %s\n' % self.ts_source
+            s += '! source: %s' % self.ts_source+eoln
         
         if self.ts_variables:
             v = ppdict(self.ts_variables, label='variables: ')
             for al in v.split('\n'):
-                s += '! ' + al + '\n' 
-            s += '\n'
+                s += '! ' + al + eoln
+            s += eoln
         
-        s += '# %s \n' % self.FormatStr()
+        s += '# %s' % self.FormatStr() + eoln
 
         if not data:
             return s
@@ -421,12 +428,12 @@ class TouchStone:
                     if (kc % CN is (CN-1)) and (kc is not self.nports-1):
                         if kc is (CN-1):
                             s += ' !    row %d' % (kr+1)
-                        s += '\n'+' '*freq_fmt_len
-                s += '\n'
+                        s += eoln+' '*freq_fmt_len
+                s += eoln
                 if kr is not self.nports-1:
                     s += ' '*freq_fmt_len
                     
-        s += '\n' # add a trailing return
+        s += eoln # add a trailing return
         
         return s
      
@@ -1600,7 +1607,7 @@ class TouchStone:
 #
 
     def WriteFile(self, fpath, comments=None, prependto=None, appendto=None,
-                  coeffs_per_line=4):
+                  coeffs_per_line=4, line_ending='\r\n'):
         """
         write a touchstone file
         """
@@ -1620,9 +1627,11 @@ class TouchStone:
             self.comments += [c for c in appendto.split('\n')]
 
         with open(fpath,'w') as f:
-            tmp = self.COEFFS_PER_LINE
+            tmp = self.COEFFS_PER_LINE, self.LINE_ENDING
+            self.COEFFS_PER_LINE = coeffs_per_line
+            self.LINE_ENDING = line_ending
             f.write(str(self))
-            self.COEFFS_PER_LINE = tmp
+            self.COEFFS_PER_LINE, self.LINE_ENDING = tmp
         
         if comments:
             self.comments = selfcomments[:] # restore original comments
@@ -2170,8 +2179,11 @@ if __name__ == '__main__':
     from Utilities.findpath import findpath
     from Utilities.printMatrices import printMA
     
-    TSF = findpath('ReImZ_Z_Step7_Sc2short17.s24p','..') 
-    tests = [210]         
+    print(os.path.abspath(os.path.curdir))
+    TESTDATA = os.path.join('..','test data')
+    
+    tests = [220]         
+    
 
     #---------------------------------------------------------------------------
     if 200 in tests:
@@ -2216,6 +2228,16 @@ if __name__ == '__main__':
         print(Zmixed)
         S = tsf.Get_Scatter(ftsf).convert_to_mixed(Zmixed)
         printMA(S, '%20.16f%+20.14fdeg')
+        
+    #---------------------------------------------------------------------------
+    if 220 in tests:
+        # test dos line endings
+        TSF = TouchStone(filepath=findpath('test_HFSSDesign1.s2p',[TESTDATA]))
+        print(str(TSF).replace('\r','\\r').replace('\n','\\n\n'))
+        fpath = 'dos_line_ending.s%dp' % TSF.nports
+        TSF.WriteFile(os.path.join(TESTDATA,fpath))
+        TSF2=TouchStone(filepath=findpath(fpath,[TESTDATA]))
+        print(str(TSF2).replace('\r','\\r').replace('\n','\\n\n'))
         
     #---------------------------------------------------------------------------
     if 100 in tests:
