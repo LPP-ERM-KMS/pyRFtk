@@ -124,7 +124,7 @@ Frederic Durodie 2009-04-21
 
 """
 
-__updated__ = '2020-01-29 11:58:13'
+__updated__ = '2020-04-01 12:06:02'
 
 
 #===============================================================================
@@ -1437,24 +1437,28 @@ class TouchStone:
                 aline, rest = parts[0], ''
             
             # check for gamma or port impedance lines
-            if rest[:16] == ' Gamma         !' or (
-                lastline == 'gamma' and rest[:15] !=' Port Impedance'):
+            
+            Gline = re.findall('(?i)\s*(Gamma)\s+!(.+)',rest)
+            Zline = re.findall('(?i)\s*(Port Impedance)(.+)',rest)
+            
+            if Gline or (lastline == 'gamma' and not Zline):
                 if lastline != 'gamma':
                     if len(Gmsk):
                         Gms.append(Gmsk)
                     Gmsk = []
-                tlst = [float(x) for x in rest[16:].split()]
+                    rest = Gline[0][1]
+                tlst = [float(x) for x in rest.split()]
                 for k in range(0,len(tlst),2):
                     Gmsk.append(tlst[k]+1j*tlst[k+1])
                 lastline='gamma'
             
-            elif rest[:15] == ' Port Impedance' or (
-                lastline == 'impedance' and not aline):
+            elif Zline or (lastline == 'impedance' and not aline):
                 if lastline != 'impedance':
                     if Zcsk:
                         Zcs.append(Zcsk)
                     Zcsk = []
-                tlst = [float(x) for x in rest[15:].split()]
+                    rest = Zline[0][1]
+                tlst = [float(x) for x in rest.split()]
                 for k in range(0,len(tlst),2):
                     Zcsk.append(tlst[k]+1j*tlst[k+1])
                 lastline = 'impedance'
@@ -1688,7 +1692,7 @@ class TouchStone:
 ## Resample the frequencies in the touchstone data structure
 ##
     def Resample(self, newfreqs, funit=None, interpolation=None,
-                 order=None, itype='interp1d',  relferror=0.01):
+                 order=None, itype='interp1d',  relferror=0.0001):
         """
         returns a resampled touchstone data structure
         funit = HZ, KHZ, MHZ or GHZ

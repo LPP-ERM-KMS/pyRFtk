@@ -33,6 +33,8 @@
 #                                                                              #
 ################################################################################
 
+__updated__ = '2020-03-24 11:01:02'
+
 """
 Implementation of the Scatter toolbox in Python
 Frederic Durodie, 16 November 2005
@@ -125,7 +127,7 @@ from datetime import date
 #
 # d e f i n e   v e r s i o n s
 #
-__updated__ = '2020-01-17 19:39:13'
+
 __version__ = date.fromtimestamp(os.path.getmtime(__file__)).strftime('%Y.%m.%d')
 __version_info__ = tuple(__version__.split('.'))
 
@@ -474,7 +476,7 @@ class Scatter:
     #  s t a  t e
     #
     def state(self, d=None):
-        print('going through state')
+        # print('going through state')
         if d is None:
             return {
                 'fMHz'    : self.fMHz,

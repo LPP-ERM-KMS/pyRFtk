@@ -551,8 +551,9 @@ class circuit():
                     'circuit.AddBlock: only one of SZ, S, Z or Y allowed')
             else:
                 SZb = kwargs.pop('SZ')
-                if self.fMHz and self.fMHz != SZb.fMHz :
+                if self.fMHz and np.abs(1 - SZb.fMHz/self.fMHz) > 1E-12 :
                     print("circuit_Class.AddBlock() : frequency mismatch")
+                    print(self.fMHz, SZb.fMHz, self.fMHz - SZb.fMHz)
                     raise ValueError
                 else :
                     self.fMHz = SZb.fMHz
@@ -573,7 +574,7 @@ class circuit():
         ##-------------------------------------------------------------------- Z
         elif 'Z' in kwargs:
             dtype = 'Z'
-            if 'Z' in kwargs:
+            if 'Y' in kwargs:
                 raise ValueError(
                     'circuit.AddBlock: only one of SZ, S, Z or Y allowed')
             else:
