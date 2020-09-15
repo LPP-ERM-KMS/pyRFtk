@@ -124,7 +124,7 @@ Frederic Durodie 2009-04-21
 
 """
 
-__updated__ = '2020-04-01 12:06:02'
+__updated__ = '2020-07-02 09:17:53'
 
 
 #===============================================================================
@@ -1846,9 +1846,11 @@ class TouchStone:
 def CombineEvenOdd(TS1N_even, TS1N_odd, part=None, shape=None, numbering=None):
     """
     reconstruct a 2Nx2N Touchstone data structure from two NxN Touchstone data
-    structures for even odd excitation of a circuit with a port symmetry :
+    structures for even (perfect H symmetry plane) / odd (perfect E symmetry plane)
+    excitation of a circuit with a port symmetry :
 
-    TS2N, TS1N_even and TS1N_odd are TouchStoneClass objects
+    TS2N, TS1N_even (perfect H symmetry plane) and TS1N_odd (perfect E symmetry 
+      plane) are TouchStoneClass objects
 
     The TS1N_odd is converted to the format of TS1N_even and the result has the
     same format.

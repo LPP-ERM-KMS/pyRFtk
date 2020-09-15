@@ -30,12 +30,38 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2020-04-10 19:50:10'
+__updated__ = '2020-09-14 09:17:55'
 
 """
 Created on 9 Apr 2020
 
 @author: frederic
+
+try the approach everything is a circuit
+
+methods of the circuit:
+
+__add__
+__iadd__
+__sub__ (deembed)
+__isub__
+
+setf(f, unit)
+compact()  -> return S-matrix of free ports
+
+Zbase, freq, funit
+
+M is the circuit matrix (i
+S is the compacted matrix (i.e only external ports)
+Ports are the external ports
+
+properties of a (sub)circuit:
+
+{'toplevel': (None, 0, 0, 0), <-- tbd
+ ...
+ name:s : (pointer2rfobject, size:d, row:d, col:d),
+ ...
+}
 """
 
 import numpy as np
@@ -53,13 +79,13 @@ class rfCircuit(rfObject):
     #
     #  _ _ i n i t _ _
     #
-    def __init__(self, Portnames, **kwargs):
+    def __init__(self, ports, **kwargs):
         
         #TODO: TBD Portnames in this context
+        #      e.g. these could be the external ports
         
-        super().__init__(Portnames, **kwargs)
+        super().__init__(ports, **kwargs)
         self.type = 'circuit'
-    
     
     
 #===============================================================================

@@ -33,7 +33,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2020-03-24 11:01:02'
+__updated__ = '2020-09-09 09:58:35'
 
 """
 Implementation of the Scatter toolbox in Python
@@ -3264,8 +3264,8 @@ def convert_general(Z2, S1, Z1, type1='std', type2='std'):
          
         return QaV, QaI, QbV, QbI, QVa, QVb, QIa, QIb
     
-    SaV, SaI, SbV, SbI, SVa, SVb, SIa, SIb = coeffs(Z1, type1)
-    TaV, TaI, TbV, TbI, TVa, TVb, TIa, TIb = coeffs(Z2, type2)
+    SaV, SaI, SbV, SbI, SVa, SVb, SIa, SIb = coeffs(Z1, type1)  # @UnusedVariable
+    TaV, TaI, TbV, TbI, TVa, TVb, TIa, TIb = coeffs(Z2, type2)  # @UnusedVariable
     
     
     V, I = np.diag(SVa) + np.diag(SVb) @ S1, np.diag(SIa) + np.diag(SIb) @ S1

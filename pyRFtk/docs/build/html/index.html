@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to pyRFtk’s documentation! &mdash; pyRFtk 3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyRFtk 3 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">pyRFtk 3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-pyrftk-s-documentation">
+<h1>Welcome to pyRFtk&#8217;s documentation!<a class="headerlink" href="#welcome-to-pyrftk-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+<div class="section" id="module-pyRFtk.RFcircuit_class3a">
+<span id="rfcircuit"></span><h1>RFcircuit<a class="headerlink" href="#module-pyRFtk.RFcircuit_class3a" title="Permalink to this headline">¶</a></h1>
+<p>RFcircuit_class3a</p>
+<p>Created on 12 Feb 2020</p>
+<p>&#64;author: frederic</p>
+<p>The idea is to expand on circuit_class3a allowing nesting of circuits as well as
+defining an RFobject class with whose sources can be a set of scatter3a objects,
+a touchstone object or a GTL dict (see circuit_class3a.processGTL).</p>
+<p>Question: should there be a distiction between RFcirccuit and RFobject</p>
+<dl class="class">
+<dt id="pyRFtk.RFcircuit_class3a.RFcircuit">
+<em class="property">class </em><tt class="descclassname">pyRFtk.RFcircuit_class3a.</tt><tt class="descname">RFcircuit</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/pyRFtk/RFcircuit_class3a.html#RFcircuit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyRFtk.RFcircuit_class3a.RFcircuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>RFcircuit class</p>
+<p>kwargs:</p>
+<blockquote>
+<div><p>Zbase: &lt;float&gt; default 50 [Ohm]</p>
+<p>freqs: &lt;list of floats&gt; default empty list</p>
+<p>fUnit: &#8216;Hz&#8217; | &#8216;kHz&#8217; | &#8216;MHz&#8217; | &#8216;GHz&#8217; default &#8216;MHz&#8217;</p>
+</div></blockquote>
+<dl class="method">
+<dt id="pyRFtk.RFcircuit_class3a.RFcircuit.Add">
+<tt class="descname">Add</tt><big>(</big><em>**kw</em><big>)</big><a class="reference internal" href="_modules/pyRFtk/RFcircuit_class3a.html#RFcircuit.Add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyRFtk.RFcircuit_class3a.RFcircuit.Add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an RF object to the circuit</p>
+<p>GTL: cicuit_Class3a GTL object</p>
+<p>SZs: list of scatter3a.Scatter objects</p>
+<p>TSF: TouchStone_class.TouchStone object</p>
+<p>type of inputs:</p>
+<blockquote>
+<div><p>GTL</p>
+<p>SZs (with signals)</p>
+<p>GTL + TSFs</p>
+<p>SZs (without signals) + GTL</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyRFtk.RFcircuit_class3a.RFcircuit.GetS">
+<tt class="descname">GetS</tt><big>(</big><em>f=[]</em>, <em>Zbase=None</em><big>)</big><a class="reference internal" href="_modules/pyRFtk/RFcircuit_class3a.html#RFcircuit.GetS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyRFtk.RFcircuit_class3a.RFcircuit.GetS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pyRFtk.RFcircuit_class3a.RFcircuit.ProcessGTL">
+<tt class="descname">ProcessGTL</tt><big>(</big><em>f</em>, <em>GTL</em><big>)</big><a class="reference internal" href="_modules/pyRFtk/RFcircuit_class3a.html#RFcircuit.ProcessGTL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyRFtk.RFcircuit_class3a.RFcircuit.ProcessGTL" title="Permalink to this definition">¶</a></dt>
+<dd><p>ProcessGTL - process a GTL dict data structure</p>
+<p>returns Scatter object</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to pyRFtk&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#module-pyRFtk.RFcircuit_class3a">RFcircuit</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">pyRFtk 3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2020, Frederic Durodie.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
