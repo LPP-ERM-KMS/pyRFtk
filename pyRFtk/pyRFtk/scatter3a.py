@@ -33,7 +33,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2020-09-09 09:58:35'
+__updated__ = '2020-10-30 14:47:00'
 
 """
 Implementation of the Scatter toolbox in Python
@@ -2246,9 +2246,11 @@ class Scatter:
             V = self.V
             
         k0 = self.w / (self.c0 * V)
+        
         if (A == 0) and (Z == self.Zbase):
             s = 0j                         ### can use simpler formulas
             t = np.exp(-self.iwt*1j* k0 *L)
+            Zc, gamma = self.Zbase, self.iwt * 1j * k0
             
         else:
             
@@ -2268,6 +2270,10 @@ class Scatter:
 #               (gamma.real, gamma.imag, Zc.real, Zc.imag))
         
         self.extendport(ports,np.array([[s,t],[t,s]]))
+        
+        # as a side effect save the Zc and gamma used
+        self.Zc = Zc
+        self.gamma = gamma
         
 ##    #===========================================================================
 ##    #  t r l C o a x
@@ -3406,7 +3412,7 @@ def TL_GRLC(gamma, Zc, **kwargs):
             
     wL, wC = Zc.real * gamma.imag, gamma.imag / Zc.real
 
-    X = fmin(func=fm, x0=[0., 0., wL, wC])
+    X = fmin(func=fm, x0=[0., 0., wL, wC], disp=False)
     
     if verbose:
         print(X)

@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2020-04-30 00:15:59'
+__updated__ = '2020-12-02 14:29:29'
 
 """
 Created on 29 Apr 2020
@@ -357,6 +357,8 @@ def read_tsf(src, **kwargs):
         "shape"     : shape,
         "numbering" : numbering,
         "markers"   : markers,
+        "Zc"        : Zcs,
+        "Gm"        : Gms,
         "variables" : None,
     }
 

@@ -44,6 +44,10 @@ Frederic Durodie 2009-04-21
 | date      | Modification                                                        |
 +===========+=====================================================================+
 |           |                                                                     |
+| 03 Dec 20 | changed the readline function in str2tsf -> 10 fold faster          |
+|           |                                                                     |
++-----------+---------------------------------------------------------------------+
+|           |                                                                     |
 | 19 Dec 19 | NEED TO CORRECT BUG FOR CONSEQUTIVE CALLS TO .Datas()               |
 |           |                                                                     |
 +-----------+---------------------------------------------------------------------+
@@ -124,7 +128,7 @@ Frederic Durodie 2009-04-21
 
 """
 
-__updated__ = '2020-07-02 09:17:53'
+__updated__ = '2020-12-03 13:54:50'
 
 
 #===============================================================================
@@ -167,6 +171,8 @@ from pyRFtk import scatter3a as sc
 from Utilities.ppdict import ppdict
 from Utilities.printMatrices import printMA
 pfmt = '%12.7f %+9.4f'
+
+from Utilities.getlines import getlines
 
 assert sc.__version__ >= '2012.05.02', TouchStoneError(
     'Scatter version >= 2012.05.02 required')
@@ -1273,12 +1279,19 @@ class TouchStone:
         
         #  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        def readline(S):
+        def readline_(S):
             counter = 0
             S += '\n' # end on empty line
             while S:
                 counter += 1
                 aline, S = S.split('\n', 1)
+                yield counter, aline.strip()
+        
+        def readline(S):
+            counter = 0
+            S += '\n' # end on empty line
+            for aline in S.split('\n'):
+                counter += 1
                 yield counter, aline.strip()
         
         iterator = readline(S)

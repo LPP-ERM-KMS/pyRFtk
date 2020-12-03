@@ -73,6 +73,7 @@ VERSION = date.fromtimestamp(os.path.getmtime(__file__)).strftime('%Y-%m-%d')
 
 from pyRFtk import scatter3a as sc
 from pyRFtk.General_TL import General_TL
+from Utilities.printMatrices import printRI
 
 #------------------------------------------------------------- import : specials
 
@@ -578,9 +579,9 @@ class circuit():
                 raise ValueError(
                     'circuit.AddBlock: only one of SZ, S, Z or Y allowed')
             else:
-                Z = np.array(kwargs.pop('Z'))
+                Z = np.array(kwargs.pop('Z'))+0j
                 Zeye = self.Zbase * np.eye(Z.shape[0])
-                Sb = np.dot(np.linalg.inv(Z - Zeye),(Z + Zeye))
+                Sb = np.dot(np.linalg.inv(Z + Zeye),(Z - Zeye))
                 Portnames = kwargs.pop('Portnames',
                                        ['Z_%02d' % k for k in range(Z.shape[0])])
                 
@@ -589,7 +590,7 @@ class circuit():
             dtype = 'Y'
             Y = np.array(kwargs.pop('Y'))
             Yeye = np.eye(Y.shape[0]) / self.Zbase
-            Sb = np.dot(np.linalg.inv(Yeye - Y),(Yeye + Y))
+            Sb = np.dot(np.linalg.inv(Yeye + Y),(Yeye - Y))
             Portnames = kwargs.pop('Portnames',
                                    ['Y_%02d' % k for k in range(Y.shape[0])])
             
@@ -1100,7 +1101,7 @@ class circuit():
         ##-------------------------------------------------------- define the TL
         
         GTLkwargs = dict([(kw, kwargs.pop(kw)) for kw in [
-            'OD','ID','rho','rhoI','rhoO','espr','mur','vr','V','etar','murI',
+            'OD','ID','rho','rhoI','rhoO','epsr','mur','vr','V','etar','murI',
             'murO','A','AdB','rTL','R','rTLI','rTLO','gTL','G','sigma','tand',
             'LTL','L','CTL','C','Z0TL','Z', 'maxdeg', 'maxdx', 'xs', 'qTLI',
             'qTLO','dx']
@@ -1288,7 +1289,7 @@ class circuit():
         S = kwargs.pop('S', None)
         if S is None:
             # if S is not given use ideal junction
-            S = np.array([[2/N - (1 if kc is kr else 0) for kc in range(N)]
+            S = np.array([[2/N - (1 if kc == kr else 0) for kc in range(N)]
                               for kr in range(N)])
         else:
             # check that S fits the number of ports given
@@ -1548,11 +1549,12 @@ class circuit():
         # new code
         self.sol = dict([(name, self.S[k,0]) for k, name in enumerate(self.names)])
         if printit:
+            maxlenname = max([len(name) for name in self.names])
             for name in self.names:
                 i1 = name.find('/B_')
                 if i1 >= 0 :
                     blockname = name.replace('/B_','/')
-                    ss = '%-15s : ' % blockname
+                    ss = ('%%-%ds : ' % maxlenname) % blockname
                     A = self.sol[name.replace('/B_','/A_')]
                     B = self.sol[name]
                     V = A + B
@@ -1643,6 +1645,9 @@ class circuit():
             if type(stype) is tuple :
                 res = tuple(res)
         else :
+            if stype[0] == '-': # reverse A and B
+                A, B = B, A
+                stype = stype[1:]
             res = self._value(A, B, stype)
 
         return res
@@ -1799,8 +1804,198 @@ class circuit():
         """
         pass
     
+#===============================================================================
+#
+#  G e t _ S m a t r i x
+#
+    def Get_Smatrix(self, nodes, St = None):
         
-    
+        Aidxs, Bidxs = [], []
+        for name in nodes:
+            reverse = name[0] == '<'
+            block, port =  name.split('/')
+            if reverse:
+                Aname = block[1:] + '/B_' + port
+                Bname = block[1:] + '/A_' + port
+            else:
+                Aname = block + '/A_' + port
+                Bname = block + '/B_' + port
+            Aidxs.append(self.names.index(Aname))
+            Bidxs.append(self.names.index(Bname))
+            
+        Oidxs = [k for k in range(len(self.names)) 
+                 if not (k in Aidxs or k in Bidxs)]
+            
+        Eidxs = [self.E[name][0] for name in self.E]
+        
+        if len(Eidxs) < len(Aidxs):
+            print('circuit.Get_Smatrix: Warning: number of excited ports (%d)'
+                  ' is smaller than the number of ports of the Smatrix'
+                  ' requested (%d). Solution not possible.' % 
+                  (len(Eidxs), len(Aidxs)))
+                
+        if self.invM is None:
+            self.Solve()
+            
+        QA = self.invM[np.r_[Aidxs],:][:,np.r_[Eidxs]] # N x E
+        
+        invQA = None
+        if len(Eidxs) == len(Aidxs):
+            try:
+                invQA = np.linalg.inv(QA)
+            except:
+                print('circuit.get_Smatrix: probably singular matrix')
+                
+        if invQA is None:
+            invQA = np.linalg.pinv(QA)                     # E x N
+            
+        QB = self.invM[np.r_[Bidxs],:][:,np.r_[Eidxs]] # N x E
+        
+        S = QB @ invQA
+
+        if False:
+            
+            MA = self.M[:,np.r_[Aidxs]] # T x N
+            MB = self.M[:,np.r_[Bidxs]] # T x N
+            MO = self.M[:,np.r_[Oidxs]] # T x (T - N)
+        
+            QO = self.invM[np.r_[Oidxs],:][:,np.r_[Eidxs]] # (T - N) x E 
+            invMB = np.linalg.pinv(MB) # N x T
+            invQB = np.linalg.pinv(QB) # E x N
+
+            S = - invMB @ ((np.eye(len(Eidxs)) - MO @ QO) @ invQA - MA)
+            printRI(MA @ QA + MB @ QB + MO @ QO)
+            printRI((MA + MB @ S) @ QA + MO @ QO)
+            
+            print('Aidxs ', Aidxs)
+            print('Bidxs ', Bidxs)
+            
+            print('invM = Q')
+            printRI(self.invM)
+            
+            print('QA')
+            printRI(QA)
+            print('QB')
+            printRI(QB)
+            
+            if St is not None:
+                print('St @ QA')
+                printRI(St @ QA)
+            
+            print("Qb'")
+            printRI(invMB @ (np.eye(self.V.shape[0]) - MA @ QA - MO @ QO))
+            
+            printRI( S )
+            printRI( np.linalg.inv(QA @ invQB ))
+        
+        return S
+        
+#===============================================================================
+#
+#  G e t _ S m a t r i x
+#
+    def Get_Smatrix_(self, nodes):
+        
+        Aidxs, Bidxs = [], []
+        for name in nodes:
+            reverse = name[0] == '<'
+            block, port =  name.split('/')
+            if reverse:
+                Aname = block[1:] + '/b_' + port
+                Bname = block[1:] + '/A_' + port
+            else:
+                Aname = block + '/A_' + port
+                Bname = block + '/B_' + port
+            Aidxs.append(self.names.index(Aname))
+            Bidxs.append(self.names.index(Bname))
+        
+        Aidxs, Bidxs = np.r_[Aidxs], np.r_[Bidxs]
+        
+        Oidxs = np.r_[[k for k in range(len(self.names)) 
+                       if not (k in Aidxs or k in Bidxs)]]
+        
+        Eidxs = [self.E[name][0] for name in self.E]
+        
+        print(self.E)
+        print(Eidxs)
+        
+        Zidxs = np.r_[[k for k in range(len(self.names)) if not k in Eidxs]]
+        Eidxs = np.r_[Eidxs]
+        
+        MAZ = self.M[Zidxs,:][:,Aidxs] # (T - E) x N
+        print('\nMAZ')
+        printRI(MAZ)
+        
+        MAE = self.M[Eidxs,:][:,Aidxs] # E x N
+        print('\nMAE')
+        printRI(MAE)
+        
+        MBZ = self.M[Zidxs,:][:,Bidxs] # (T - E) x N
+        print('\nMBZ')
+        printRI(MBZ)
+
+        MBE = self.M[Eidxs,:][:,Bidxs] # E x N
+        print('\nMBE')
+        printRI(MBE)
+        
+        MOZ = self.M[Zidxs,:][:,Oidxs] # (T - E) x (T - 2N)
+        print('\nMOZ')
+        printRI(MOZ)
+        
+        MOE = self.M[Eidxs,:][:,Oidxs] # E x (T - 2N)
+        print('\nMOE')
+        printRI(MOE)
+
+        VE = self.V[Eidxs,:] # E x 1
+        print('\nVE')
+        printRI(VE)
+        
+        MZE = MOZ @ np.linalg.pinv(MOE) # (T - E) x E
+        MEZ = MOE @ np.linalg.pinv(MOZ) # E x (T - E)
+        print('\nMEZ')
+        printRI(MEZ)
+          
+        MA = MAE + MEZ @ MAZ # E x N
+        print('\nMA')
+        printRI(MA)
+        
+        MB = MBE + MEZ @ MBZ # E x N
+        print('\nMB')
+        printRI(MB)
+        
+        MSA = self.invM[Aidxs,:][:,Eidxs] # N x E
+        print('\nMSA')
+        printRI(MSA)
+        
+        MSB = self.invM[Bidxs,:][:,Eidxs] # N x E
+        print('\nMSB')
+        printRI(MSB)
+        
+        invMSA = np.linalg.pinv(MSA)      # E x N
+        print('\ninvMSA')
+        printRI(invMSA)
+        
+        R = - MZE @ VE # (T - E) x 1
+        
+        print(f'maxR {np.max(np.abs(R))}, maxVE {np.max(np.abs(VE))}, '
+              f'maxV {np.max(np.abs(self.V))}')
+        tol = 1E-4
+        if np.max(np.abs(R)) > tol * np.max(np.abs(VE)): 
+                print('circuit_Class3a.Get_Smatrix: R is not null')
+                print(np.max(R))
+                
+        invMB =  np.linalg.pinv(MB) # N x E
+        print('\ninvMB')
+        printRI(invMB)
+        
+        S = - invMB @ (invMSA - MA) # N x N
+        U = MA @ MSA + MB @ MSB
+        print('\nU')
+        printRI(U)
+        
+        return S
+        
+            
 #===============================================================================
 #
 #  G e t _ Z 
@@ -2361,8 +2556,12 @@ def processGTL(fMHz, Zbase, GTL_data, **kwargs):
         ekwargs = {}
         for kw, val in kwargs.items():
             if isinstance(val, str):
-                ekwargs[kw] = eval(val, globals(), variables)
-            
+                try:
+                    ekwargs[kw] = eval(val, globals(), variables)
+                except:
+                    print(f'val       = {val}')
+                    print(f'variables = {variables}')
+                    raise
             else:
                 ekwargs[kw] = val
 
@@ -2534,8 +2733,48 @@ def processGTL(fMHz, Zbase, GTL_data, **kwargs):
 if __name__ == "__main__" :
     
     from pyRFtk import scatter3a as _sc
-
+    
     if True:
+        print('test circuit.Connect( > 2 ports)')
+        R = 1.0 # Ohm
+        for N in [2,3,4,5,6]:
+            print('=' * 80)
+            print(f'\n N = {N}\n')
+            CT = circuit(fMHz=55.0, Zbase=20.0)
+            for k in range(1,N):
+                CT.AddBlock(f'R{k}',Portnames=['R'],Z=[[R]])
+            CT.AddBlockTL(f'{N-1}R', 0., Portnames=['R','T'])
+            CT.Connect(*tuple([f'R{k}/R' for k in range(1,N)] + [f'{N-1}R/R']))
+            CT.Excite(f'{N-1}R/T', 1)
+            print(CT)
+            
+            Z = CT.Solution(f'{N-1}R/T', 'Z')
+            print(Z,R/(N-1))
+            
+    if False:
+        print('test circuit_Class3s.Get_Smatrix')
+        St = np.array([[0.5-0.5j, 0.25],
+                       [0.25, 0.1-0.4j]])
+        CT = circuit(fMHz=55.0,Zbase=50.)
+        CT.AddBlock('2port',S=St)
+        print(CT)
+        CT.AddBlockTL('TL1',2.0,Z=10.0)
+        CT.AddBlockTL('TL2',2.1,Z=15.0)
+        #CT.AddBlockTL('TL',2.1,Z=25.0)
+        CT.Connect('2port/S_00','TL1/1')
+        CT.Connect('2port/S_01','TL2/1')
+        #CT.Connect('TL1/2','TL2/2','TL/1')
+        #CT.Excite('TL/2',  1.0)
+        CT.Excite('TL1/2',2.)
+        CT.Excite('TL2/2',0.)
+        CT.Solve(printit=True)
+        print(CT)
+        S = CT.Get_Smatrix(['2port/S_00','2port/S_01'], St = St)
+        print(S)
+        S = CT.Get_Smatrix(['<TL1/1','<TL2/1'], St = St)
+        print(S)
+        
+    if False:
         print('test processGTL')
         
         GTL = {'variables': {'rho' : 0., # 0.02214,

@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2020-09-15 10:37:16'
+__updated__ = '2020-10-19 14:49:36'
 
 """
 Created on 8 Apr 2020
@@ -55,6 +55,20 @@ from Utilities.getlines import getlines
 from pyRFtk2.CommonLib import read_tsf, convert_general, S_from_Y, S_from_Z
 
 #===============================================================================
+#
+#    setup logging
+#
+import logging
+logging.basicConfig(
+    level=logging.DEBUG, 
+    filename='rfObject.log',
+    filemode = 'w',
+    format='%(asctime)s - %(levelname)8s - %(message)s'
+)
+logging.info('[rfObject] ---------------------------------------------------- ')
+logging.info('[rfObject] startlogging -- level %s')
+
+#===============================================================================
 
 rcparams = {
     'Zbase'  : 50,       # Ohm
@@ -67,6 +81,25 @@ FUNITS = {'HZ':1., 'KHZ':1e3, 'MHZ':1e6, 'GHZ':1e9}
 
 ID = 0
 
+TYPE_GENERIC     = 1
+TYPE_CIRCUIT     = 2
+TYPE_TOUCHSTONE  = 3
+TYPE_GTL         = 4
+
+TYPES = {
+    'GENERIC'    : TYPE_GENERIC,
+    'CIRCUIT'    : TYPE_CIRCUIT,
+    'TOUCHSTONE' : TYPE_TOUCHSTONE,
+    'GTL'        : TYPE_GTL
+}
+
+TYPE_STR = {
+    TYPE_GENERIC    : 'GENERIC',
+    TYPE_CIRCUIT    : 'CIRCUIT',
+    TYPE_TOUCHSTONE : 'TOUCHSTONE',
+    TYPE_GTL        : 'GTL'
+}
+
 #===============================================================================
 #
 #  r f O b j e c t
@@ -74,8 +107,21 @@ ID = 0
 class rfObject():
     """rfObject is the master class
     
-            not sure if this a replacement for TouchStoneClass or already includes
-            scatter3a ...
+            not sure if this a replacement for TouchStoneClass or already
+            includes scatter3a ... or even something else ...
+            
+    methods:
+        getS(fMHz, **kwargs) : kwargs could be parameters determining the object
+                for nested objects (circuits) it would be called
+                
+        getS(frequency, {sub_element_ID:{
+                            parameter1: value1,
+                            parameter2: value2,
+                            sub_sub_element_ID: {
+                            
+                            }
+                         }
+                        }
             
     """
     #===========================================================================
@@ -85,24 +131,25 @@ class rfObject():
     def __init__(self, **kwargs):
         """rfObject
         
-        
-            'kwargs'
-        
-                'ports'      : list of unique strings
-                'name'       : string (TBD)
-                'Zbase'      : default rcparams['Zbase']
-                'funit'      : default rcparmas['funit']
-                'interp'     : default rcparams['interp']
-                'interpkws'  : default rcparams['interpkws']
-                'flim'       : default funit/1000, funit*1000
-                'touchstone' : default None -- path to a touchstone file
+        'kwargs'
+    
+            'ports'      : list of unique strings
+            'name'       : string (TBD)
+            'Zbase'      : default rcparams['Zbase']
+            'funit'      : default rcparmas['funit']
+            'interp'     : default rcparams['interp']
+            'interpkws'  : default rcparams['interpkws']
+            'flim'       : default funit/1000, funit*1000
+            'touchstone' : default None -- path to a touchstone file
         """
+        
         global ID
              
         self.kwargs = kwargs.copy()
 
         #TODO: validate allowed port names
         self.Portnames = kwargs.get('ports',[])
+        self.alias = {}
         if isinstance(self.Portnames, str):
             self.Portnames = self.Portnames.split()
         self.N = len(self.Portnames)
@@ -137,11 +184,8 @@ class rfObject():
         self.sorted = True
         self.Ss = np.array([], dtype=np.complex).reshape((0, self.N, self.N))
         
-        if self.touchstone:
-            pass
-        
         self.process_kwargs()
-        self.type = 'generic'
+        self.type = TYPE_GENERIC
     
     #===========================================================================
     #
