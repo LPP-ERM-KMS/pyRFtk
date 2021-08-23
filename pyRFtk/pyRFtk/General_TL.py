@@ -111,13 +111,13 @@ class General_TL():
             'LTL':[ #V01
                 '$Z0TL / (c0 * $vr)',                                    #01*
                 '$Z0TL**2 * $CTL',                                       #02*
-                '$epsr * $mur / ($w**2 * $CTL)',                         #14*
+                '$epsr * $mur / ($vr**2 * $CTL)',                         #14*   w->vr 
                 '$mur / $epsr * $CTL',                                   #15*
             ],
             'CTL':[ #V02
                 '$LTL / $Z0TL**2',                                       #02*
                 '1 / ($Z0TL * c0 * $vr)',                                #03*
-                '$epsr * $mur / ($w**2 * $LTL)',                         #14*
+                '$epsr * $mur / ($vr**2 * $LTL)',                         #14*   w->vr
                 '$epsr / $mur * $LTL',                                   #15*
             ],
             'rTL':[ #V03
@@ -194,14 +194,14 @@ class General_TL():
                 '$etar / $vr',                                           #06*
                 '1 / ($epsr * $vr**2)',                                  #07*
                 '$etar**2 * $epsr',                                      #05*
-                '$w**2 * $LTL * $CTL / $epsr',                           #14*
+                '$vr**2 * $LTL * $CTL / $epsr',                           #14*  w->vr
                 '$mur * $LTL / $CTL',                                    #15*
             ],
             'epsr':[ #V13
                 '1 / ($etar * $vr)',                                     #08*
                 '1 / ($mur * $vr**2)',                                   #07*
                 '$mur / $etar**2',                                       #05*
-                '$w**2 * $LTL * $CTL / $mur',                            #14*
+                '$vr**2 * $LTL * $CTL / $mur',                            #14*  w->vr
                 '$epsr * $CTL / $LTL',                                   #15*
                 '$sigma / ($w * epsilon_0 * $tand)',                     #16*
             ],

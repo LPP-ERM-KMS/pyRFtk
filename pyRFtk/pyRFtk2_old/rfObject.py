@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2020-10-19 14:49:36'
+__updated__ = '2020-12-23 17:26:09'
 
 """
 Created on 8 Apr 2020
@@ -52,7 +52,10 @@ from Utilities.printMatrices import printR, printM, printMA
 from Utilities.tictoc import tic, toc
 from Utilities.getlines import getlines
 
-from pyRFtk2.CommonLib import read_tsf, convert_general, S_from_Y, S_from_Z
+from pyRFtk2.CommonLib import ReadTSF as read_tsf, \
+                              ConvertGeneral as convert_general, \
+                              S_from_Y, \
+                              S_from_Z
 
 #===============================================================================
 #
@@ -547,7 +550,7 @@ if __name__ == '__main__':
     
     from pyRFtk import TouchStoneClass3a as _ts
     from matplotlib import pyplot as pl
-    from pyRFtk2 import tests_rfObject as t
+    from pyRFtk2_old import tests_rfObject as t
     
     tests = {
         

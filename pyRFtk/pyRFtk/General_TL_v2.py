@@ -111,14 +111,16 @@ class General_TL():
             'LTL':[ #V01
                 '$Z0TL / (c0 * $vr)',                                    #01*
                 '$Z0TL**2 * $CTL',                                       #02*
-                '$epsr * $mur / ($w**2 * $CTL)',                         #14*
-                '$mur / $epsr * $CTL',                                   #15*
+                '$epsr * $mur / (c0**2 * $CTL)',                         #14* 2021/2/26 corrected !
+                # where does this come from ??
+                # '$mur / $epsr * $CTL',                                   #15*
             ],
             'CTL':[ #V02
                 '$LTL / $Z0TL**2',                                       #02*
                 '1 / ($Z0TL * c0 * $vr)',                                #03*
-                '$epsr * $mur / ($w**2 * $LTL)',                         #14*
-                '$epsr / $mur * $LTL',                                   #15*
+                '$epsr * $mur / (c0**2 * $LTL)',                         #14* 2021/2/26 corrected !
+                # where does this come from ??
+                # '$epsr / $mur * $LTL',                                   #15*
             ],
             'rTL':[ #V03
                 '$rTLI + $rTLO',                                         #09*
@@ -194,14 +196,14 @@ class General_TL():
                 '$etar / $vr',                                           #06*
                 '1 / ($epsr * $vr**2)',                                  #07*
                 '$etar**2 * $epsr',                                      #05*
-                '$w**2 * $LTL * $CTL / $epsr',                           #14*
+                'c0**2 * $LTL * $CTL / $epsr',                           #14* 2021/2/26 corrected !
                 '$mur * $LTL / $CTL',                                    #15*
             ],
             'epsr':[ #V13
                 '1 / ($etar * $vr)',                                     #08*
                 '1 / ($mur * $vr**2)',                                   #07*
                 '$mur / $etar**2',                                       #05*
-                '$w**2 * $LTL * $CTL / $mur',                            #14*
+                'c0**2 * $LTL * $CTL / $mur',                            #14* 2021/2/26 corrected !
                 '$epsr * $CTL / $LTL',                                   #15*
                 '$sigma / ($w * epsilon_0 * $tand)',                     #16*
             ],

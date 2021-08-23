@@ -128,7 +128,7 @@ Frederic Durodie 2009-04-21
 
 """
 
-__updated__ = '2020-12-03 13:54:50'
+__updated__ = '2021-05-03 17:59:22'
 
 
 #===============================================================================
@@ -489,12 +489,12 @@ class TouchStone:
             '^zline([0-9]+\(1\))+.sig$'
             """
             data = {}
-            fcheck = (len(freqs) is not 0)
+            fcheck = (len(freqs) != 0)
 
             tfiles = [x for x in os.listdir(dirpath) if len(re.findall(regex,x))]
             print(tfiles)
             
-            if len(tfiles) is 0:
+            if len(tfiles) == 0:
                 print('hmm ... maybe the data is a sqlite database ...')
                 print('... trying to open Storage.sdb ...')
                 sdb = sqlite3.connect(os.path.join(dirpath,  # @UndefinedVariable
@@ -559,8 +559,8 @@ class TouchStone:
                     for aline in f.readlines():
                         if aline[0] not in [dk for dk in '0123456789']:
                             try:
-                                if aline.index('Scale:') is 0:
-                                    if fscale is 0: # so it was not set yet
+                                if aline.index('Scale:') == 0:
+                                    if fscale == 0: # so it was not set yet
                                         fscale = float(aline.split()[1])
                                     else:
                                         if fscale != float(aline.split()[1]):
@@ -1032,8 +1032,8 @@ class TouchStone:
         # convert the data to an numpy.ndarray
         tdata = np.array(data)
             
-        if len(self.freqs) is 0:
-            if (len(tdata.shape) is not 2) or (tdata.shape[0] is not tdata.shape[1]):
+        if len(self.freqs) == 0:
+            if (len(tdata.shape) != 2) or (tdata.shape[0] != tdata.shape[1]):
                 raise TouchStoneError('Add_Data : data is not a square 2D array')
             self.nports = tdata.shape[0]
         else:
@@ -1340,13 +1340,13 @@ class TouchStone:
             tlist = re.findall('!SHAPE (.+)',aline.upper())
             if len(tlist) > 0:
                 self.shape = tuple([int(x) for x in tlist[0].split()[:2]])
-                if len(self.shape) is 1:
+                if len(self.shape) == 1:
                     self.shape.append(0)
                 
             tlist = re.findall('!PART (.+)',aline)
             if len(tlist) > 0:
                 self.part = tuple([x.lower() for x in tlist[0].split()[:2]])
-                if len(self.part) is 1:
+                if len(self.part) == 1:
                     self.part = self.part[0]
             
             tlist = re.findall('!NUMBERING (.+)',aline)
@@ -1451,7 +1451,7 @@ class TouchStone:
             
             # check for gamma or port impedance lines
             
-            Gline = re.findall('(?i)\s*(Gamma)\s+!(.+)',rest)
+            Gline = re.findall('(?i)\s*(Gamma)\s+!?(.+)',rest)
             Zline = re.findall('(?i)\s*(Port Impedance)(.+)',rest)
             
             if Gline or (lastline == 'gamma' and not Zline):
@@ -1527,7 +1527,8 @@ class TouchStone:
         
         if GENERAL_MIXED or len(Zcs) > 0:
             ## check if the port impedance matrix has the right shape
-            if np.array(Zcs).shape != (len(self.freqs), self.nports):
+            if (np.array(Zcs).shape != (len(self.freqs), self.nports) and 
+                np.array(Zcs).shape != (len(self.freqs), self.nports**2)):
                 
                 raise TouchStoneError(
                     'the data is not normalized but there is a mismatch in the '
@@ -1535,6 +1536,30 @@ class TouchStone:
                     'data %r' % (np.array(Zcs).shape, self.datas.shape)
                 )
                 
+            if np.array(Zcs).shape[1] == self.nports**2:
+                # this appear to be the new format of the Gamma Z0 data
+                # not clear what the reason for the change is ...
+                # we assume that the data is on the diagonal of the square matrix
+                # and we check that all other elements are zero ...
+                Gms = np.array(Gms).reshape((len(self.freqs),self.nports,self.nports))
+                Zcs = np.array(Zcs).reshape((len(self.freqs),self.nports,self.nports))
+                
+                tlist = []
+                for kf, (fGms, fZcs) in enumerate(zip(Gms, Zcs)):
+                    for kr, (rGm, rZc) in enumerate(zip(fGms, fZcs)):
+                        for kc, (Gm, Zc) in enumerate(zip(rGm, rZc)):
+                            if kr != kc and (np.abs(Gm) > 0 or np.abs(Zc) > 0):
+                                tlist.append((kf, kr, kc))
+                    
+                if tlist:
+                    print(
+                        f'WARNING: {len(tlist)} non-zero off-diagnal elements'
+                         ' for Gammas and Complex Port Impedances'
+                    )
+            
+                Gms = [np.diag(Gmk) for Gmk in Gms]
+                Zcs = [np.diag(Zck) for Zck in Zcs]
+
             self.Zcs = np.array(Zcs)
             self.Gms = np.array(Gms)
             
@@ -1729,7 +1754,7 @@ class TouchStone:
 
         if not hasattr(newfreqs, '__iter__'): # list and numpy.ndarray
             newfreqs = [newfreqs]   
-        elif isinstance(newfreqs, np.ndarray) and (len(newfreqs.shape) is 0):
+        elif isinstance(newfreqs, np.ndarray) and (len(newfreqs.shape) == 0):
             # note: np.array(n) will also have an __iter__ however one cannot iterate it
             newfreqs.resshape((1,))
         tsf.freqs = np.array(newfreqs)
@@ -1745,7 +1770,7 @@ class TouchStone:
                 return tsf
                 
         # a special case when there is only one frequency point
-        if len(self.freqs) is 1:
+        if len(self.freqs) == 1:
             
             if np.abs(1 - newfreqs/self.freqs) > relferror :
                 raise TouchStoneError(
@@ -1850,7 +1875,27 @@ class TouchStone:
         tsf.datas = R # [M for M in R] # because np.array().tolist() is slightly too agressive (arrays not preserved)!
 
         return tsf
+##==============================================================================!=====
+##
+## compare
+##
+    def compare(self, other, reciprocal=True, shape=None):
         
+        if self.nports != other.nports:
+            raise ValueError('TouchStone.compare: '
+                f'number of ports mismatch self:{self.nports} / '
+                f'other:{other.nports}')
+        
+        if not reciprocal:
+            raise NotImplementedError('TouchStone.compare: '
+                'reciprocal = False is not yet implemented')
+            
+        if shape is not None:
+            raise NotImplementedError('TouchStone.compare: '
+                'shape != None is not yet implemented')
+            
+        raise NotImplementedError('TouchStone.compare: is not implemented yet')
+    
 ##==============================================================================!=====
 ##
 ## Rebuild TouchStones from symmetric parts : main routine
@@ -1999,7 +2044,7 @@ def CombineEvenOdd(TS1N_even, TS1N_odd, part=None, shape=None, numbering=None):
                 raise TouchStoneError("CombineM1Ns : numbering is not "
                                       "'up', 'down', 'left' or 'right'")
             
-        if ((type(numbering) is tuple) and (len(numbering) is 2)):
+        if ((type(numbering) is tuple) and (len(numbering) == 2)):
             if ((type(numbering[0]) is not str) and (type(numbering[1]) is not str)):
                 raise TouchStoneError("CombineM1Ns : numbering not str or "
                                       "tuple of 2 str")
@@ -2128,12 +2173,12 @@ def CombineEvenOdd(TS1N_even, TS1N_odd, part=None, shape=None, numbering=None):
         
     if type(shape) is int :
         ## the client was lazy and just provided the number of rows
-        if TS1N_even.nports % shape is not 0:
+        if TS1N_even.nports % shape != 0:
             raise TouchStoneError(
                     'CombineM1Ns : shape not compatible with number of ports')
         shape = (shape, TS1N_even.nports / shape)
         
-    elif ((type(shape) is tuple) and (len(shape) is 2)):
+    elif ((type(shape) is tuple) and (len(shape) == 2)):
         if shape[0]*shape[1] != TS1N_even.nports:
             raise TouchStoneError(
                     'CombineM1Ns : shape not compatible with number of ports')

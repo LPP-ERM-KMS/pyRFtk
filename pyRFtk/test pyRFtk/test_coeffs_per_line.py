@@ -37,6 +37,8 @@ Created on 29 Jan 2020
 
 """
 
+import sys
+
 from pyRFtk import TouchStoneClass3a as _ts
 
 tsf = _ts.TouchStone(filepath='../test data/Z_IterCY8vr2R_Low-4cm_RefTOP.s24p')

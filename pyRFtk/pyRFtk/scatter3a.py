@@ -33,7 +33,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2020-10-30 14:47:00'
+__updated__ = '2020-12-06 14:55:28'
 
 """
 Implementation of the Scatter toolbox in Python
@@ -1937,7 +1937,7 @@ class Scatter:
         """
         
         if not (isinstance(port_s,str) or 
-                (isinstance(port_s, list) and len(port_s) is 2 
+                (isinstance(port_s, list) and len(port_s) == 2 
                  and all([isinstance(p,str) for p in port_s]))
                ):
             raise ValueError(
@@ -3217,7 +3217,6 @@ def convert_general(Z2, S1, Z1, type1='std', type2='std'):
             raise ValueError('Port impedance has to be a scalar or 1D vector')
         
         iZd = 1/Zd
-        iRd = 1/np.sqrt(np.real(Zd))
         
         if typ == 'std':
             QaV, QaI = O/2,  Zd/2
@@ -3226,6 +3225,7 @@ def convert_general(Z2, S1, Z1, type1='std', type2='std'):
             QIa, QIb = iZd, -iZd
             
         elif typ == 'gsm':
+            iRd = 1/np.sqrt(np.real(Zd))
             QaV, QaI = iRd/2,  Zd * iRd / 2
             QbV, QbI = iRd/2, -np.conj(Zd) * iRd / 2
             QVa, QVb = np.conj(Zd) * iRd, Zd * iRd
@@ -3334,7 +3334,7 @@ def convert_general_old(Zgen2, Sgen1, Zgen1):
             if len(Zgen) is len(Sgen1):
                 Zg = Zgen
             
-            elif len(Zgen) is 1:
+            elif len(Zgen) == 1:
                 # we are still here 
                 Zg = [Zgen[0]] * len(Sgen1)
  
@@ -4511,7 +4511,7 @@ if __name__ == "__main__":   ## self testing code: will not run during an import
     if 'trlCoax' in tests:
 
         def printdict(d):
-            print('Fail' if d[2] is 5 else '    ',end='')
+            print('Fail' if d[2] == 5 else '    ',end='')
             for k, v in [ (x, y) for x, y in sorted(d[0].items()) if x != '-']:
                 print(' %s%s = %10.4f' % ('*' if k in d[1] else ' ',k,v), end=',')
             print('     ',d[1])
