@@ -1,0 +1,13 @@
+INFO     - config.py            <module>        [   33]: 2021-10-01 13:55:05 -- logging level DEBUG
+DEBUG    - config.py            setLogLevel     [   43]: Change loglevel from DEBUG to DEBUG
+DEBUG    - config.py            setLogLevel     [   52]: SetLogLevel: DEBUG
+DEBUG    - config.py            setLogLevel     [   54]:    CRITICAL    True   50
+DEBUG    - config.py            setLogLevel     [   54]:    FATAL       True   50
+DEBUG    - config.py            setLogLevel     [   54]:    ERROR       True   40
+DEBUG    - config.py            setLogLevel     [   54]:    WARN        True   30
+DEBUG    - config.py            setLogLevel     [   54]:    WARNING     True   30
+DEBUG    - config.py            setLogLevel     [   54]:    INFO        True   20
+DEBUG    - config.py            setLogLevel     [   54]:    DEBUG       True   10
+DEBUG    - config.py            setLogLevel     [   54]:    NOTSET      False   0
+DEBUG    - ConvertGeneral.py    ConvertGeneral  [   63]: 50 Ohm (V) -> 30 Ohm (V)
+DEBUG    - ConvertGeneral.py    ConvertGeneral  [   63]: 50 Ohm (V) -> 30 Ohm (V)
