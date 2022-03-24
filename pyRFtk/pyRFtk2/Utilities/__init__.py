@@ -40,8 +40,13 @@ Created on 18 Dec 2020
 
 @author: frederic
 """
-__updated__ = "2021-08-18 13:53:19"
+__updated__ = "2021-12-15 11:47:53"
 
 from .getlines import getlines
-from .printMatrices import strM, printM
+from .printMatrices import strM, printM, printMA, printRI
 from .tictoc import tic, toc
+from .ReadDictData import ReadDictData
+from .findpath import findpath
+from .compareSs import compareSs
+from .whoami import whoami
+from .str_dict import str_dict

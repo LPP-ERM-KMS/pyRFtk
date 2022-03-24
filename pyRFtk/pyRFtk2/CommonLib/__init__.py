@@ -40,12 +40,16 @@ Created on 18 Dec 2020
 
 @author: frederic
 """
-__updated__ = "2021-03-03 17:36:53"
+__updated__ = "2022-01-26 16:07:06"
 
 from .S_from_Z import S_from_Z
 from .S_from_Y import S_from_Y
 from .S_from_VI import S_from_VI
+from .Z_from_S import Z_from_S
+
 from .ConvertGeneral import ConvertGeneral
 from .ReadTSF import ReadTSF
 from .maxfun import maxfun
 from .resolveTLparams import TLresolver
+from .plotVSWs import plotVSWs, scaleVSW, strVSW
+from ._check_3D_shape_ import _check_3D_shape_

@@ -8,7 +8,7 @@ Created on 16 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2021-08-19 16:45:16"
+__updated__ = "2022-03-23 09:07:44"
 
 if __name__ == '__main__':
     import sys
@@ -19,6 +19,7 @@ if __name__ == '__main__':
 import numpy as np
 from scipy.integrate import odeint
 from scipy.interpolate import interp1d
+import copy
 
 #===============================================================================
 #
@@ -27,7 +28,7 @@ from scipy.interpolate import interp1d
 
 #TODO: properly integrate .config imports ...
 
-from .config import tLogger, logit
+from .config import tLogger, logit, ident
 from .config import _newID
 from .config import rcparams
 from .config import fscale
@@ -38,6 +39,8 @@ from .CommonLib import maxfun
 from .CommonLib import ReadTSF
 
 from .CommonLib import TLresolver
+
+from .Utilities import whoami
 
 #===============================================================================
 #
@@ -150,8 +153,8 @@ class rfTRL():
         ID: [m] inner diameter of a circular coaxial TL
         
         qTL: [1/m] rTL = (w rho mur mu0 / 2)**0.5 * qTL
-            qTLO: [1/m] rTLO= (w rhoO murO mu0 / 2)**0.5 * qTLO
-            qTLI: [1/m] rTLI = (w rhoI murI mu0 / 2)**0.5 * qTLI
+        qTLO: [1/m] rTLO= (w rhoO murO mu0 / 2)**0.5 * qTLO
+        qTLI: [1/m] rTLI = (w rhoI murI mu0 / 2)**0.5 * qTLI
         
     
     Implemented methods:
@@ -194,7 +197,7 @@ class rfTRL():
     def __init__(self, **kwargs):
         
         self.kwargs = kwargs
-        self.ID = kwargs.pop('ID','rfTRL_'+_newID())
+        self.Id = kwargs.pop('Id','rfTRL_'+_newID())
         self.ports = kwargs.pop('ports',['1','2'])
         self.L = kwargs.pop('L', 0.)
         self.Zbase = kwargs.pop('Zbase', 50.)
@@ -204,8 +207,21 @@ class rfTRL():
         self.constant = True
         self.f = np.NaN
         self.S = None
+        xpos = kwargs.pop('xpos', [0., self.L])
+                        
+        if isinstance(xpos, list):
+            if len(xpos) == 2:
+                self.xpos = xpos
+            else:
+                raise ValueError(
+                    'rfTRL.__init__: port count mismatch'
+                )
+        
+        elif isinstance(xpos, (float,int)):
+            self.xpos = [xpos, self.L + xpos]
         
         #------------------------------------------------------------ touchstone
+        # FIXME: do we need this here ??
         if self.sNp:
             self.sNpdata = ReadTSF(src = self.sNp, 
                                    funit='Hz',
@@ -241,7 +257,7 @@ class rfTRL():
             # print(Ss,'\n')
             
         #-------------------------------------------------------- TRL parameters
-        self.TLP = TLresolver(**kwargs)
+        self.TLP = TLresolver(L=self.L, Zbase=self.Zbase, **kwargs)
         
         self.rjwL = self.TLP.rjwL
         self.gjwC = self.TLP.gjwC
@@ -252,6 +268,42 @@ class rfTRL():
         
         self.solved = {}
         
+    #===========================================================================
+    #
+    # c o p y
+    #
+    def copy(self):
+        
+        return self.__deepcopy__(self)
+    
+    #===========================================================================
+    #
+    # _ _ c o p y _ _
+    #
+    def __copy__(self):
+        
+        return self.__deepcopy__(self)
+    
+    #===========================================================================
+    #
+    # _ _ d e e p c o p y _ _
+    #
+    def __deepcopy__(self, memo=None):
+        debug = logit['DEBUG']
+        debug and tLogger.debug(ident(f'> circuit.__deepcopy__ {self.Id}', 1))
+        
+        other = type(self)()
+        for attr, val in self.__dict__.items():
+            try: 
+                debug and tLogger.debug(ident(f'copy {attr}'))
+                other.__dict__[attr] = copy.deepcopy(val)
+            except:
+                print(f'{whoami(__package__)}: could not deepcopy {attr}')
+                raise
+        
+        debug and tLogger.debug(ident(f'< circuit.__deepcopy__ {self.Id}', -1))
+        return other
+     
     #===========================================================================
     #
     # _ _ s t r _ _
@@ -297,12 +349,14 @@ class rfTRL():
     def set(self, **kwargs):
         
         if kwargs and not self.constant:
-            raise ValueError('rfTRL.set not possible because the transmission '
+            raise ValueError(
+                f'{whoami(__package__)}: not possible because the transmission '
                              'line parameters are not constant')
             
         for kw, val in kwargs.items():
             if not hasattr(self, kw):
-                raise ValueError(f'rfTRL.set: parameter {kw} not present')
+                raise ValueError(
+                    f'{whoami(__package__)}: parameter {kw} not present')
             
             setattr(self, kw, val)
             self.kwargs[kw] = val
@@ -388,9 +442,18 @@ class rfTRL():
                     xs = np.array(xs) * self.L/xs[-1]
                     
             else: # step explicitly given
-                
-                num = int(np.ceil(self.L/self.dx))
-                xs = np.linspace(0, self.L, max(2,num))
+                if self.dx < 0:
+                    x, xs = 0., []
+                    while x <= self.L:
+                        xs.append(x)
+                        x -= self.dx
+                    if xs[-1] < self.L:
+                        xs.append(self.L)
+                    xs = np.array(xs)
+                    
+                else:
+                    num = int(np.ceil(self.L/self.dx))
+                    xs = np.linspace(0, self.L, max(2,num))
                                        
             if xs[0] == xs[-1]:
                 
@@ -462,7 +525,7 @@ class rfTRL():
     #
     # g e t S
     #
-    def getS(self, fs, Zbase=None, params={}):
+    def getS(self, fs, Zbase=None, params={}, **kw):
         """
         returns an (array of) S-matrice(s) at the frequency(ies)fs 
 
@@ -528,9 +591,10 @@ class rfTRL():
     #
     # m a x V  
     #
-    def maxV(self, f, E, Zbase=None, ID='<top>'):
+    def maxV(self, f, E, Zbase=None, ID='<top>',**kwargs):
+        # kwargs: catchall for other parameters
         xs, (Vsw, _, _) = self.VISWs(f, E, Zbase)
         Usw = np.abs(Vsw)
         xymax = maxfun(xs, Usw)
-        return xymax[1], f'\'{self.ports[0]}\' @ {xymax[0]:.3f}m'
+        return xymax[1], f' node: {self.ports[0]} @ {xymax[0]:.3f}m', (xs, Usw)
         

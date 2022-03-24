@@ -10,7 +10,7 @@ Created on 17 Aug 2021
 
 Attempt to simulate the ILA RDLs 
 """
-__updated__ = "2021-08-18 13:48:07"
+__updated__ = "2021-10-07 09:41:52"
 
 import os
 
@@ -23,7 +23,7 @@ import numpy as np
 import matplotlib.pyplot as pl
 
 from pyRFtk2 import circuit
-from pyRFtk2 import junction
+# from pyRFtk2 import junction
 from pyRFtk2 import rfTRL
 from pyRFtk2 import rfRLC
 

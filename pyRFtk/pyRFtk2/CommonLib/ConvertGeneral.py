@@ -8,12 +8,12 @@ Created on 18 Dec 2020
 
 @author: frederic
 """
-__updated__ = "2021-08-15 10:30:44"
+__updated__ = "2022-02-23 09:58:17"
 
 import numpy as np
 
+from ..config import logit, logident
 from ._check_3D_shape_ import _check_3D_shape_ 
-from ..config import tLogger
 
 #===============================================================================
 #
@@ -60,8 +60,9 @@ def ConvertGeneral(Z2, S1, Z1, type1='V', type2='V'):
         return value has the shape of S1
     """
     
-    tLogger.debug(f'{Z1} Ohm ({type1}) -> {Z2} Ohm ({type2})')
-    
+    _debug_ = logit['DEBUG']
+    _debug_ and logident('>', printargs=True)
+        
     # check S1 ... a single scalar s         -> [ [[s]] ] 1 freq 1x1 S-matrix
     #              a list of 1 element [s]   -> [ [[s]] ] 1 freq 1x1 S-matrix
     #              a 2D list/array     [[S]] -> [ [[S]] ] 1 freq NxN S-matrix
@@ -136,14 +137,18 @@ def ConvertGeneral(Z2, S1, Z1, type1='V', type2='V'):
     S2 = np.array(S2)
     
     if L == 0:
+        _debug_ and logident('< L==0')
         return S2[0,0,0]
     
     elif L == 1:
+        _debug_ and logident('< L==1')
         return [S2[0,0,0]]
     
     elif L == 2:
+        _debug_ and logident('< L==2')
         return S2[0,:,:]
              
+    _debug_ and logident('< L==3')
     return S2
 
     

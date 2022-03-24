@@ -8,17 +8,21 @@ Created on 30 Mar 2021
 
 @author: frederic
 """
-__updated__ = "2021-08-19 16:39:00"
+__updated__ = "2022-03-24 09:14:50"
 
 import numpy as np
+import copy
 
 #TODO: integrate config imports ...
 
-from .config import tLogger, logit
-from .config import _newID
-from .config import rcparams
-from .config import fscale
-from .config import FUNITS
+if __name__ == '__main__':
+    from config import _newID, logit, logident # @UnresolvedImport @UnusedImport
+    from Utilities import whoami               # @UnresolvedImport @UnusedImport
+    
+else:
+    from .config import _newID, logit, logident                      # @Reimport
+    from .Utilities import whoami                                    # @Reimport
+
 
 #===============================================================================
 #
@@ -64,8 +68,10 @@ class rfRLC():
             Rs : series resistance [0 Ohm]
             Ls : series inductance [0 H]
             Cs : series capacity [+inf F]
+            xpos : list of the port positions (order 's', 'p')
         """
-        self.Zbase = kwargs.pop('Zbase',50.)
+        self.Id = kwargs.pop('Id', f'{type(self).__name__}_{_newID()}')
+        self.Zbase = kwargs.pop('Zbase', 50.)
         self.ports = kwargs.pop('ports',['s','p'])
         self.Rs = kwargs.pop('Rs', 0.)
         self.Ls = kwargs.pop('Ls', 0.)
@@ -75,13 +81,61 @@ class rfRLC():
         self.Cp = kwargs.pop('Cp', 0.)
         self.f = None
         self.S = np.array([[0,1],[1,0]], dtype=complex)
+        self.xpos = kwargs.pop('xpos',[0., 0.])
     
+    #===========================================================================
+    #
+    # c o p y
+    #
+    def copy(self):
+        
+        return self.__deepcopy__(self)
+    
+    #===========================================================================
+    #
+    # _ _ c o p y _ _
+    #
+    def __copy__(self):
+        
+        return self.__deepcopy__(self)
+    
+    #===========================================================================
+    #
+    # _ _ d e e p c o p y _ _
+    #
+    def __deepcopy__(self, memo=None):
+        
+        debug = logit['DEBUG']
+        debug and logident('>')
+        other = type(self)()
+        for attr, val in self.__dict__.items():
+            try:
+                other.__dict__[attr] = copy.deepcopy(val)
+            except:
+                msg = f'{whoami(__package__)}: could not deepcopy {attr}'
+                debug and logident(msg)
+                raise RuntimeError(msg)
+            
+        debug and logident('<')
+        return other
+
     #===========================================================================
     #
     # _ _ s t r _ _
     #
-    def __str__(self, full=False):
-        return 'lumped RLC element\n^'
+    def __str__(self, full=0):
+        s  = f'{type(self).__name__} Id={self.Id} at {hex(id(self))}\n'
+        if full:
+            for elem, value, default, unit, scale in zip(
+                ['Rs', 'Ls', 'Cs', 'Rp', 'Lp', 'Cp'],
+                [self.Rs, self.Ls, self.Cs, self.Rp, self.Lp, self.Cp],
+                [0., 0., +np.inf, +np.inf, +np.inf, 0.],
+                ['Ohm', 'nH', 'pF','Ohm', 'nH', 'pF'],
+                [1e0, 1e-9, 1e-12, 1e0, 1e-9, 1e-12]):
+                if value != default:
+                    s += f'|  {elem} = {value/scale:.6g} {unit} \n'
+        s += '^\n'
+        return s
     
     #===========================================================================
     #
@@ -109,7 +163,7 @@ class rfRLC():
     #
     # g e t S
     #
-    def getS(self, fs, Zbase=None, params={}):
+    def getS(self, fs, Zbase=None, params={}, **kw):
         
         if Zbase is None:
             Zbase = self.Zbase
@@ -189,12 +243,51 @@ class rfRLC():
     #
     # m a x V 
     #
-    def maxV(self, f, E, Zbase=None, ID='<rfRLC>'):
+    def maxV(self, f, E, Zbase=None, ID=None, **kwargs):
         
-        if Zbase is None:
-            Zbase = self.Zbase
+        # kwargs: catch all for other parameters 
+        ID =  self.Id if ID is None else ID
+        Zbase = self.Zbase if Zbase == None else Zbase
         
-        raise NotImplementedError
+        Ea = [E[p] for p in self.ports]
+        Eb = self.getS(f, Zbase) @ Ea   # implicitly updates and solves the circuit
+        Vi = np.abs(Ea + Eb)
+        maxVi = np.max(Vi)
+        k = np.where(Vi == maxVi)[0][0]
+        
+        return maxVi, ID+'.'+self.ports[k], (np.zeros(Vi.shape),Vi)
+
         return 
-        
+
+#===============================================================================
+#
+# _ _ m a i n _ _
+#
+if __name__ == '__main__':
+    from config import setLogLevel             # @UnresolvedImport @UnusedImport
+    tRLC = rfRLC(Rs=10)
+    print(type(tRLC))
+    print(tRLC)
     
+    setLogLevel('DEBUG')
+    
+    def f1(t):
+        def f2(t):
+            def f3(t):
+                logident('> hello world')
+                r = t.copy()
+                logident('<')
+                return r
+            
+            logident('>')
+            r = f3(t)
+            logident('<')
+            return r
+        
+        logident('>')
+        r = f2(t)
+        logident('<')
+        return r
+    
+    rRLC = f1(tRLC)
+        

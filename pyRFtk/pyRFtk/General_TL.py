@@ -841,7 +841,7 @@ class General_TL():
                 self.f[var] = lambda x, s=scl: val(x)*s
         
         elif isinstance(val, (list,tuple)):
-            if len(val) is not 2:
+            if len(val) != 2:
                 raise ValueError(
                     'General_TL: %r : need a list/tuple of 2 floats or '
                     'a list/tuple of 2 list/tuple of floats' % var)

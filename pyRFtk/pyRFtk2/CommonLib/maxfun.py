@@ -8,15 +8,24 @@ Created on 17 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2021-02-18 10:50:29"
+__updated__ = "2022-01-19 11:30:52"
 
 import numpy as np
 import matplotlib.pyplot as pl
 
+from ..config import logit, tLogger, ident
+
 VERBOSE = False
 
+import warnings
+
 def maxfun(xs, ys):
-        
+    debug = logit['DEBUG']
+    debug and tLogger.debug(ident(
+        f'> [maxfun]',
+        1
+    ))
+    
     xymax = [xs[-1], ys[-1]] if ys[-1] > ys[0] else [xs[0],ys[0]]
     
     if VERBOSE:
@@ -49,12 +58,26 @@ def maxfun(xs, ys):
                 
     for idx in idxmaxs:
         cases.append([ys[idx],ys[idx+1],ys[idx+2]])
-        p = np.polyfit([xs[idx],xs[idx+1],xs[idx+2]],
-                       [ys[idx],ys[idx+1],ys[idx+2]],
-                       deg=2)
+        
+        # note polyfit can cast a numpy.RankWarning:
+        #  this probably happens when the TL fixed step dx parameter causes
+        #  the last but one and last points to be too close to each other
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            p = np.polyfit([xs[idx],xs[idx+1],xs[idx+2]],
+                           [ys[idx],ys[idx+1],ys[idx+2]],
+                           deg=2)
+        
         xy = (-p[1]/(2*p[0]), p[2]-p[1]**2/(4*p[0]))
-        if xy[1] > xymax[1]:
-            xymax = xy
+        if  xs[idx] <= xy[0] <= xs[idx+2]:
+            if xy[1] > xymax[1]:
+                xymax = xy
+        else:
+            debug and tLogger.debug(ident('Warning result outside window'))
+            xymax = 0, 0
+            for xm, ym in zip(xs[idx:idx+3],xs[idx:idx+3]):
+                if ym > xymax[1]:
+                    xymax = xm, ym
             
         if VERBOSE:
             pl.plot(xy[0],xy[1],'g^')
@@ -70,4 +93,5 @@ def maxfun(xs, ys):
                 cases.append((xs[-1],ys[-1]))
                 pl.plot(xs[-1],ys[-1],'rs')
 
+    debug and tLogger.debug(ident(f'< [maxfun]', -1))
     return xymax

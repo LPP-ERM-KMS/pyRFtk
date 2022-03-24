@@ -64,6 +64,7 @@ from datetime import date
 import warnings
 import pprint as PP
 import pickle
+import copy
 
 #----------------------------------------------------------------------- version
 
@@ -286,6 +287,39 @@ class circuit():
 
 #===============================================================================
 #
+#    c o p y
+#
+    def copy(self):
+        other = type(self)()
+        for kw, V in self.__dict__.items():
+            try:
+                other.__dict__[kw] = copy.deepcopy(V)
+            except:
+                if kw == 'TLs':
+                    sTLs = {}
+                    for TL, val in self.TLs.items():
+                        if isinstance(val['isGTL'], General_TL):
+                            sTLs[TL] = val.copy()
+                            sTLs[TL]['isGTL'] = sTLs[TL]['isGTL'].state
+                    
+                    other.__dict__['TLs'] = sTLs
+                    for TL in other.TLs:
+                        if (isinstance(other.TLs[TL]['isGTL'], dict) and 
+                            len(other.TLs[TL]['isGTL']) == 2 and 
+                            'L' in other.TLs[TL]['isGTL'] and 
+                            'kwargs' in other.TLs[TL]['isGTL']):
+                        
+                            other.TLs[TL]['isGTL'] = General_TL(
+                                other.TLs[TL]['isGTL']['L'],
+                                **other.TLs[TL]['isGTL']['kwargs'])
+                else:
+                    print(f'circuit_Class3.copy: failed to deepcopy {kw}')
+                    raise
+                
+        return other
+    
+#===============================================================================
+#
 #    f i n d _ o r p h a n s
 #
 
@@ -328,7 +362,7 @@ class circuit():
 # s t a t e
 #
     def state(self, d = None):
-        if d is None:
+        if d == None:
             
             sTLs = {}
             for TL, val in self.TLs.items():
@@ -371,7 +405,7 @@ class circuit():
                     'M'       : np.array(self.M).dumps(),
                     # 'sM'       : sM,
                     # we don't store the invM but just the fact that it was there or not
-                    'invM'    : None if self.invM is None else True,
+                    'invM'    : None if self.invM == None else True,
                     'sol'     : self.sol,
                     'counter' : self.counter,
                    }
@@ -394,7 +428,7 @@ class circuit():
             # sM = pickle.loads(d['sM'])
             self.M = pickle.loads(d['M'])
             self.invM = d['invM']
-            if self.invM is True:
+            if self.invM == True:
                 self.invM = np.linalg.inv(self.M)
             self.sol = d['sol']
             self.counter = d['counter']
@@ -608,7 +642,7 @@ class circuit():
 
         ##------------------------------------------------------final processing
         Nports = Sb.shape[0]
-        if len(Portnames) is not Nports :
+        if len(Portnames) != Nports :
             print("circuit_Class.AddBlock : optional Portnames [%d] is not " +
                   "consistent with size of '%s[%d,%d]'" % 
            (len(Portnames),dtype,Nports,Nports))
@@ -782,7 +816,7 @@ class circuit():
         Ports = tkwargs.pop('Portnames', None)
  
         if Ports:
-            if (not isinstance(Ports, list) or len(Ports) is not 2 
+            if (not isinstance(Ports, list) or len(Ports) != 2 
                or any([not isinstance(p,str) for p in Ports])):
                 raise ValueError('circuit_Class.MakeTL: Portnames if given'
                                  ' must be a list of 2 strings')
@@ -808,7 +842,7 @@ class circuit():
         plotargs = tkwargs.pop('plotargs',{})
         
         dx = tkwargs.pop('dx',self.dx)
-        if dx is None:
+        if dx == None:
             dx = -speed_of_light/(self.fMHz*1E6)/72
 
         self.check_kwargs_left('MakeTL', tkwargs)
@@ -950,7 +984,7 @@ class circuit():
         Ports = tkwargs.pop('Portnames', None)
  
         if Ports:
-            if (not isinstance(Ports, list) or len(Ports) is not 2 
+            if (not isinstance(Ports, list) or len(Ports) != 2 
                or any([not isinstance(p,str) for p in Ports])):
                 raise ValueError('circuit_Class.MakeTL: Portnames if given'
                                  ' must be a list of 2 strings')
@@ -976,7 +1010,7 @@ class circuit():
         plotargs = tkwargs.pop('plotkws',{})
         
         maxdx = tkwargs.pop('dx',self.dx)
-        if maxdx is None:
+        if maxdx == None:
             maxdx = -speed_of_light/(self.fMHz*1E6)/72
         GTLkwargs.update({'maxdx': maxdx})
 
@@ -1161,8 +1195,8 @@ class circuit():
            
         """
         ##-------------------------- no kwargs maybe 1 additional positional arg
-        if len(kwargs) is 0 :
-            if len(args) is 1 :
+        if len(kwargs) == 0 :
+            if len(args) == 1 :
                 RC = args[0]
             elif len(args):
                 raise ValueError('circuit.Terminate : there can only be at most'
@@ -1287,7 +1321,7 @@ class circuit():
                              'ports (%d given)' % N)
         
         S = kwargs.pop('S', None)
-        if S is None:
+        if S == None:
             # if S is not given use ideal junction
             S = np.array([[2/N - (1 if kc == kr else 0) for kc in range(N)]
                               for kr in range(N)])
@@ -1316,7 +1350,7 @@ class circuit():
                 # apparently some of the ports have been used in a connection
                 # so we need to find if that is the connection that is being
                 # changed or not
-                if len(iBs[3]) is not len(idxB):
+                if len(iBs[3]) != len(idxB):
                     raise ValueError(
                         'circuit.Connect : modified connection topology')
                 
@@ -1324,7 +1358,7 @@ class circuit():
                     if old_iB not in idxB:
                         raise ValueError(
                             'circuit.Connect : modified connection topology')
-                    elif old_iB is not new_iB:
+                    elif old_iB != new_iB:
                         print('circuit.Connect : modified connection order')
                 
     #             print('Connect')
@@ -1499,7 +1533,7 @@ class circuit():
             for port, wave in excitations.items() :
                 self.Excite(port,wave)
 
-        if self.invM is None : # only the excitations changed ?
+        if self.invM == None : # only the excitations changed ?
             Neq, Nunknowns = self.M.shape
             # print(self.M.shape)
             if Neq == Nunknowns: # ??? "is" does not seem to work
@@ -1630,7 +1664,7 @@ class circuit():
         stype : 'V'|'I'|'A'|'B'|'P'|'G'|'Z'|'Y'|'argV'|'absV'|'argI'|'absI'
                 |'VSWR'
         """
-        if self.sol is None : 
+        if self.sol == None : 
             self.Solve()
         
         try :
@@ -1640,9 +1674,9 @@ class circuit():
             print("circuit_Class.Solution : port '%s' not found" % name)
             raise
 
-        if type(stype) is tuple or type(stype) is list :
+        if type(stype) == tuple or type(stype) == list :
             res = [self._value(A, B, ttype) for ttype in stype]
-            if type(stype) is tuple :
+            if type(stype) == tuple :
                 res = tuple(res)
         else :
             if stype[0] == '-': # reverse A and B
@@ -1716,8 +1750,8 @@ class circuit():
             
             tlist = []
             for k, itm in enumerate(alist):
-                if type(itm) is tuple :
-                    if len(itm) is 2 :
+                if type(itm) == tuple :
+                    if len(itm) == 2 :
                         idxA, idxB, idxE = check2(itm[0])                            
                         if itm[1] not in ['V','I','A','B']:
                             print("circuit_Class.Get_Coeffs() : only types 'A', ",
@@ -1740,11 +1774,11 @@ class circuit():
                     
         #.......................................................................
 
-        if E is None :
+        if E == None :
             E = [(port,deftypeE) for port in self.E]
         E = check1(E,deftypeE,self.E,'E')
 
-        if D is None :
+        if D == None :
             D = [(port,deftypeD)
                  for port, typ, idxA, idxB, idxE, cfA, cfB in E]
         D = check1(D,deftypeD,self.names,'D')
@@ -1878,7 +1912,7 @@ class circuit():
             print('QB')
             printRI(QB)
             
-            if St is not None:
+            if St != None:
                 print('St @ QA')
                 printRI(St @ QA)
             
@@ -2258,7 +2292,7 @@ class circuit():
             # get the TL properties
             Zc, gamma = tTLinfo['Zc'], tTLinfo['gamma']
             x0, L = tTLinfo['relpos'], tTLinfo['length']
-            dx = dx1 if dx1 is not None else  tTLinfo['dx']
+            dx = dx1 if dx1 != None else  tTLinfo['dx']
             gmx0 = gamma * x0
             
             # get the 1st port's voltage and current
@@ -2277,7 +2311,7 @@ class circuit():
             AexpGxr = (VI[0] + sI * Zc * VI[1]) / np.exp(-gmx0) / 2
             BexpGxr = (VI[0] - sI * Zc * VI[1]) / np.exp(+gmx0) / 2
 
-            if dx is 0:
+            if dx == 0:
                 xs = x0, x0+L # the interval on which the function is defined
                 
             elif isinstance(dx, int):
@@ -2326,12 +2360,12 @@ class circuit():
         result = {}
 
         for TLid, TLinfo in self.TLs.items():
-            if TLinfo['isGTL'] is False:
+            if TLinfo['isGTL'] == False:
     #             xs, dx, V, I, P, dP = SWfunctions(TLinfo)
                 # get the TL properties
                 Zc, gamma = TLinfo['Zc'], TLinfo['gamma']
                 x0, L = TLinfo['relpos'], TLinfo['length']
-                dx = dx1 if dx1 is not None else  TLinfo['dx']
+                dx = dx1 if dx1 != None else  TLinfo['dx']
                 gmx0 = gamma * x0
                  
                 # get the 1st port's voltage and current
@@ -2353,7 +2387,7 @@ class circuit():
                 AexpGxr = (VI[0] + sI * Zc * VI[1]) / np.exp(-gmx0) / 2
                 BexpGxr = (VI[0] - sI * Zc * VI[1]) / np.exp(+gmx0) / 2
      
-                if dx is 0:
+                if dx == 0:
                     xs = x0, x0+L # the interval on which the function is defined
                      
                 elif isinstance(dx, int):
@@ -2385,7 +2419,7 @@ class circuit():
              
                 if isinstance(dtype,str):
                     DTYPE = dtype.upper()
-                    if dx is 0:
+                    if dx == 0:
                         if DTYPE in ['V', 'VSW']:
                             result[TLid] = (xs, V)
                         elif DTYPE in ['I','ISW']:
@@ -2549,6 +2583,7 @@ def processGTL(fMHz, Zbase, GTL_data, **kwargs):
      }, # GTL
     }
     """
+    from pprint import pprint
     
     #---------------------------------------------------- r e s o l v e V a  r s   
     #
@@ -2596,9 +2631,12 @@ def processGTL(fMHz, Zbase, GTL_data, **kwargs):
     #----------------------------------------------------- iterate over GTL list
     GTLs = {}
     for TL, GTLkwargs in GTL_data['GTL'].items():
-        
+        # pprint(TL)
+        # pprint(GTLkwargs)
         GTLkws =    resolveVars(GTLkwargs, variables)
         terminations = []
+        # pprint(GTLkws)
+        
         for k, port in enumerate(GTLkws['Portnames']):
             
             # detect if a port is terminated or not
@@ -2929,7 +2967,7 @@ if __name__ == "__main__" :
         
         # S-matrix of an ideal N-port junction
         N = 3
-        S = np.array([[(2.-N)/N if rw is cl else 2./N for rw in range(N)]
+        S = np.array([[(2.-N)/N if rw == cl else 2./N for rw in range(N)]
                       for cl in range(N)])
 
         # build the circuit

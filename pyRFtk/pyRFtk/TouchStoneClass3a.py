@@ -128,7 +128,7 @@ Frederic Durodie 2009-04-21
 
 """
 
-__updated__ = '2021-05-03 17:59:22'
+__updated__ = '2022-02-15 11:39:14'
 
 
 #===============================================================================
@@ -164,8 +164,11 @@ from scipy.interpolate import interp1d, splrep, splev
 from scipy.constants import speed_of_light
 
 import re, os, bisect, time, copy
-import sqlite3
-
+try:
+    import sqlite3
+except Exception as e:
+    print(repr(e))
+    
 from functools import reduce
 from pyRFtk import scatter3a as sc
 from Utilities.ppdict import ppdict

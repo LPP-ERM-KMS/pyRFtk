@@ -8,12 +8,12 @@ Created on 18 Dec 2020
 
 @author: frederic
 """
-__updated__ = "2021-08-19 12:54:47"
+__updated__ = "2022-02-11 18:10:45"
 
 import numpy as np
 import re
 from ..Utilities import getlines 
-from ..config import tLogger, logit
+from ..config import tLogger, logit, ident
 from ..config import fscale
 
 from . import ConvertGeneral, S_from_Z, S_from_Y
@@ -35,6 +35,11 @@ def ReadTSF(src, **kwargs):
         !REM
         !MARKERS    list of frequencies
     """
+    debug = logit['DEBUG']
+    debug and tLogger.debug(ident(
+        f'> [CommonLib.ReadTSF] src= {src}, kwargs= {kwargs}',
+        1
+    ))
     
     #TODO: implement ports, funit
     
@@ -43,11 +48,13 @@ def ReadTSF(src, **kwargs):
     Tports = kwargs.get('ports', 'port-%03d')
     Tcomments = kwargs.get('comments',[])
     
-    logit['DEBUG'] and tLogger.debug(f'TZbase = {TZbase}')
-    logit['DEBUG'] and tLogger.debug(f'funit  = {Tfunit}')
-    logit['DEBUG'] and tLogger.debug(f'Tports = {Tports}')
-    for k, cmt in Tcomments:
-        logit['DEBUG'] and tLogger.debug(f'Tcomments[{k:4d}] = "{cmt}"')
+    if debug:
+        tLogger.debug(ident(f'TZbase = {TZbase}'))
+        tLogger.debug(ident(f'funit  = {Tfunit}'))
+        tLogger.debug(ident(f'Tports = {Tports}'))
+        
+        for k, cmt in Tcomments:
+            tLogger.debug(ident(f'Tcomments[{k:4d}] = "{cmt}"'))
     
     # process the source input 
         
@@ -144,13 +151,13 @@ def ReadTSF(src, **kwargs):
         tlist = re.findall('!SHAPE (.+)',aline.upper())
         if len(tlist) > 0:
             shape = tuple([int(x) for x in tlist[0].split()[:2]])
-            if len(shape) is 1:
+            if len(shape) == 1:
                 shape.append(0)
             
         tlist = re.findall('!PART (.+)',aline)
         if len(tlist) > 0:
             part = tuple([x.lower() for x in tlist[0].split()[:2]])
-            if len(part) is 1:
+            if len(part) == 1:
                 part = part[0]
         
         tlist = re.findall('!NUMBERING (.+)',aline)
@@ -167,7 +174,7 @@ def ReadTSF(src, **kwargs):
     source = re.findall(
         '(?i)! Touchstone file exported from HFSS (\d{4}\.\d+\.\d+)',
         comments[0])
-    logit['DEBUG'] and tLogger.debug(f'source = {source}')
+    debug and tLogger.debug(ident(f'source = {source}'))
     
     if source:
         # print('HFSS  %r' % source)
@@ -185,7 +192,7 @@ def ReadTSF(src, **kwargs):
                 if re.findall('(?i)^!Data is not renormalized', aline):
                     GENERAL_MIXED = True
                 
-                logit['DEBUG'] and tLogger.debug(f'GENERAL_MIXED = {GENERAL_MIXED}')
+                debug and tLogger.debug(ident(f'GENERAL_MIXED = {GENERAL_MIXED}'))
                 
                 if re.findall('(?i)^! Variables:',aline):
                     lineno += 1
@@ -344,17 +351,17 @@ def ReadTSF(src, **kwargs):
             
     # set the portnames
     
-    if 'ports'in kwargs:
+    if 'ports' in kwargs:
         # caller supplied portnames (or equivalent format string)
         if isinstance(Tports,str):
             ports = [Tports % k for k in range(1,N+1)]
-            logit['DEBUG'] and tLogger.debug(
-                f'ports were supplied as a format string "{Tports}" -> {ports}')
+            debug and tLogger.debug(ident(
+                f'ports were supplied as a format string "{Tports}" -> {ports}'))
             
         elif isinstance(Tports, list) and len(Tports) == N:
             ports = Tports
-            logit['DEBUG'] and tLogger.debug(
-                f'ports were supplied as a list -> {ports}')
+            debug and tLogger.debug(ident(
+                f'ports were supplied as a list -> {ports}'))
         
         else:
             logit['ERROR'] and tLogger.error(
@@ -362,19 +369,20 @@ def ReadTSF(src, **kwargs):
     
     elif ports and len(ports) == N: 
         # these are the ports that were found in the tsf
-        logit['DEBUG'] and tLogger.debug(f'found ports in tsf {ports}')
+        debug and tLogger.debug(ident(f'found ports in tsf {ports}'))
         
     else:
         # supplied or found ports are not suitable
-        logit['DEBUG'] and tLogger.debug(f'  port in kwargs: {"ports"in kwargs}')
-        logit['DEBUG'] and tLogger.debug(f'  ports         : {ports}')
+        debug and tLogger.debug(ident(f'  port in kwargs: {"ports" in kwargs}'))
+        debug and tLogger.debug(ident(f'  ports         : {ports}'))
         if hasattr(ports, '__iter__'):
-            logit['DEBUG'] and tLogger.debug(
-                f'  len(ports) == {N:4} : {len(ports) == N}')
+            debug and tLogger.debug(ident(
+                f'  len(ports) == {N:4} : {len(ports) == N}'))
         
         ports = [Tports % k for k in range(1,N+1)]
-        logit['DEBUG'] and tLogger.debug(f'set ports to {ports}')
-            
+        debug and tLogger.debug(ident(f'set ports to {ports}'))
+    
+    debug and tLogger.debug(ident(f'< [CommonLib.ReadTSF]',-1))
     return {        
         "ports"     : ports,
         "fs"        : fs,

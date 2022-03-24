@@ -8,13 +8,15 @@ Created on 23 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2021-03-05 09:57:23"
+__updated__ = "2021-11-04 14:53:51"
 
 from inspect import signature
 
 import numpy as np
 from scipy.interpolate import interp1d
 from scipy.constants import speed_of_light as c0, mu_0 as mu0, epsilon_0 as e0
+
+from ..Utilities import whoami
 
 #===============================================================================
 
@@ -36,6 +38,8 @@ class TLresolver():
         for depends, kw in kwargs.pop('forget', {}).items():
             self.forget[tuple(sorted(depends + (kw,)))] = kw
             
+        self.L = kwargs.pop('L', None)
+            
         self.trl_kwargs = {
             'OD': {}, 'ID': {},
             'rho': {}, 'rhoO': {}, 'rhoI': {},
@@ -47,6 +51,8 @@ class TLresolver():
             'LTL': {}, 'CTL': {}, 'Z0TL': {},
             'epsr': {}, 'mur': {}, 'vr': {}, 'etar': {},
         }
+        
+        self.Zbase = kwargs.pop('Zbase', 50.)
         
         # TODO:
         # is it beneficial to define all functions as f(w,x,L=1) = g(w, x/L) ?
@@ -117,7 +123,7 @@ class TLresolver():
             return self.rTL(w,x) - self.rTLI(w,x)
         
         def _rTLO__qTLO_RsO_(w,x=0):                                         #21
-            return self.qTLI(w,x) * self.RsI(w,x)
+            return self.qTLO(w,x) * self.RsI(w,x)
         
         def _rTL__A_CTL_gTL_LTL_(w,x=0):
             wL = w * self.LTL(w,x)
@@ -259,20 +265,21 @@ class TLresolver():
             # resonable assumptions as we found nothing until now ...
             ('mur', (), 0., _ct_1_),                                         #53
             ('epsr', (), 0., _ct_1_),                                        #54
+            ('Z0TL', (), 0., lambda w, x: self.Zbase),                            #55
             #--  -----------------------------------------------------------  --
             # these are a bit iffy but in case there is nothing else ...
             
             #--  -----------------------------------------------------------  --
             # these are only useful if one wants to compute all the parameters
-            ('sigma', ('gTL', 'OD', 'ID'), 0., lambda w, x:                  #55
+            ('sigma', ('gTL', 'OD', 'ID'), 0., lambda w, x:                  #56
                 self.gTL(w,x) * np.log(self.OD(w,x)/self.ID(w,x)) / (2 * np.pi)
             ),
-            ('tand', ('sigma', 'epsr'), 1., lambda w, x:                     #56
+            ('tand', ('sigma', 'epsr'), 1., lambda w, x:                     #57
                 self.sigma(w,x) / (w * self.epsr(w,x) * e0)
             ),
-            ('Zc', ('rjwL', 'gjwC'), 0., _Zc__gjwC_rjwL_),                   #57
-            ('gamma', ('rjwL', 'gjwC'), 0., _gamma__gjwC_rjwL_),             #58
-            ('beta', ('LTL', 'CTL'), 1., lambda w, x:                        #59
+            ('Zc', ('rjwL', 'gjwC'), 0., _Zc__gjwC_rjwL_),                   #58
+            ('gamma', ('rjwL', 'gjwC'), 0., _gamma__gjwC_rjwL_),             #59
+            ('beta', ('LTL', 'CTL'), 1., lambda w, x:                        #60
                 w * np.sqrt(self.LTL(w,x) * self.CTL(w,x))
             ),
         ]
@@ -368,8 +375,12 @@ class TLresolver():
                         # print(f'... gTL : {getattr(self, "gTL")}')
                         break
                     
-                    elif dependsOK :
+                    elif dependsOK and depends:
                         # we could try and see if we are consistent
+                        # we discard to check for empty depends-list because
+                        #   these are assumption-like settings for mur and epsr
+                        #   when failing to find anything that solves with the
+                        #   current set of found kw's
                         f0 = 1E6 if self.f0 in [np.NaN,None] else self.f0
                         x0 = 0
                         tol = 1e-7
@@ -377,8 +388,8 @@ class TLresolver():
                         if  np.abs(new - got) > tol * np.abs(new + got):
                             err = np.abs((new - got) / (new + got))
                             print(
-                                f'warning: {kw} {self.kwset[kw]["source"]} and '
-                                f'from {depends} differ [{err*100:.2f}%]')
+                                f'warning: {kw} {self.kwset[kw]["source"]} [{got}] and '
+                                f'from {depends} [{new}] differ [{err*100:.2f}%]')
                     
                 if not found: break
             
@@ -473,7 +484,7 @@ class TLresolver():
                 # so to call for a TL length L call with f(w,x/L)
                 # fixme: how does the caller know what to do ?
                 
-                xs = np.linspace(0., 1., num=len(p))
+                xs = np.linspace(0., 1., num=len(p)) * self.L
                 # print(f'  xs = {xs}')
                 f = interp1d(xs, p, kind='linear', 
                              bounds_error=False, fill_value=(p[0],p[-1]))
@@ -503,19 +514,19 @@ if __name__ == '__main__':
     
     import matplotlib.pyplot as pl
     
-    fMHz = 30
+    fMHz = 47.5
     xs = 0.
     w = 2e6 * np.pi * fMHz
     
     kwargs = [
-        {'Z0TL':[30,30]},
-        {'Z0TL':30, 'A': 1.e-3},
-        {'Z0TL':30, 'A': 1.e-4},
-        {'Z0TL':30, 'A': 1.e-5},
-        {'Z0TL':30, 'A': 3.1437675233744445e-05, 'tand': 1e-4},
-        {'Z0TL':30, 'tand': 1e-4},
-        {'Z0TL':30, 'OD':0.230, 'rho':2e-8},
-        
+#         {'Z0TL':[30,30]},
+#         {'Z0TL':30, 'A': 1.e-3},
+#         {'Z0TL':30, 'A': 1.e-4},
+#         {'Z0TL':30, 'A': 1.e-5},
+#         {'Z0TL':30, 'A': 3.1437675233744445e-05, 'tand': 1e-4},
+#         {'Z0TL':30, 'tand': 1e-4},
+#         {'Z0TL':30, 'OD':0.230, 'rho':2e-8},
+        {'OD': 223.0, 'ID': 140.0, 'epsr': 1.640, 'tand': 6.000E-5, 'rho': 0.},    
     ]
     
     for kwarg in kwargs[-1:]:
@@ -525,5 +536,5 @@ if __name__ == '__main__':
         a = TLresolver(f0 = fMHz*1e6, **kwarg)
         print(a)
         
-    print(a.__str__(full=False))
+    print(a.__str__(full=True))
                

@@ -8,7 +8,7 @@ Created on 16 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2021-08-19 16:47:52"
+__updated__ = "2021-10-06 17:02:08"
 
 import numpy as np
 import matplotlib.pyplot as pl
@@ -19,8 +19,8 @@ from pyRFtk2 import rfTRL
 #===============================================================================
 # test zero frequency response
 aTL = rfTRL(Z0TL=[50.,50.], L=1) # should be Zbase and Z0TL 50 Ohm
+print(aTL.getS(47.5e6),'\n')
 print(aTL)
-print(aTL.getS(0))
 sys.exit()
 
 #===============================================================================

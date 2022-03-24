@@ -11,7 +11,7 @@ Created on 18 Dec 2020
 This is a template for a rfObject: but it may be obsoleted ...
 
 """
-__updated__ = "2021-10-05 16:14:34"
+__updated__ = "2022-03-24 09:11:17"
 
 if __name__ == '__main__':
     import sys
@@ -24,19 +24,22 @@ if __name__ == '__main__':
 
 import numpy as np
 from scipy.interpolate import interp1d
+import copy
 
 from .CommonLib import ReadTSF
 from .CommonLib import ConvertGeneral
 from .CommonLib import S_from_Y
 from .CommonLib import S_from_Z
+from .CommonLib import _check_3D_shape_
 
-from .config import tLogger, logit
+from .config import tLogger, logit, ident
 from .config import _newID
 from .config import rcparams
 from .config import fscale
 from .config import FUNITS
 
 from .rfTRL import rfTRL
+from .Utilities import whoami
 
 #===============================================================================
 #
@@ -77,12 +80,14 @@ class rfObject():
              
         self.kwargs = kwargs.copy()
 
+        self.Id = kwargs.pop('Id',f'{type(self).__name__}_{_newID()}')
+        
         #TODO: validate allowed port names
-        self.Portnames = kwargs.get('ports',[])
+        self.ports = kwargs.get('ports',[])
         self.alias = {}
-        if isinstance(self.Portnames, str):
-            self.Portnames = self.Portnames.split()
-        self.N = len(self.Portnames)
+        if isinstance(self.ports, str):
+            self.ports = self.ports.split()
+        self.N = len(self.ports)
         
         self.Zbase = kwargs.get('Zbase', rcparams['Zbase'])
         self.funit = kwargs.get('funit', rcparams['funit'])
@@ -91,6 +96,8 @@ class rfObject():
         
         self.interp = kwargs.get('interp',rcparams['interp'])
         self.interpkws = kwargs.get('interpkws',rcparams['interpkws'])
+        
+        self.xpos = kwargs.get('xpos', [0.]*self.N)
         
         # initialize arrays and stuff
         self.fs = np.array([],dtype=float).reshape((0,))
@@ -103,18 +110,48 @@ class rfObject():
         
         self.touchstone = kwargs.get('touchstone', None)
         if self.touchstone:
-            Tkwargs = dict([
-                (kw, value) for kw, value in [
-                    ('Zbase', self.Zbase),
-                    ('funit', self.funit),
-                    # ('ports', self.Portnames)
-                ] if kw in kwargs
-            ])
+            Tkwargs = {'Zbase': self.Zbase, 'funit':'HZ'}
+            for (kw, value) in kwargs.items():
+                if kw in Tkwargs:
+                    Tkwargs[kw] = value
             
             self.read_tsf(self.touchstone, **Tkwargs)
         
         self.interpOK = False
-            
+                
+    #===========================================================================
+    #
+    # c o p y
+    #
+    def copy(self):
+        
+        return self.__deepcopy__(self)
+    
+    #===========================================================================
+    #
+    # _ _ c o p y _ _
+    #
+    def __copy__(self):
+        
+        return self.__deepcopy__(self)
+    
+    #===========================================================================
+    #
+    # _ _ d e e p c o p y _ _
+    #
+    def __deepcopy__(self, memo={}):
+        
+        other = type(self)()
+        for attr, val in self.__dict__.items():
+            try:
+                # print(f'copying {attr}')
+                other.__dict__[attr] = copy.deepcopy(val)
+            except:
+                print(f'{whoami(__package__)}: could not deepcopy {attr}')
+                raise
+        
+        return other
+     
     #===========================================================================
     #
     #  _ _ g e t s t a t e _ _
@@ -157,8 +194,8 @@ class rfObject():
     #
     def __repr__(self):
         s = '%s( # \n' % (type(self).__name__)
-        s += '  Portnames=[   # %d \n' % len(self.Portnames)
-        for p in self.Portnames:
+        s += '  Portnames=[   # %d \n' % len(self.ports)
+        for p in self.ports:
             s += '    %r,\n' % p
         s += '  ]'
         for kw, val in self.kwargs.items():
@@ -182,7 +219,7 @@ class rfObject():
     #  _ _ l e n _ _
     #
     def __len__(self):
-        return len(self.Portnames)
+        return len(self.ports)
     
     #===========================================================================
     #
@@ -209,17 +246,27 @@ class rfObject():
     
     #===========================================================================
     #
-    #  _ _ c o p y _ _
+    #  c o p y
     #
-    def __copy__(self):
+    def _copy_(self):
         
         new_self = type(self)(**self.kwargs)
         new_self.sorted = self.sorted
+        new_self.Portnames = self.Portnames[:]
         new_self.fs = self.fs.copy()
         new_self.Ss = self.Ss.copy()
         new_self.interpOK = False    # avoid to copy interpolation functions
         new_self.type = self.type
-        
+        new_self.ports = self.ports[:]
+        new_self.alias = self.alias.copy()
+        new_self.N = self.N
+        new_self.Zbase = self.Zbase
+        new_self.funit = self.funit
+        new_self.fscale = self.fscale
+        new_self.flim = self.flim.copy()
+        new_self.Zcs = self.Zcs.copy()
+        new_self.Gms = self.Gms.copy()
+
         return new_self
     
     #===========================================================================
@@ -262,15 +309,15 @@ class rfObject():
     def sortports(self, order=str.__lt__):
         
         if isinstance(order,list):
-            idxs = [self.Portnames.index(p1) for p1 in order]
-            idxs += [k for k, p1 in enumerate(self.Portnames) if k not in idxs]
-            if len(idxs) != len(self.Portnames):
+            idxs = [self.ports.index(p1) for p1 in order]
+            idxs += [k for k, p1 in enumerate(self.ports) if k not in idxs]
+            if len(idxs) != len(self.ports):
                 raise ValueError(
                     'rfObject.sort: either a bug or duplicate ports in order list')
         else:
-            idxs = np.array(self.Portnames).argsort()
+            idxs = np.array(self.ports).argsort()
         
-        self.Portnames = [self.Portnames[k] for k in idxs]
+        self.ports = [self.ports[k] for k in idxs]
         self.Ss = self.Ss[:,:,idxs][:,idxs,:]
         self.Zcs = self.Zcs[:,idxs]
         self.Gms = self.Gms[:,idxs]
@@ -318,9 +365,16 @@ class rfObject():
             else: # RI
                 M = np.real(self.Ss)
                 A = np.imag(self.Ss)
-                
-            self.interpM = interp1d(self.fs, M, axis=0, **self.interpkws)
-            self.interpA = interp1d(self.fs, A, axis=0, **self.interpkws)
+            
+            interpkws = self.interpkws.copy()
+            interpkws.update({'kind':min(len(self.fs)-1, 
+                                         interpkws.get('kind',3))})
+            if interpkws['kind'] == 0:
+                interpkws.update({'fill_value':'extrapolate'})
+            
+            
+            self.interpM = interp1d(self.fs, M, axis=0, **interpkws)
+            self.interpA = interp1d(self.fs, A, axis=0, **interpkws)
                             
             self.interpOK = True
             
@@ -365,6 +419,13 @@ class rfObject():
     #
     def getS(self, fs, **kw):
         
+        debug = logit['DEBUG']
+        debug and tLogger.debug(ident(
+            f'> [rfObject.getS] '
+            f'fs = {fs}, kw = {kw} [sNp={self.touchstone}]',
+            1
+        ))
+        
         fs = np.array(fs) * FUNITS[kw.pop('funit', self.funit).upper()]/self.fscale
         Zbase = kw.pop('Zbase',self.Zbase)
         
@@ -373,7 +434,7 @@ class rfObject():
             if k.size:
                 return self.Ss[k[0]]
             else:
-                return self._interp_(fk)
+                return self._interp_(fk)[0]
         
         if hasattr(fs,'__iter__'):
             Ss = []
@@ -387,7 +448,8 @@ class rfObject():
             tS = get1S(fs)
             Ss = (tS if Zbase == self.Zbase 
                   else ConvertGeneral(Zbase, tS, self.Zbase))
-            
+        
+        debug and tLogger.debug(ident('< [rfObject.getS]',-1))
         return np.array(Ss)
     
     #===========================================================================
@@ -396,59 +458,72 @@ class rfObject():
     #
     def setS(self, f, S, Portnames=None):
         
-        #TODO: possibly ... what ?
+        whoami = 'pyRFtk2.rfObject.setS'
         
         self.interpOK = False
         self.interpA = None
         self.interpM = None
         
-        S =  np.array(S)
+        try:
+            *_, S =  _check_3D_shape_(S)
+        except ValueError:
+            raise ValueError(f'{whoami}: Unexpected shape: {S.shape}')
         
-        if S.shape[-1] != S.shape[-2]:
+        f =  np.array(f) if hasattr(f, '__iter__') else np.array([f])
+                    
+        if len(f) != len(S):
             raise ValueError(
-                'rfObject.setS: S does not appear to be a (list of) square matrice(s)')
+                f'{whoami}: number of frequencies ({len(f)}) does match number of '
+                f'S-matrices supplied ({len(S)}.')
         
-        if  (len(S.shape)==3 
-             and S.shape[0] != (len(f) if hasattr(f,'__iter__') else 1)
-            ):
-            # we have a list of 2D arrays ... and its length is compatible with f
-            pass # what did we want to do
+        if Portnames == None:
+            if not self.ports:
+                # no port names were defined yet: implicitely set to default names
+                self.ports = ['%02d' % k for k in range(S.shape[-1])]
+        else:
+            if self.ports:
+                raise ValueError(f'{whoami}: cannot redefine the portnames')
+            else:
+                self.ports = Portnames
+                
+        # self.ports is defined 
+        if len(self.ports) != S.shape[-1]:
+            raise ValueError(
+                f'{whoami}: number of object\'s Portnames ({len(Portnames)}) '
+                f'does not match shape of S ({len(S.shape[-1])})')
         
         if len(self.fs) == 0:
             # the object has no frequency entries yet ...
-            self.Ss = self.Ss.reshape((0,)+S.shape[-2])
-            if Portnames and len(Portnames) == S.shape[-1]:
-                self.Portnames = Portnames[:]
-            else:
-                self.Portnames = ['%02d' % k for k in range(S.shape[-1])]
+            self.Ss = self.Ss.reshape((0,)+S.shape[-2:])
             
         if self.Ss.shape[-2:] != S.shape[-2:]:
-            raise ValueError('rfOject.setS Shape of S does not match ')
-        
-        if len(S.shape) < 3:
-            S = S.reshape((1, self.N, self.N))
-        
+            # we should never come here
+            raise SystemError(f'{whoami}: Shape of S does not match ')
+                
         self.fs = np.append(self.fs,[f])
         self.Ss = np.append(self.Ss, S, axis=0)
         
         # do not sort each time
         self.sorted = self.sorted and (
-            (len(self.fs) is 1) or (self.fs[-2] < self.fs[-1])
+            (len(self.fs) == 1) or (self.fs[-2] < self.fs[-1])
         )
         
     #===========================================================================
     #
     #  m a x V
     #
-    def maxV(self, f, E, Zbase=None, ID='<rfOBject>'):
+    def maxV(self, f, E, Zbase=None, ID='<rfOBject>', **kwargs):
         
+        # kwargs : catchall for other parameters
+        
+        Zbase = self.Zbase if Zbase == None else Zbase
         Ea = [E[p] for p in self.ports]
-        Eb = self.getS(f, Zbase) @ Ea   # implicitly updates and solves the circuit
+        Eb = self.getS(f, Zbase=Zbase) @ Ea   # implicitly updates and solves the circuit
         Vi = Ea + Eb
         maxVi = np.max(Vi)
         k = np.where(Vi == maxVi)[0][0]
         
-        return maxVi, ID+'.'+self.ports[k]
+        return maxVi, ID+'.'+self.ports[k], ([0],[maxVi])
     
     #===========================================================================
     #
@@ -463,10 +538,10 @@ class rfObject():
     #
     def read_tsf(self, src, **kwargs):
         r = ReadTSF(src, **kwargs)
-        self.fs = r['fs'] * (FUNITS[r['funit'].upper()] 
-                             / FUNITS[self.funit.upper()])
+        self.fs = r['fs']   # * (FUNITS[r['funit'].upper()] 
+                            #  / FUNITS[self.funit.upper()])
         self.Ss = r['Ss']
-        self.Portnames = r['ports']
+        self.ports = r['ports']
         self.Zbase = r['Zbase']
         self.part = r['part']
         self.numbering = r['numbering']
@@ -474,6 +549,7 @@ class rfObject():
         self.shape = r['shape']
         self.Zcs = np.array(r['Zc'])
         self.Gms = np.array(r['Gm'])
+        self.xpos = [0.] * len(self)
         
     #===========================================================================
     #
@@ -513,8 +589,10 @@ class rfObject():
         Positive L means the deembeding is into the port 
         
         """
-                
-        for kp, port in enumerate(self.Portnames):
+          
+        self.interpOK = False      
+        
+        for kp, port in enumerate(self.ports):
             if port in ports:
                 v = ports.pop(port, (0., self.Zbase))
                 if isinstance(v,tuple) and len(v) == 2:

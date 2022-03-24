@@ -33,9 +33,9 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2020-04-07 12:10:26'
+__updated__ = '2021-12-07 15:54:54'
 __version__ = __updated__.split()[0]+' for ITER contract WWS896'
 
-print('pyRFtk version :', __version__)
+# print('pyRFtk version :', __version__)
 
 

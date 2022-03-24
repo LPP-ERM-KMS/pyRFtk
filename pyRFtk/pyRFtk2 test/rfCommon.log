@@ -1,11 +1,21 @@
-INFO     - config.py            <module>        [   33]: 2021-09-30 10:51:35 -- logging level DEBUG
-DEBUG    - config.py            setLogLevel     [   43]: Change loglevel from DEBUG to DEBUG
-DEBUG    - config.py            setLogLevel     [   52]: SetLogLevel: DEBUG
-DEBUG    - config.py            setLogLevel     [   54]:    CRITICAL    True   50
-DEBUG    - config.py            setLogLevel     [   54]:    FATAL       True   50
-DEBUG    - config.py            setLogLevel     [   54]:    ERROR       True   40
-DEBUG    - config.py            setLogLevel     [   54]:    WARN        True   30
-DEBUG    - config.py            setLogLevel     [   54]:    WARNING     True   30
-DEBUG    - config.py            setLogLevel     [   54]:    INFO        True   20
-DEBUG    - config.py            setLogLevel     [   54]:    DEBUG       True   10
-DEBUG    - config.py            setLogLevel     [   54]:    NOTSET      False   0
+DEBUG    - rfGTL.py             __init__        [   73]: [  0] > __init__ 
+DEBUG    - rfGTL.py             __init__        [   73]: [  1] |     self = rfGTL
+DEBUG    - rfGTL.py             __init__        [   73]: [  1] |     path2model = /mnt/data/frederic/git/iter_d_wws896/ITER_D_WWS896/src/CYCLE 2018/2020 Contract/Arc Detection/launcher/WHu20201021/CIA/WHu20201021_fpj=453_arc.ciamod
+DEBUG    - rfGTL.py             __init__        [   73]: [  1] |     objkey = VTL2
+DEBUG    - rfGTL.py             __init__        [   73]: [  1] |     variables = {'RHO': 0.022, 'LMTL': 1.0}
+DEBUG    - rfGTL.py             __init__        [   73]: [  1] |     Zbase : 20
+DEBUG    - rfGTL.py             __init__        [   76]: [  1] | Id = rfGTL_KXP9JK
+DEBUG    - rfCircuit.py         __init__        [   77]: [  1] | > __init__ 
+DEBUG    - rfCircuit.py         __init__        [   77]: [  2] | |     self = rfGTL
+DEBUG    - rfCircuit.py         __init__        [   77]: [  2] | |     Zbase : 20
+DEBUG    - rfCircuit.py         __init__        [   77]: [  2] | |     Id : rfGTL_KXP9JK
+DEBUG    - rfBase.py            __init__        [  105]: [  2] | | > __init__ 
+DEBUG    - rfBase.py            __init__        [  105]: [  3] | | |     self = rfGTL
+DEBUG    - rfBase.py            __init__        [  105]: [  3] | | |     Zbase : 20
+DEBUG    - rfBase.py            __init__        [  105]: [  3] | | |     Id : rfGTL_KXP9JK
+DEBUG    - rfBase.py            __init__        [  135]: [  3] | | | self.fs=[]
+DEBUG    - rfBase.py            __init__        [  145]: [  2] | | < __init__
+DEBUG    - rfCircuit.py         __init__        [  119]: [  1] | < __init__
+DEBUG    - rfGTL.py             __init__        [   78]: [  1] | self.Id <- rfGTL_KXP9JK
+DEBUG    - rfCircuit.py         addblock        [  288]: [  1] | > [circuit.addblock] name= VTL2_arc_ss, RFobj= rfRLC_YM1MXR, ports= ['ss', 'ssa'], params={}, kwargs= {'relpos': 0}
+DEBUG    - rfCircuit.py         addblock        [  453]: [  1] | < [circuit.addblock] (inserted a new block)

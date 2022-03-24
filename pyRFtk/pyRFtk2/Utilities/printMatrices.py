@@ -77,7 +77,7 @@ def printRI(C, pfmt='%7.3f%+7.3fj, ', printzeros='0') :
 # p r i n t M A
 #
 
-def printMA(C, pfmt='%7.3f%+7.1fj, ', printzeros='0') :
+def printMA(C, pfmt='%8.5f %+7.2f'+u'\N{DEGREE SIGN}'+', ', printzeros='0') :
     """
     pretty print a complex matrix
     """
@@ -91,7 +91,7 @@ def printMA(C, pfmt='%7.3f%+7.1fj, ', printzeros='0') :
 # p r i n t D B
 #
 
-def printDB(C, pfmt='%7.3f%+7.1fj, ', printzeros='0') :
+def printDB(C, pfmt='%7.3f%+7.1f'+u'\N{DEGREE SIGN}'+', ', printzeros='0') :
     """
     pretty print a complex matrix
     """
