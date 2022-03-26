@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-03-22 09:41:24'
+__updated__ = '2022-03-25 16:57:22'
 
 """
 Arnold's Laws of Documentation:
@@ -58,6 +58,10 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
     figkwargs = dict([ (kw, val) for kw, val in kwargs.items() 
                      if kw in ['figsize', 'num']])
     
+    if 'num' not in figkwargs:
+        if Id is None and len(VSWs)==1:
+            Id = next(iter(VSWs))
+            
     if Id: 
         if 'num' not in figkwargs:
             figkwargs['num'] = Id
@@ -66,6 +70,8 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
                 'pyRFtk2.commonLib.plotVSWs: only one of "ID" or "num" kwargs allowed')
         
     tfig, ax = pl.subplots(**figkwargs)
+    
+    plotnodes = kwargs.pop('plotnodes', False)
     
     ankwargs = dict(
         xytext=(0,30),
@@ -97,7 +103,7 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
             if any([x != xs[0] for x in xs]) or any([v != absV[0] for v in absV]):
                 _debug_ and tLogger.debug(ident(f'vsw'))
                 pl.plot(xs, absV, '.-', label=lbl)
-            else:
+            elif plotnodes:
                 _debug_ and tLogger.debug(ident(f'node'))
                 if isinstance(xs[0], (float,int)):
                     pl.plot(xs, absV, 'd', label=lbl)

@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-03-24 16:39:56'
+__updated__ = '2022-03-25 17:15:30'
 
 """
 Arnold's Laws of Documentation:
@@ -151,12 +151,12 @@ class rfGTL(rfCircuit):
                           
             blkPortnames = tkwargs['ports']
             terminated = False
-            for _, p in enumerate(blkPortnames):
+            for kp, p in enumerate(blkPortnames):
                 #------------------------------------ check for terminated ports
                 if isinstance(p, dict):
                     # terminate kwargs
                     terminated = (p, '[**]')
-                    blkPortnames[_] = '[**]'
+                    blkPortnames[kp] = '[**]'
                     continue
                 elif isinstance(p, str):
                     if p == '[oc]':
@@ -171,7 +171,7 @@ class rfGTL(rfCircuit):
                 portlist[p].append(blk)
             
             #---------------------------------------------- substitute variables
-            for kw, val in tkwargs.items():
+            for kw, val in tkwargs.items(): #FIXME: 'ports' is a tkwarg and should not be considered
                 if isinstance(val, str):
                     try:
                         tkwargs[kw] = eval(val, globals(), self.vars)
@@ -204,7 +204,12 @@ class rfGTL(rfCircuit):
                                                   ('Z0TL', 'Z', False),
                                                   ('xpos', 'relpos', False)])
             
-            xpos = tkwargs.pop('xpos', 0)
+            if 'xpos' in tkwargs:
+                xpos = tkwargs.pop('xpos')
+                positions[f'{blkPortnames[0]}'] = xpos
+            else:
+                xpos = -10
+                
             plotkws = tkwargs.pop('plotkws',{}) # future feature
             
             if any([kw in tkwargs for kw in ['Ls','Cs','Rs','Lp','Cp','Rp']]):
@@ -242,6 +247,48 @@ class rfGTL(rfCircuit):
                 f'{whoami(__package__)}: number of declared ports ({len(self.Portnames)})'
                 f' and the resulting free ports ({nports}) mismatch')
         
+        # resolve the internal port positions
+        _debug_ and logident('finding port positions')
+        
+        # for _kp, _p in enumerate(self.Portnames):
+        #     _blk = self.blocks[portlist[_p][0]]
+        #     _blk_relpos = _blk['xpos'] + xpos
+        #     _xpos = _blk['object'].xpos[_blk['ports'].index(_p)] + _blk_relpos
+        #     self.xpos.append(_xpos)
+        
+        for p in positions:
+            for blk in portlist[p]:
+                tblk = self.blocks[blk]
+                tports = tblk['ports']
+                k1 = tports.index(p)
+                if k1 == 0:
+                    tblk['xpos'] = positions[p]
+                else:
+                    rfobj_xpos = tblk['object'].xpos
+                    tblk['xpos'] = positions[p] - rfobj_xpos[1] + rfobj_xpos[0]
+        
+        found = True # prime the loop
+        while found:
+            found = False
+            for p, blks in portlist.items():
+                if p not in positions:
+                    for blk in blks:
+                        tblk = self.blocks[blk]
+                        rfobj, ports = tblk['object'], tblk['ports']
+                        rfobj_xpos = rfobj.xpos
+                        if p in ports:
+                            for p2 in [p1 for p1 in ports if p1 != p]:
+                                if p2 in positions:
+                                    kp = ports.index(p)
+                                    found = True
+                                    if kp == 0:
+                                        tblk['xpos'] = (
+                                            positions[p2] - rfobj_xpos[1] + rfobj_xpos[0])
+                                        positions[p] = tblk['xpos']
+                                    else:
+                                        tblk['xpos'] = positions[p2]
+                                        positions[p] = tblk['xpos'] + rfobj_xpos[1] - rfobj_xpos[0]
+                                    
         # connect free ports to a port name without the block to which it belongs
         for _p in self.Portnames:
             if _p in portlist and len(portlist[_p]) == 1:
@@ -263,16 +310,7 @@ class rfGTL(rfCircuit):
             raise RuntimeError(
                 f'{whoami(__package__)}: self.ports and self.Portnames differ !'
             )
-        
-        # resolve the port positions
-        _debug_ and logident('finding port positions')
-        
-        for _kp, _p in enumerate(self.Portnames):
-            _blk = self.blocks[portlist[_p][0]]
-            _blk_relpos = _blk['xpos'] + xpos
-            _xpos = _blk['object'].xpos[_blk['ports'].index(_p)] + _blk_relpos
-            self.xpos.append(_xpos)
-            
+                    
         # found = True # prime the loop
         # xpos = {}
         # while found:

@@ -1,21 +1,535 @@
 DEBUG    - rfGTL.py             __init__        [   73]: [  0] > __init__ 
 DEBUG    - rfGTL.py             __init__        [   73]: [  1] |     self = rfGTL
 DEBUG    - rfGTL.py             __init__        [   73]: [  1] |     path2model = /mnt/data/frederic/git/iter_d_wws896/ITER_D_WWS896/src/CYCLE 2018/2020 Contract/Arc Detection/launcher/WHu20201021/CIA/WHu20201021_fpj=453_arc.ciamod
-DEBUG    - rfGTL.py             __init__        [   73]: [  1] |     objkey = VTL2
+DEBUG    - rfGTL.py             __init__        [   73]: [  1] |     objkey = VTL1
 DEBUG    - rfGTL.py             __init__        [   73]: [  1] |     variables = {'RHO': 0.022, 'LMTL': 1.0}
 DEBUG    - rfGTL.py             __init__        [   73]: [  1] |     Zbase : 20
-DEBUG    - rfGTL.py             __init__        [   76]: [  1] | Id = rfGTL_KXP9JK
+DEBUG    - rfGTL.py             __init__        [   76]: [  1] | Id = rfGTL_M1YID4
 DEBUG    - rfCircuit.py         __init__        [   77]: [  1] | > __init__ 
 DEBUG    - rfCircuit.py         __init__        [   77]: [  2] | |     self = rfGTL
 DEBUG    - rfCircuit.py         __init__        [   77]: [  2] | |     Zbase : 20
-DEBUG    - rfCircuit.py         __init__        [   77]: [  2] | |     Id : rfGTL_KXP9JK
+DEBUG    - rfCircuit.py         __init__        [   77]: [  2] | |     Id : rfGTL_M1YID4
 DEBUG    - rfBase.py            __init__        [  105]: [  2] | | > __init__ 
 DEBUG    - rfBase.py            __init__        [  105]: [  3] | | |     self = rfGTL
 DEBUG    - rfBase.py            __init__        [  105]: [  3] | | |     Zbase : 20
-DEBUG    - rfBase.py            __init__        [  105]: [  3] | | |     Id : rfGTL_KXP9JK
+DEBUG    - rfBase.py            __init__        [  105]: [  3] | | |     Id : rfGTL_M1YID4
 DEBUG    - rfBase.py            __init__        [  135]: [  3] | | | self.fs=[]
 DEBUG    - rfBase.py            __init__        [  145]: [  2] | | < __init__
 DEBUG    - rfCircuit.py         __init__        [  119]: [  1] | < __init__
-DEBUG    - rfGTL.py             __init__        [   78]: [  1] | self.Id <- rfGTL_KXP9JK
-DEBUG    - rfCircuit.py         addblock        [  288]: [  1] | > [circuit.addblock] name= VTL2_arc_ss, RFobj= rfRLC_YM1MXR, ports= ['ss', 'ssa'], params={}, kwargs= {'relpos': 0}
-DEBUG    - rfCircuit.py         addblock        [  453]: [  1] | < [circuit.addblock] (inserted a new block)
+DEBUG    - rfGTL.py             __init__        [   78]: [  1] | self.Id <- rfGTL_M1YID4
+DEBUG    - rfCircuit.py         addblock        [  288]: [  1] | > [circuit.addblock] name= VTL1_arc_4pj, RFobj= rfRLC_WLMHQ0, ports= ['4pj', '4pja'], params={}, kwargs= {'relpos': -10}
+DEBUG    - rfCircuit.py         addblock        [  436]: [  1] | < [circuit.addblock] (inserted a new block)
+DEBUG    - rfCircuit.py         addblock        [  288]: [  1] | > [circuit.addblock] name= V1, RFobj= rfTRL_CX2ZIX, ports= ['4pja', 'v1'], params={}, kwargs= {'relpos': -10}
+DEBUG    - rfCircuit.py         addblock        [  436]: [  1] | < [circuit.addblock] (inserted a new block)
+DEBUG    - rfCircuit.py         addblock        [  288]: [  1] | > [circuit.addblock] name= VTL1_arc_v1, RFobj= rfRLC_983NIB, ports= ['v1', '[oc]'], params={}, kwargs= {'relpos': -10}
+DEBUG    - rfCircuit.py         addblock        [  436]: [  1] | < [circuit.addblock] (inserted a new block)
+DEBUG    - rfCircuit.py         addblock        [  288]: [  1] | > [circuit.addblock] name= V2, RFobj= rfTRL_XU81Y9, ports= ['v1', 'v2'], params={}, kwargs= {'relpos': 0.38877211658664146}
+DEBUG    - rfCircuit.py         addblock        [  436]: [  1] | < [circuit.addblock] (inserted a new block)
+DEBUG    - rfCircuit.py         addblock        [  288]: [  1] | > [circuit.addblock] name= VTL1_arc_v2, RFobj= rfRLC_BTBQPH, ports= ['v2', '[oc]'], params={}, kwargs= {'relpos': -10}
+DEBUG    - rfCircuit.py         addblock        [  436]: [  1] | < [circuit.addblock] (inserted a new block)
+DEBUG    - rfCircuit.py         addblock        [  288]: [  1] | > [circuit.addblock] name= V3, RFobj= rfTRL_KCZT0O, ports= ['v2', 'ssa'], params={}, kwargs= {'relpos': 0.488}
+DEBUG    - rfCircuit.py         addblock        [  436]: [  1] | < [circuit.addblock] (inserted a new block)
+DEBUG    - rfCircuit.py         addblock        [  288]: [  1] | > [circuit.addblock] name= VTL1_arc_ss, RFobj= rfRLC_DBEAVQ, ports= ['ssa', 'ss'], params={}, kwargs= {'relpos': -10}
+DEBUG    - rfCircuit.py         addblock        [  436]: [  1] | < [circuit.addblock] (inserted a new block)
+DEBUG    - rfGTL.py             __init__        [  251]: [  1] | finding port positions
+DEBUG    - rfGTL.py             __init__        [  325]: [  1] | prime rfGTL object calling getSgtl
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  1] | > getSgtl 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |     self = rfGTL Id="rfGTL_M1YID4" at 0x7fed6368ae50
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  Portnames          : 4pj, ss
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |   4pj : 0.0000m
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |   ss  : 0.9980m
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  Zbase              : 20.000 Ohm
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  sNp                : None
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  global variables   :
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  RHO             : 0.022
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  LMTL            : 1.0
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  ^
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  local variables    :
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  RHO             : 0.02891958317047993 -> 0.022
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  DX              : -0.01 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  SSPOS           : 1.238 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  SSFDR1          : 0.24 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  SSFDR2          : 0.205 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  L1              : 0.340 + 0.050 -> 0.39
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  Z1              : 20.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  c0MS            : 299792458.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  LH_COR          : 1.3e-10 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  L2_COR          : LH_COR * c0MS / Z2 -> 0.001227883413358538
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  L2              : 0.098 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  Z2              : 31.74 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  L3              : 0.51 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  Z3              : 20.1 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  arcLnH_4pj      : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  arcLnH_v1       : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  arcLnH_v2       : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  arcLnH_ss       : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  ^
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            ^
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |     fs = 45000000.0
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |     Zbase = None
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |     params = {}
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |     flags = {}
+DEBUG    - rfCircuit.py         getS            [  713]: [  2] | | > [circuit.getS] fs= 45000000.0, Zbase= 20, params= {}, flags= {'sNp': False}
+DEBUG    - rfCircuit.py         get1S           [  738]: [  3] | | | not using sNp: no sNp
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_4pj
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for V1
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_v1
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for V2
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_v2
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for V3
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_ss
+DEBUG    - rfCircuit.py         extS            [  605]: [  3] | | | > [circuit.extS] 
+DEBUG    - rfCircuit.py         extS            [  611]: [  4] | | | | M is not square (30, 32)
+DEBUG    - rfCircuit.py         extS            [  649]: [  4] | | | | Portnames= ['4pj', 'ss']
+DEBUG    - rfCircuit.py         extS            [  650]: [  4] | | | | ports=     ['4pj', 'ss']
+DEBUG    - rfCircuit.py         extS            [  675]: [  4] | | | | S:
+DEBUG    - rfCircuit.py         extS            [  682]: [  4] | | | |   [2,2]
+DEBUG    - rfCircuit.py         extS            [  682]: [  4] | | | |    0.04714  +40.16°,  0.99876  -54.64°, 
+DEBUG    - rfCircuit.py         extS            [  682]: [  4] | | | |    0.99876  -54.64°,  0.04715  +30.29°, 
+DEBUG    - rfCircuit.py         extS            [  684]: [  3] | | | < [circuit.extS]
+DEBUG    - rfCircuit.py         getS            [  792]: [  3] | | | Ss: 1 matrix
+DEBUG    - rfCircuit.py         getS            [  796]: [  3] | | | f= 45000000.0 Hz
+DEBUG    - rfCircuit.py         getS            [  803]: [  3] | | |   [2,2]
+DEBUG    - rfCircuit.py         getS            [  803]: [  3] | | |    0.04714  +40.16°,  0.99876  -54.64°, 
+DEBUG    - rfCircuit.py         getS            [  803]: [  3] | | |    0.99876  -54.64°,  0.04715  +30.29°, 
+DEBUG    - rfCircuit.py         getS            [  805]: [  2] | | < [circuit.getS]
+DEBUG    - rfGTL.py             getSgtl         [  445]: [  1] | < getSgtl
+DEBUG    - rfGTL.py             __init__        [  328]: [  0] < __init__
+DEBUG    - rfGTL.py             getS            [  455]: [  0] > getS 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |     self = rfGTL Id="rfGTL_M1YID4" at 0x7fed6368ae50
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  Portnames          : 4pj, ss
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |   4pj : 0.0000m
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |   ss  : 0.9980m
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  Zbase              : 20.000 Ohm
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  sNp                : None
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  global variables   :
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  RHO             : 0.022
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  LMTL            : 1.0
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  ^
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  local variables    :
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  RHO             : 0.02891958317047993 -> 0.022
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  DX              : -0.01 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  SSPOS           : 1.238 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  SSFDR1          : 0.24 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  SSFDR2          : 0.205 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  L1              : 0.340 + 0.050 -> 0.39
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  Z1              : 20.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  c0MS            : 299792458.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  LH_COR          : 1.3e-10 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  L2_COR          : LH_COR * c0MS / Z2 -> 0.001227883413358538
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  L2              : 0.098 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  Z2              : 31.74 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  L3              : 0.51 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  Z3              : 20.1 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  arcLnH_4pj      : 1000000000.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  arcLnH_v1       : 1000000000.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  arcLnH_v2       : 1000000000.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  |  arcLnH_ss       : 1000000000.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            |  ^
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |            ^
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |     fs = 50000000.0
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |     Zbase = None
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |     params = {}
+DEBUG    - rfGTL.py             getS            [  455]: [  1] |     flags = {}
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  1] | > getSgtl 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |     self = rfGTL Id="rfGTL_M1YID4" at 0x7fed6368ae50
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  Portnames          : 4pj, ss
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |   4pj : 0.0000m
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |   ss  : 0.9980m
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  Zbase              : 20.000 Ohm
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  sNp                : None
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  global variables   :
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  RHO             : 0.022
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  LMTL            : 1.0
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  ^
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  local variables    :
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  RHO             : 0.02891958317047993 -> 0.022
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  DX              : -0.01 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  SSPOS           : 1.238 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  SSFDR1          : 0.24 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  SSFDR2          : 0.205 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  L1              : 0.340 + 0.050 -> 0.39
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  Z1              : 20.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  c0MS            : 299792458.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  LH_COR          : 1.3e-10 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  L2_COR          : LH_COR * c0MS / Z2 -> 0.001227883413358538
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  L2              : 0.098 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  Z2              : 31.74 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  L3              : 0.51 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  Z3              : 20.1 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  arcLnH_4pj      : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  arcLnH_v1       : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  arcLnH_v2       : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  |  arcLnH_ss       : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            |  ^
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |            ^
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |     fs = 50000000.0
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |     Zbase = 20
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |     params = {}
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | |     flags = {}
+DEBUG    - rfCircuit.py         getS            [  713]: [  2] | | > [circuit.getS] fs= 50000000.0, Zbase= 20, params= {}, flags= {'sNp': False}
+DEBUG    - rfCircuit.py         get1S           [  738]: [  3] | | | not using sNp: no sNp
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_4pj
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for V1
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_v1
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for V2
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_v2
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for V3
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_ss
+DEBUG    - rfCircuit.py         extS            [  605]: [  3] | | | > [circuit.extS] 
+DEBUG    - rfCircuit.py         extS            [  649]: [  4] | | | | Portnames= ['4pj', 'ss']
+DEBUG    - rfCircuit.py         extS            [  650]: [  4] | | | | ports=     ['4pj', 'ss']
+DEBUG    - rfCircuit.py         extS            [  675]: [  4] | | | | S:
+DEBUG    - rfCircuit.py         extS            [  682]: [  4] | | | |   [2,2]
+DEBUG    - rfCircuit.py         extS            [  682]: [  4] | | | |    0.05224  +34.68°,  0.99850  -60.71°, 
+DEBUG    - rfCircuit.py         extS            [  682]: [  4] | | | |    0.99850  -60.71°,  0.05225  +23.65°, 
+DEBUG    - rfCircuit.py         extS            [  684]: [  3] | | | < [circuit.extS]
+DEBUG    - rfCircuit.py         getS            [  792]: [  3] | | | Ss: 1 matrix
+DEBUG    - rfCircuit.py         getS            [  796]: [  3] | | | f= 50000000.0 Hz
+DEBUG    - rfCircuit.py         getS            [  803]: [  3] | | |   [2,2]
+DEBUG    - rfCircuit.py         getS            [  803]: [  3] | | |    0.05224  +34.68°,  0.99850  -60.71°, 
+DEBUG    - rfCircuit.py         getS            [  803]: [  3] | | |    0.99850  -60.71°,  0.05225  +23.65°, 
+DEBUG    - rfCircuit.py         getS            [  805]: [  2] | | < [circuit.getS]
+DEBUG    - rfGTL.py             getSgtl         [  445]: [  1] | < getSgtl
+DEBUG    - rfGTL.py             getS            [  481]: [  1] | not using sNp
+DEBUG    - rfCircuit.py         getS            [  713]: [  1] | > [circuit.getS] fs= 50000000.0, Zbase= 20, params= {}, flags= {}
+DEBUG    - rfCircuit.py         get1S           [  738]: [  2] | | not using sNp: no sNp
+DEBUG    - rfCircuit.py         get1S           [  745]: [  2] | | getting S for VTL1_arc_4pj
+DEBUG    - rfCircuit.py         get1S           [  745]: [  2] | | getting S for V1
+DEBUG    - rfCircuit.py         get1S           [  745]: [  2] | | getting S for VTL1_arc_v1
+DEBUG    - rfCircuit.py         get1S           [  745]: [  2] | | getting S for V2
+DEBUG    - rfCircuit.py         get1S           [  745]: [  2] | | getting S for VTL1_arc_v2
+DEBUG    - rfCircuit.py         get1S           [  745]: [  2] | | getting S for V3
+DEBUG    - rfCircuit.py         get1S           [  745]: [  2] | | getting S for VTL1_arc_ss
+DEBUG    - rfCircuit.py         extS            [  605]: [  2] | | > [circuit.extS] 
+DEBUG    - rfCircuit.py         extS            [  649]: [  3] | | | Portnames= ['4pj', 'ss']
+DEBUG    - rfCircuit.py         extS            [  650]: [  3] | | | ports=     ['4pj', 'ss']
+DEBUG    - rfCircuit.py         extS            [  675]: [  3] | | | S:
+DEBUG    - rfCircuit.py         extS            [  682]: [  3] | | |   [2,2]
+DEBUG    - rfCircuit.py         extS            [  682]: [  3] | | |    0.05224  +34.68°,  0.99850  -60.71°, 
+DEBUG    - rfCircuit.py         extS            [  682]: [  3] | | |    0.99850  -60.71°,  0.05225  +23.65°, 
+DEBUG    - rfCircuit.py         extS            [  684]: [  2] | | < [circuit.extS]
+DEBUG    - rfCircuit.py         getS            [  792]: [  2] | | Ss: 1 matrix
+DEBUG    - rfCircuit.py         getS            [  796]: [  2] | | f= 50000000.0 Hz
+DEBUG    - rfCircuit.py         getS            [  803]: [  2] | |   [2,2]
+DEBUG    - rfCircuit.py         getS            [  803]: [  2] | |    0.05224  +34.68°,  0.99850  -60.71°, 
+DEBUG    - rfCircuit.py         getS            [  803]: [  2] | |    0.99850  -60.71°,  0.05225  +23.65°, 
+DEBUG    - rfCircuit.py         getS            [  805]: [  1] | < [circuit.getS]
+DEBUG    - rfGTL.py             getS            [  484]: [  0] < getS
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  0] > maxV 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |     self = rfGTL Id="rfGTL_M1YID4" at 0x7fed6368ae50
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  Portnames          : 4pj, ss
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |   4pj : 0.0000m
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |   ss  : 0.9980m
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  Zbase              : 20.000 Ohm
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  sNp                : None
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  global variables   :
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  RHO             : 0.022
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  LMTL            : 1.0
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  ^
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  local variables    :
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  RHO             : 0.02891958317047993 -> 0.022
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  DX              : -0.01 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  SSPOS           : 1.238 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  SSFDR1          : 0.24 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  SSFDR2          : 0.205 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  L1              : 0.340 + 0.050 -> 0.39
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  Z1              : 20.0 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  c0MS            : 299792458.0 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  LH_COR          : 1.3e-10 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  L2_COR          : LH_COR * c0MS / Z2 -> 0.001227883413358538
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  L2              : 0.098 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  Z2              : 31.74 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  L3              : 0.51 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  Z3              : 20.1 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  arcLnH_4pj      : 1000000000.0 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  arcLnH_v1       : 1000000000.0 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  arcLnH_v2       : 1000000000.0 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  |  arcLnH_ss       : 1000000000.0 
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            |  ^
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |            ^
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |     f = 50000000.0
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |     E = {'ss': 1, '4pj': 0.0}
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |     Zbase = None
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |     Id = None
+DEBUG    - rfCircuit.py         maxV            [ 1092]: [  1] |     flags = {}
+DEBUG    - rfCircuit.py         maxV            [ 1126]: [  1] | ppos = {
+DEBUG    - rfCircuit.py         maxV            [ 1128]: [  1] |   rfGTL_M1YID4.4pj :0.0,
+DEBUG    - rfCircuit.py         maxV            [ 1128]: [  1] |   rfGTL_M1YID4.ss :0.998,
+DEBUG    - rfCircuit.py         maxV            [ 1129]: [  1] | }
+DEBUG    - rfGTL.py             getS            [  455]: [  1] | > getS 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |     self = rfGTL Id="rfGTL_M1YID4" at 0x7fed6368ae50
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  Portnames          : 4pj, ss
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |   4pj : 0.0000m
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |   ss  : 0.9980m
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  Zbase              : 20.000 Ohm
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  sNp                : None
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  global variables   :
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  RHO             : 0.022
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  LMTL            : 1.0
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  ^
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  local variables    :
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  RHO             : 0.02891958317047993 -> 0.022
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  DX              : -0.01 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  SSPOS           : 1.238 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  SSFDR1          : 0.24 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  SSFDR2          : 0.205 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  L1              : 0.340 + 0.050 -> 0.39
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  Z1              : 20.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  c0MS            : 299792458.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  LH_COR          : 1.3e-10 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  L2_COR          : LH_COR * c0MS / Z2 -> 0.001227883413358538
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  L2              : 0.098 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  Z2              : 31.74 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  L3              : 0.51 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  Z3              : 20.1 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  arcLnH_4pj      : 1000000000.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  arcLnH_v1       : 1000000000.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  arcLnH_v2       : 1000000000.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  |  arcLnH_ss       : 1000000000.0 
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            |  ^
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |            ^
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |     fs = 50000000.0
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |     Zbase = 20
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |     params = {}
+DEBUG    - rfGTL.py             getS            [  455]: [  2] | |     flags = {}
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  2] | | > getSgtl 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |     self = rfGTL Id="rfGTL_M1YID4" at 0x7fed6368ae50
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  Portnames          : 4pj, ss
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |   4pj : 0.0000m
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |   ss  : 0.9980m
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  Zbase              : 20.000 Ohm
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  sNp                : None
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  global variables   :
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  RHO             : 0.022
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  LMTL            : 1.0
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  ^
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  local variables    :
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  RHO             : 0.02891958317047993 -> 0.022
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  DX              : -0.01 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  SSPOS           : 1.238 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  SSFDR1          : 0.24 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  SSFDR2          : 0.205 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  L1              : 0.340 + 0.050 -> 0.39
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  Z1              : 20.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  c0MS            : 299792458.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  LH_COR          : 1.3e-10 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  L2_COR          : LH_COR * c0MS / Z2 -> 0.001227883413358538
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  L2              : 0.098 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  Z2              : 31.74 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  L3              : 0.51 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  Z3              : 20.1 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  arcLnH_4pj      : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  arcLnH_v1       : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  arcLnH_v2       : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  |  arcLnH_ss       : 1000000000.0 
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            |  ^
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |            ^
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |     fs = 50000000.0
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |     Zbase = 20
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |     params = {}
+DEBUG    - rfGTL.py             getSgtl         [  438]: [  3] | | |     flags = {}
+DEBUG    - rfCircuit.py         getS            [  713]: [  3] | | | > [circuit.getS] fs= 50000000.0, Zbase= 20, params= {}, flags= {'sNp': False}
+DEBUG    - rfCircuit.py         get1S           [  738]: [  4] | | | | not using sNp: no sNp
+DEBUG    - rfCircuit.py         get1S           [  745]: [  4] | | | | getting S for VTL1_arc_4pj
+DEBUG    - rfCircuit.py         get1S           [  745]: [  4] | | | | getting S for V1
+DEBUG    - rfCircuit.py         get1S           [  745]: [  4] | | | | getting S for VTL1_arc_v1
+DEBUG    - rfCircuit.py         get1S           [  745]: [  4] | | | | getting S for V2
+DEBUG    - rfCircuit.py         get1S           [  745]: [  4] | | | | getting S for VTL1_arc_v2
+DEBUG    - rfCircuit.py         get1S           [  745]: [  4] | | | | getting S for V3
+DEBUG    - rfCircuit.py         get1S           [  745]: [  4] | | | | getting S for VTL1_arc_ss
+DEBUG    - rfCircuit.py         extS            [  605]: [  4] | | | | > [circuit.extS] 
+DEBUG    - rfCircuit.py         extS            [  649]: [  5] | | | | | Portnames= ['4pj', 'ss']
+DEBUG    - rfCircuit.py         extS            [  650]: [  5] | | | | | ports=     ['4pj', 'ss']
+DEBUG    - rfCircuit.py         extS            [  675]: [  5] | | | | | S:
+DEBUG    - rfCircuit.py         extS            [  682]: [  5] | | | | |   [2,2]
+DEBUG    - rfCircuit.py         extS            [  682]: [  5] | | | | |    0.05224  +34.68°,  0.99850  -60.71°, 
+DEBUG    - rfCircuit.py         extS            [  682]: [  5] | | | | |    0.99850  -60.71°,  0.05225  +23.65°, 
+DEBUG    - rfCircuit.py         extS            [  684]: [  4] | | | | < [circuit.extS]
+DEBUG    - rfCircuit.py         getS            [  792]: [  4] | | | | Ss: 1 matrix
+DEBUG    - rfCircuit.py         getS            [  796]: [  4] | | | | f= 50000000.0 Hz
+DEBUG    - rfCircuit.py         getS            [  803]: [  4] | | | |   [2,2]
+DEBUG    - rfCircuit.py         getS            [  803]: [  4] | | | |    0.05224  +34.68°,  0.99850  -60.71°, 
+DEBUG    - rfCircuit.py         getS            [  803]: [  4] | | | |    0.99850  -60.71°,  0.05225  +23.65°, 
+DEBUG    - rfCircuit.py         getS            [  805]: [  3] | | | < [circuit.getS]
+DEBUG    - rfGTL.py             getSgtl         [  445]: [  2] | | < getSgtl
+DEBUG    - rfGTL.py             getS            [  481]: [  2] | | not using sNp
+DEBUG    - rfCircuit.py         getS            [  713]: [  2] | | > [circuit.getS] fs= 50000000.0, Zbase= 20, params= {}, flags= {}
+DEBUG    - rfCircuit.py         get1S           [  738]: [  3] | | | not using sNp: no sNp
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_4pj
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for V1
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_v1
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for V2
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_v2
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for V3
+DEBUG    - rfCircuit.py         get1S           [  745]: [  3] | | | getting S for VTL1_arc_ss
+DEBUG    - rfCircuit.py         extS            [  605]: [  3] | | | > [circuit.extS] 
+DEBUG    - rfCircuit.py         extS            [  649]: [  4] | | | | Portnames= ['4pj', 'ss']
+DEBUG    - rfCircuit.py         extS            [  650]: [  4] | | | | ports=     ['4pj', 'ss']
+DEBUG    - rfCircuit.py         extS            [  675]: [  4] | | | | S:
+DEBUG    - rfCircuit.py         extS            [  682]: [  4] | | | |   [2,2]
+DEBUG    - rfCircuit.py         extS            [  682]: [  4] | | | |    0.05224  +34.68°,  0.99850  -60.71°, 
+DEBUG    - rfCircuit.py         extS            [  682]: [  4] | | | |    0.99850  -60.71°,  0.05225  +23.65°, 
+DEBUG    - rfCircuit.py         extS            [  684]: [  3] | | | < [circuit.extS]
+DEBUG    - rfCircuit.py         getS            [  792]: [  3] | | | Ss: 1 matrix
+DEBUG    - rfCircuit.py         getS            [  796]: [  3] | | | f= 50000000.0 Hz
+DEBUG    - rfCircuit.py         getS            [  803]: [  3] | | |   [2,2]
+DEBUG    - rfCircuit.py         getS            [  803]: [  3] | | |    0.05224  +34.68°,  0.99850  -60.71°, 
+DEBUG    - rfCircuit.py         getS            [  803]: [  3] | | |    0.99850  -60.71°,  0.05225  +23.65°, 
+DEBUG    - rfCircuit.py         getS            [  805]: [  2] | | < [circuit.getS]
+DEBUG    - rfGTL.py             getS            [  484]: [  1] | < getS
+DEBUG    - rfCircuit.py         maxV            [ 1186]: [  1] | VSWs:
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   VTL1_arc_4pj.4pj  : [  0.000]m, [  0.999]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   VTL1_arc_4pj.4pja : [  0.000]m, [  0.999]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   V1.4pja           : [ -0.001]m, [  0.999]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   V1.v1             : [  0.389]m, [  0.999]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   VTL1_arc_v1.v1    : [  0.389]m, [  0.999]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   VTL1_arc_v1.[oc]  : [  0.389]m, [  0.999]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   V2.v1             : [  0.388]m, [  0.999]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   V2.v2             : [  0.488]m, [  1.007]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   VTL1_arc_v2.v2    : [  0.488]m, [  1.007]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   VTL1_arc_v2.[oc]  : [  0.488]m, [  1.007]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   V3.v2             : [  0.488]m, [  1.007]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   V3.ssa            : [  0.998]m, [  1.048]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   VTL1_arc_ss.ssa   : [  0.998]m, [  1.048]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   VTL1_arc_ss.ss    : [  0.998]m, [  1.048]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   4pj               : [  0.000]m, [  0.999]V
+DEBUG    - rfCircuit.py         maxV            [ 1189]: [  1] |   ss                : [  0.998]m, [  1.048]V
+DEBUG    - rfCircuit.py         maxV            [ 1194]: [  1] | finding maxV for VTL1_arc_4pj
+DEBUG    - rfCircuit.py         maxV            [ 1223]: [  1] |   port excitations:
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     4pj  :             -0.000+0.000jV
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     4pja :              0.488-0.871jV
+DEBUG    - rfCircuit.py         maxV            [ 1230]: [  1] | VTL1_arc_4pj: xpos = 0.0
+DEBUG    - rfCircuit.py         maxV            [ 1194]: [  1] | finding maxV for V1
+DEBUG    - rfCircuit.py         maxV            [ 1223]: [  1] |   port excitations:
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     4pja :              0.000+0.000jV
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     v1   :              0.794-0.605jV
+DEBUG    - rfCircuit.py         maxV            [ 1230]: [  1] | V1: xpos = -0.0012278834133585548
+DEBUG    - maxfun.py            maxfun          [   24]: [  1] | > [maxfun]
+DEBUG    - maxfun.py            maxfun          [   96]: [  1] | < [maxfun]
+DEBUG    - rfCircuit.py         maxV            [ 1194]: [  1] | finding maxV for VTL1_arc_v1
+DEBUG    - rfCircuit.py         maxV            [ 1223]: [  1] |   port excitations:
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     v1   :              0.397-0.303jV
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     [oc] :              0.397-0.303jV
+DEBUG    - rfCircuit.py         maxV            [ 1230]: [  1] | VTL1_arc_v1: xpos = 0.38877211658664146
+DEBUG    - rfCircuit.py         maxV            [ 1194]: [  1] | finding maxV for V2
+DEBUG    - rfCircuit.py         maxV            [ 1223]: [  1] |   port excitations:
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     v1 :              0.000-0.000jV
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     v2 :              0.860-0.509jV
+DEBUG    - rfCircuit.py         maxV            [ 1230]: [  1] | V2: xpos = 0.3875442331732829
+DEBUG    - maxfun.py            maxfun          [   24]: [  1] | > [maxfun]
+DEBUG    - maxfun.py            maxfun          [   96]: [  1] | < [maxfun]
+DEBUG    - rfCircuit.py         maxV            [ 1194]: [  1] | finding maxV for VTL1_arc_v2
+DEBUG    - rfCircuit.py         maxV            [ 1223]: [  1] |   port excitations:
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     v2   :              0.445-0.235jV
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     [oc] :              0.445-0.235jV
+DEBUG    - rfCircuit.py         maxV            [ 1230]: [  1] | VTL1_arc_v2: xpos = 0.488
+DEBUG    - rfCircuit.py         maxV            [ 1194]: [  1] | finding maxV for V3
+DEBUG    - rfCircuit.py         maxV            [ 1223]: [  1] |   port excitations:
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     v2  :              0.030+0.040jV
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     ssa :              1.000+0.000jV
+DEBUG    - rfCircuit.py         maxV            [ 1230]: [  1] | V3: xpos = 0.488
+DEBUG    - maxfun.py            maxfun          [   24]: [  1] | > [maxfun]
+DEBUG    - maxfun.py            maxfun          [   96]: [  1] | < [maxfun]
+DEBUG    - rfCircuit.py         maxV            [ 1194]: [  1] | finding maxV for VTL1_arc_ss
+DEBUG    - rfCircuit.py         maxV            [ 1223]: [  1] |   port excitations:
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     ssa :              0.048+0.021jV
+DEBUG    - rfCircuit.py         maxV            [ 1226]: [  1] |     ss  :              1.000+0.000jV
+DEBUG    - rfCircuit.py         maxV            [ 1230]: [  1] | VTL1_arc_ss: xpos = 0.998
+DEBUG    - rfCircuit.py         maxV            [ 1261]: [  0] < [circuit.maxV]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  0] > [plotit] BLK=rfGTL_M1YID4, type(VSW)=<class 'dict'>,lev= 0
+DEBUG    - plotVSWs.py          plotit          [   88]: [  1] | > [plotit] BLK=rfGTL_M1YID4, type(VSW)=<class 'dict'>,lev= 1
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_4pj.4pj, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_4pj.4pj; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_4pj.4pja, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_4pj.4pja; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=V1.4pja, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= V1.4pja; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=V1.v1, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= V1.v1; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_v1.v1, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_v1.v1; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_v1.[oc], type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_v1.[oc]; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=V2.v1, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= V2.v1; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=V2.v2, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= V2.v2; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_v2.v2, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_v2.v2; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_v2.[oc], type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_v2.[oc]; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=V3.v2, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= V3.v2; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=V3.ssa, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= V3.ssa; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_ss.ssa, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_ss.ssa; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_ss.ss, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_ss.ss; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=4pj, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= 4pj; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=ss, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= ss; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_4pj, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_4pj; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=V1, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= V1; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  104]: [  3] | | | vsw
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_v1, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_v1; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  104]: [  3] | | | vsw
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=V2, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= V2; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  104]: [  3] | | | vsw
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_v2, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_v2; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  104]: [  3] | | | vsw
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=V3, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= V3; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  104]: [  3] | | | vsw
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [   88]: [  2] | | > [plotit] BLK=VTL1_arc_ss, type(VSW)=<class 'tuple'>,lev= 2
+DEBUG    - plotVSWs.py          plotit          [   98]: [  3] | | | label= VTL1_arc_ss; BLK[0] != "_": True, lev < maxlev: True
+DEBUG    - plotVSWs.py          plotit          [  107]: [  3] | | | node
+DEBUG    - plotVSWs.py          plotit          [  111]: [  2] | | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [  111]: [  1] | < [plotit]
+DEBUG    - plotVSWs.py          plotit          [  111]: [  0] < [plotit]

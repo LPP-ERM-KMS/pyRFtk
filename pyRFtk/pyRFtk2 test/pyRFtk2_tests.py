@@ -8,7 +8,7 @@ Created on 12 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2022-03-24 17:07:05"
+__updated__ = "2022-03-25 17:28:44"
 
 import numpy as np
 import matplotlib.pyplot as pl
@@ -29,7 +29,7 @@ tests = [
 #    'rfCircuit-basic',
 #    'rfArc',
 #    'rfBase-basic',
-   'plotVSWs',
+#    'plotVSWs',
     'rfGTL'
 ]
 
@@ -52,15 +52,15 @@ if testhdr('rfGTL'):
                           '/src/CYCLE 2018/2020 Contract/Arc Detection')
     setLogLevel('DEBUG')
     ctGTL = rfGTL(path2model, 
-                  objkey='VTL2',
+                  objkey='VTL1',
                   Zbase=20, 
                   variables= {'RHO':0.022, 'LMTL' : 1.}
                  )
     printMA(ctGTL.getS(50e6))
     print(ctGTL)
-    maxV, where, VSWs = ctGTL.maxV(50e6,{'ss':1, 'fdr':0.},Id='VTL2')
-    plotVSWs(VSWs)
-     
+    maxV, where, VSWs = ctGTL.maxV(50e6,{'ss':1, '4pj':0.})
+    plotVSWs(VSWs, plotnodes=True)
+    
 #===============================================================================
 #
 # r f C i r c u i t
@@ -144,47 +144,50 @@ if testhdr('plotVSWs'):
     
     XPOS = lambda _: dict([(_p, _x) for _p, _x in zip(_.ports, _.xpos)])
     
-    TRL1 = rfTRL(L=1.0)
-    TRL2 = rfTRL(L=2.0)
+    TRL1 = rfTRL(L=1.1, ports=['1a','1b'])
+    TRL2 = rfTRL(L=2.1, ports=['2a','2b'])
     print('TRL1.xpos:',XPOS(TRL1))
     
     print('construct CT1')
     CT1 = rfCircuit()
     CT1.addblock('TRL1', TRL1, relpos= 0. )
-    CT1.addblock('TRL2', TRL2, relpos= 1. )
-    CT1.connect('TRL1.2','TRL2.1')
+    CT1.addblock('TRL2', TRL2, relpos= 1.1 )
+    CT1.connect('TRL1.1b','TRL2.2a')
     # CT1.resolve_xpos()
     print('CT1.xpos:',XPOS(CT1))
     
-    TRL3 = rfTRL(L=1.0)
-    TRL4 = rfTRL(L=1.0)
+    TRL3 = rfTRL(L=1.3, ports=['3a','3b'])
+    TRL4 = rfTRL(L=1.4, ports=['4a','4b'])
     CT2 = rfCircuit()
     CT2.addblock('TRL3', TRL3, relpos= 0. )
-    CT2.addblock('TRL4', TRL4, relpos= 1. )
-    CT2.connect('TRL3.2','TRL4.1')
-    CT2.terminate('TRL4.2', RC=0.5j)
+    CT2.addblock('TRL4', TRL4, relpos= 1.3)
+    CT2.connect('TRL3.3b','TRL4.4a')
+    CT2.terminate('TRL4.4b', RC=0.5j)
     # CT2.resolve_xpos()
     print('CT2.xpos:',XPOS(CT2))
     
     CT3 = rfCircuit()
     CT3.addblock('CT1', CT1, relpos= 0. )
     CT3.addblock('CT2', CT2, relpos= 0. )
-    CT3.connect('CT1.TRL1.1','CT2.TRL3.1','1')
+    CT3.connect('CT1.TRL1.1a','CT2.TRL3.3a','ct1')
     # CT3.resolve_xpos()
     print('CT3.xpos:',XPOS(CT3))
     
     CT4 = rfCircuit(Id='Duh')
-    CT4.addblock('TRL5', rfTRL(L=2.5), relpos= 0. )
+    CT4.addblock('TRL5', rfTRL(L=2.5, ports=['5a','5b']), relpos= 0. )
     CT4.addblock('CT3', CT3, relpos= 2.5 )
-    CT4.connect('TRL5.2','CT3.1')
+    CT4.connect('TRL5.5b','CT3.ct1')
     # CT4.resolve_xpos()
     print('CT4.xpos:',XPOS(CT4))
     
     print('TRL1:',TRL1)
     setLogLevel('DEBUG')
-    maxV, where, VSWs = CT4.maxV(f=45e6, E={'TRL5.1':1, 'CT3.CT1.TRL2.2':0.5}, Id='CT4')
+    maxV, where, VSWs = CT4.maxV(f=45e6, E={'TRL5.5a':1, 'CT3.CT1.TRL2.2b':0.5})
     setLogLevel('CRITICAL')
     print(f'maxV: {maxV}, {where}')
     print(strVSW(VSWs))
-    plotVSWs(VSWs,maxlev=6)
-    pl.show()
+    plotVSWs(VSWs)
+    
+#===============================================================================
+
+pl.show()

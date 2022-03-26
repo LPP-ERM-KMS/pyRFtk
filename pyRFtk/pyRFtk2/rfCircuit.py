@@ -42,7 +42,7 @@ TODO: use external sNp if available
 
 """
 
-__updated__ = "2022-03-24 09:16:57"
+__updated__ = "2022-03-25 13:47:52"
 
 if __name__ == '__main__':
     import sys
@@ -430,25 +430,8 @@ class rfCircuit(rfBase):
         
         # update the self.xpos
         # self.xpos = []
-        for _p in self.ports:
-            _blk, _blkport = (_p.split('.')+[None])[:2]
-            tpos = relpos
-            if _blkport is None:
-                # what do we do ?
-                # this is maybe a port that resulted from connecting to a new port
-                tpos = 'free port ?'
-            else:
-                rfObj = self.blocks[_blk]['object']
-                if _blkport in rfObj.ports:
-                    _kp = rfObj.ports.index(_blkport)
-                    try:
-                        tpos += rfObj.xpos[_kp]
-                    except TypeError:
-                        tpos = rfObj.xpos[_kp]+'?'
-                else:
-                    # how can that be may the port got renamed ?
-                    tpos = 'renamed port ?'
-            self.xpos.append(tpos)
+        for p, x in zip(oports, RFobj.xpos):
+            self.xpos.append(relpos + x)
                 
         _debug_ and tLogger.debug(ident(
             f'< [circuit.addblock] (inserted a new block)', -1
@@ -457,6 +440,31 @@ class rfCircuit(rfBase):
         return
 
         
+    #===========================================================================
+    #
+    # g e t p o s
+    #
+    def getpos(self, node):
+        """return the position of the node
+        """
+        relpos, obj = 0., self
+        while '.' in node:
+            try:
+                onode = node # belts and braces :)
+                blk, node = (node.split('.',1)+[None])[:2]
+                block = obj.blocks[blk]
+                relpos += block['xpos']
+                obj = block['object']
+            except AttributeError: # because obj is not a circuit (= no .blocks)
+                node = onode
+                break
+            except KeyError:
+                # because the node's toplevel block is this self self ?
+                return self.getpos(node)
+            
+        kp = obj.ports.index(node)
+        return relpos + obj.xpos[kp]
+                
     #===========================================================================
     #
     # c o n n e c t
@@ -468,10 +476,20 @@ class rfCircuit(rfBase):
         
         # create possibly missing nodes
         newports = [p for p in ports if ('->'+p) not in self.waves]
+        if len(newports) > 1:
+            raise ValueError(
+                f'{whoami(__package__)}: cannot have more than one new port'
+        )
+            
+        oldports = [p for p in ports if ('->'+p) in self.waves]
+        
         for p in newports:
             self.waves.append('->'+p)
             self.waves.append('<-'+p) 
             self.ports.append(p)
+            # here we need to make assumptions on the position of the new port
+            # -> we take the position of the first port in the list
+            self.xpos.append(self.getpos(oldports[0]))
         
         # do we need to reverse '->' and '<-' for new ports
         idxAs, idxBs = [], []
@@ -1153,33 +1171,14 @@ class rfCircuit(rfBase):
             if w[:2] == '->':
                 k1 = self.waves.index('<-'+w[2:])
                 Vk = np.abs(self.sol[k]  + self.sol[k1])
-                # note the circuit object itself does not know where it is
-                # positioned; it only keeps track of the blocks/objects inside it
-                # there is some logic to this as the circuit object itself can be
-                # used in several places in an encompassing circuit object
-                tNode = Id+'.'+w[2:]
-                if tNode not in ppos:
-                    _debug_ and tLogger.debug(ident(f'{tNode} not found in ppos'))
-                    # can we find the node in subblocks ?
-                    tBlk, _p = (w[2:].split('.') + [None])[:2]
-                    if tBlk in self.blocks and _p in self.blocks[tBlk]['ports']:
-                        obj = self.blocks[tBlk]['object']
-                        _kp = self.blocks[tBlk]['ports'].index(_p)
-                        try:
-                            _x = self.blocks[tBlk]['xpos'] + obj.xpos[_kp] + relpos
-                        except TypeError:
-                            _x = 0.
-                        VSWs[Id][w[2:]] = ([_x], [Vk]) 
-                        if _debug_ :
-                            logident(
-                                f'  but found {_p} in  {Id}[{tBlk}] with xpos={_x}')
-                    else:
-                        VSWs[Id][w[2:]]=([None],[Vk])
-                else:
-                    VSWs[Id][w[2:]]=([ppos[tNode]],[Vk])
+                
+                x = relpos + self.getpos(w[2:])
+                VSWs[Id][w[2:]] = ([x], [Vk]) 
                     
                 if Vk > tmax:
-                    tmax, nmax = Vk, tNode
+                    tmax, nmax = Vk, Id+'.'+w[2:]
+                        
+                    
         
         # l0 = max([len(_) for _ in self.blocks])+1
         if _debug_:
@@ -1231,12 +1230,14 @@ class rfCircuit(rfBase):
                         _debug_ and logident(f'{blkID}: xpos = {blk["xpos"]}')
                         t1, n1, VSW = obj.maxV(f, Ek, self.Zbase, blkID, 
                                                flags=flags,
-                                               xpos = blk['xpos'])
+                                               xpos = relpos + blk['xpos'])
+                        
                         if len(VSW) == 1 and blkID in VSW:
                             _debug_ and tLogger.debug(ident(
                                 f'squeezing return maxV dict'
                             ))
                             VSW = VSW[blkID]
+                            
                     except TypeError:
                         print(blkID)
                         print(obj)
