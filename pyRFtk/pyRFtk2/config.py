@@ -8,7 +8,7 @@ Created on 20 Dec 2020
 
 @author: frederic
 """
-__updated__ = "2022-03-22 08:39:02"
+__updated__ = "2022-03-27 09:04:33"
 
 import time
 import string
@@ -124,8 +124,8 @@ def logident(message, printargs=False, stacklev=2):
             if args:
                 for i in args:
                     s =f'    {i} = '
-                    # print(values[i])
-                    if values[i] != '_debug_': # because of the matra: _debug_ and logident(...)
+                    # print("#######\n#\n#",type(values[i]),'\n#',str(values[i]),"\n#\n#####")
+                    if True or values[i] != '_debug_': # because of the matra: _debug_ and logident(...)
                         try:
                             lines = str(values[i]).split('\n')
                         except:
@@ -163,7 +163,12 @@ def logident(message, printargs=False, stacklev=2):
 
 N = 6
 def _newID():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k = N))
+    try:
+        _newID.N += 1
+    except:
+        _newID.N = 0
+    return f'{_newID.N}'
+    # return ''.join(random.choices(string.ascii_uppercase + string.digits, k = N))
 
 #===============================================================================
 #

@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-03-23 08:58:14'
+__updated__ = '2022-03-26 18:32:24'
 
 """
 Arnold's Laws of Documentation:
@@ -102,7 +102,7 @@ class rfBase():
         """
         
         _debug_ = logit['DEBUG']
-        _debug_ and logident('>', printargs=True)
+        _debug_ and logident('>', printargs=False)
         
         self.kwargs = kwargs.copy()
         self.Id = kwargs.pop('Id', f'{type(self).__name__}_{_newID()}')

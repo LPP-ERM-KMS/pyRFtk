@@ -42,7 +42,7 @@ TODO: use external sNp if available
 
 """
 
-__updated__ = "2022-03-25 13:47:52"
+__updated__ = "2022-03-27 10:07:09"
 
 if __name__ == '__main__':
     import sys
@@ -74,7 +74,7 @@ class rfCircuit(rfBase):
     def __init__(self, **kwargs):
         
         _debug_ = logit['DEBUG']
-        _debug_ and logident('>', printargs=True)
+        _debug_ and logident('>', printargs=False)
 
         super().__init__(**kwargs)
         # pop the kwargs consumed by rfBase
@@ -374,7 +374,11 @@ class rfCircuit(rfBase):
         
         # check the position parameter xpos
         
-        relpos = kwargs.pop('relpos', 0.)
+        if 'xpos' in kwargs:
+            warnings.warn(f'{whoami(__package__)}: xpos depreciated; use relpos')
+            relpos = kwargs.pop('xpos', 0.)
+        else:
+            relpos = kwargs.pop('relpos', 0.)
             
         # if hasattr(xpos,'__iter__'):
         #     if len(xpos) != N:
@@ -461,8 +465,11 @@ class rfCircuit(rfBase):
             except KeyError:
                 # because the node's toplevel block is this self self ?
                 return self.getpos(node)
+        try:  
+            kp =block['ports'].index(node)
+        except:
+            kp = obj.ports.index(node)
             
-        kp = obj.ports.index(node)
         return relpos + obj.xpos[kp]
                 
     #===========================================================================

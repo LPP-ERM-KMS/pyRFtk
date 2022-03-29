@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-03-25 16:57:22'
+__updated__ = '2022-03-27 17:36:13'
 
 """
 Arnold's Laws of Documentation:
@@ -64,7 +64,7 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
             
     if Id: 
         if 'num' not in figkwargs:
-            figkwargs['num'] = Id
+            figkwargs['num'] = Id.replace('\\','').replace('$','')
         else:
             raise ValueError(
                 'pyRFtk2.commonLib.plotVSWs: only one of "ID" or "num" kwargs allowed')
@@ -72,6 +72,7 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
     tfig, ax = pl.subplots(**figkwargs)
     
     plotnodes = kwargs.pop('plotnodes', False)
+    plotpoints = kwargs.pop('plotpoints', False)
     
     ankwargs = dict(
         xytext=(0,30),
@@ -102,7 +103,11 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
             ))
             if any([x != xs[0] for x in xs]) or any([v != absV[0] for v in absV]):
                 _debug_ and tLogger.debug(ident(f'vsw'))
-                pl.plot(xs, absV, '.-', label=lbl)
+                pl.plot(xs, absV, '.-' if plotpoints else '-', label=lbl)
+            
+            # elif len(xs) == 2 and xs[0]==xs[1]:
+            #     pl.plot(xs, absV, '.', label=lbl)
+                
             elif plotnodes:
                 _debug_ and tLogger.debug(ident(f'node'))
                 if isinstance(xs[0], (float,int)):
@@ -116,7 +121,7 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
     pl.legend(loc='best')
     pl.xlabel('x [m]')
     pl.ylabel('U [kV]')
-    pl.title(f'{Id} Voltage standing waves')
+    pl.title(f'{Id}')
     pl.grid(True)
     
     #= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -242,7 +247,7 @@ def scaleVSW(VSW, scale):
                 for k in range(len(val[1])):
                     val[1][k] *= scale
             else:
-                VSW[Id] *= scale
+                VSW[Id][1] *= scale
         else:
             raise ValueError('pyRFtk.CommonLib.plotVSWs.scaleVSW: internal error')
         

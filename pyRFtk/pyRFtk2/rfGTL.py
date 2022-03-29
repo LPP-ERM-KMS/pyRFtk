@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-03-25 17:15:30'
+__updated__ = '2022-03-28 09:46:37'
 
 """
 Arnold's Laws of Documentation:
@@ -70,7 +70,7 @@ class rfGTL(rfCircuit):
     def __init__(self, path2model, objkey=None, variables={}, **kwargs):
                
         _debug_ = logit['DEBUG']
-        _debug_ and logident('>', printargs=True)
+        _debug_ and logident('>', printargs=False)
         
         Id = kwargs.pop('Id','rfGTL_' + _newID())
         _debug_ and logident(f'Id = {Id}')
@@ -268,8 +268,34 @@ class rfGTL(rfCircuit):
                     tblk['xpos'] = positions[p] - rfobj_xpos[1] + rfobj_xpos[0]
         
         found = True # prime the loop
+        setblks = []
         while found:
             found = False
+            for blkId, tblock in self.blocks.items():
+                if blkId in setblks:
+                    continue
+                
+                obj = tblock['object']
+                for kp, (p, xp) in enumerate(zip(tblock['ports'], obj.xpos)):
+                    if p in positions:
+                        found = True
+                        setblks.append(blkId)
+                        tblock['xpos'] = positions[p] - xp
+                        # set other ports related to that blk
+                        for p1, xp1 in zip(tblock['ports'], obj.xpos):
+                            if p1 != p and p1 not in ['[**]','[oc]','[sc]']:
+                                if p1 not in positions:
+                                    positions[p1] = tblock['xpos'] + xp1
+                                else:
+                                    err = (positions[p1] - xp1) - (positions[p] - xp)
+                                    if np.abs(err) > 1E-5:
+                                        print(f'rfGTL: inconsistent positions {err*1e3}mm for {blkId}.{p} and {blkId}.{p1}')
+                        break
+                
+                        
+            continue
+            print('woo wooo wooooo ...')
+            # below here is not executed
             for p, blks in portlist.items():
                 if p not in positions:
                     for blk in blks:
@@ -277,7 +303,8 @@ class rfGTL(rfCircuit):
                         rfobj, ports = tblk['object'], tblk['ports']
                         rfobj_xpos = rfobj.xpos
                         if p in ports:
-                            for p2 in [p1 for p1 in ports if p1 != p]:
+                            for p2 in [p1 for p1 in ports  if p1 != p]:
+                                # if (p1 != p and p1 not in ['[**]','[oc]','[sc]'])]:
                                 if p2 in positions:
                                     kp = ports.index(p)
                                     found = True
