@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-02-15 09:03:32'
+__updated__ = '2022-04-05 11:45:00'
 
 """
 Arnold's Laws of Documentation:
@@ -85,11 +85,12 @@ class rfArcObj(rfBase):
         _debug_ = logit['DEBUG']
         _debug_ and logident('>', True)
         
+        if type(self).__name_ == 'rfArcObj':
+            self.args, self.kwargs = args, kwargs.copy()
+            
         _debug_ and logident(f'{kwargs}')
         super().__init__(**kwargs)
         _debug_ and logident(f'{kwargs}')
-        
-        self.args = args[:]
         
         Larc, args = (args[0], args[1:]) if len(args) else (+np.inf, ())
         self.Larc = kwargs.pop('Larc', Larc)

@@ -11,7 +11,7 @@ Created on 18 Dec 2020
 This is a template for a rfObject: but it may be obsoleted ...
 
 """
-__updated__ = "2022-03-24 09:11:17"
+__updated__ = "2022-04-05 11:45:17"
 
 if __name__ == '__main__':
     import sys
@@ -61,7 +61,7 @@ class rfObject():
     #
     #  _ _ i n i t _ _
     #
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         """rfObject
         
         'kwargs'
@@ -77,8 +77,9 @@ class rfObject():
             
             fixme: no parameters to set the Zcs and Gms port properties
         """
-             
-        self.kwargs = kwargs.copy()
+        
+        if type(self).__name__ == 'rfObject':
+            self.args, self.kwargs = args, kwargs.copy()
 
         self.Id = kwargs.pop('Id',f'{type(self).__name__}_{_newID()}')
         

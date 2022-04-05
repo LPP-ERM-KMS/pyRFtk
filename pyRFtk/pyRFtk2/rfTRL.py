@@ -8,7 +8,7 @@ Created on 16 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2022-03-23 09:07:44"
+__updated__ = "2022-04-05 11:45:54"
 
 if __name__ == '__main__':
     import sys
@@ -194,9 +194,11 @@ class rfTRL():
     maxV(f, E, Zbase=None)
     
     """
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         
-        self.kwargs = kwargs
+        if type(self).__name__ == 'rfTRL':
+            self.args, self.kwargs = args, kwargs.copy()
+            
         self.Id = kwargs.pop('Id','rfTRL_'+_newID())
         self.ports = kwargs.pop('ports',['1','2'])
         self.L = kwargs.pop('L', 0.)
@@ -292,7 +294,7 @@ class rfTRL():
         debug = logit['DEBUG']
         debug and tLogger.debug(ident(f'> circuit.__deepcopy__ {self.Id}', 1))
         
-        other = type(self)()
+        other = type(self)(*self.args, **self.kwargs)
         for attr, val in self.__dict__.items():
             try: 
                 debug and tLogger.debug(ident(f'copy {attr}'))

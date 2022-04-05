@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-03-26 18:32:24'
+__updated__ = '2022-04-05 11:44:22'
 
 """
 Arnold's Laws of Documentation:
@@ -54,10 +54,11 @@ OHM = u'\N{Greek Capital Letter Omega}'
 
 import numpy as np
 import copy
+import time
    
 from .config import logident, logit, _newID
 from .Utilities import whoami, strM
-from .CommonLib import ConvertGeneral, _check_3D_shape_
+from .CommonLib import ConvertGeneral, _check_3D_shape_, Z_from_S, Y_from_S
         
 #===============================================================================
 #
@@ -84,13 +85,15 @@ class rfBase():
         __getstate__, __setstate__
         __str__
         __len__
+        get1S, getS
+        tsf2str, write_tsf
+        maxV
     """
-    
     #===========================================================================
     #
     # _ _ i n i t _ _
     #
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         """rfBase(
             [Id=],    # Identifier; default type(self).__name__(::ALFANUM::){6} 
             [Ss=],    # the S-matrix; default to np.zeros((0, len(ports), len(ports)))
@@ -104,7 +107,10 @@ class rfBase():
         _debug_ = logit['DEBUG']
         _debug_ and logident('>', printargs=False)
         
-        self.kwargs = kwargs.copy()
+        # only save the args and kwargs when creating a rfBase object
+        if type(self).__name__ == 'rfBase':
+            self.args, self.kwargs = args, kwargs.copy()
+        
         self.Id = kwargs.pop('Id', f'{type(self).__name__}_{_newID()}')
         self.Zbase = kwargs.pop('Zbase', 50.)
         
@@ -120,9 +126,8 @@ class rfBase():
                         'pyRFtk2.rfBase: inconsitent "ports" and "S" given'
                     )
             else:
-                self.ports = [f'{_}' for _ in range(1,self.Ss.shape[1]+1)]
+                self.ports = [f'{p_}' for p_ in range(1,self.Ss.shape[1]+1)]
             
-        
         elif 'ports' in kwargs:
             self.ports = kwargs.pop('ports')
             self.Ss = 1j*np.zeros((0, len(self.ports),len(self.ports)))
@@ -193,8 +198,8 @@ class rfBase():
     def __copy__(self):
         return self.__deepcopy__(self)
     
-    def __deepcopy__(self, memo=None):                         # @UnusedVariable
-        other = type(self)()
+    def __deepcopy__(self, memo=None):                       # @UnusedVariable
+        other = type(self)(*self.args, **self.kwargs)
         for attr, val in self.__dict__.items():
             try:
                 # print(f'copying {attr}')
@@ -256,6 +261,152 @@ class rfBase():
         _debug_ and logident('<')
         return R
 
+    #===========================================================================
+    #
+    # w r i t e _ t s f
+    #
+    def tsf2str(self, **kwargs):
+        """tsf2str
+            return a multiline string which is the touchstone v1 representation 
+            of the rfBase object's data.
+            
+            kwargs:
+                Zbase: [self.Zbase] get the S-matrix data on reference 
+                       impedance Zbase
+                
+                tfmt : [f'#MHZ S MA R {self.Zbase}'] the touchstone file format
+                
+                comments: [self.Id] a multiline comment string added at the 
+                          top of the file
+            
+            Note: Zbase is only used when R is not supplied in tfmt to define
+                  the reference impedance Zref for the touchstone. If Zref is
+                  supplied in the tfmt then it overrules Zbase.
+        """
+        Zbase = kwargs.pop('Zbase', self.Zbase)
+        tfmt = kwargs.pop('tfmt', f'# MHZ S MA R {Zbase}')
+        comments = kwargs.pop('comments', f'{self}')
+
+        if kwargs:
+            raise TypeError(f'{whoami(__package__)}: '
+                            f'Unknown kwargs {", ".join([kw for kw in kwargs])}')
+                    
+        elmfmt, mtype, Zref, fscale, funit = 'MA', 'S', 50.0, 1.0, 'MHZ'
+        fscales = {'HZ': 1, 'KHZ':1e3, 'MHZ':1e6, 'GHZ':1e9}
+        elstrs = {
+            'RI': lambda z: '  %11.8f %11.8f' % (z.real, z.imag),
+            'MA': lambda z: '  %15.12f %9.4f' % (np.abs(z), np.angle(z,deg=1)),
+            'DB': lambda z: '  %15.10f %9.4f' % (20*np.log10(z).real, 
+                                                 np.angle(z,deg=1)),
+        }
+        
+        fmts = tfmt.upper().split()
+        if fmts[0] == '#':
+            fmts = fmts[1:]
+            
+        last = ''
+        for k, tk in enumerate(fmts):
+            if last == 'R':
+                pass # skip it as it is the value for R
+            
+            elif tk == 'R':
+                Zref = float(fmts[k+1])
+            
+            elif tk in fscales:
+                funit = tk
+                fscale = fscales[funit]
+            
+            elif tk in ['RI', 'MA', 'DB']:
+                elmfmt = tk
+                elstr = elstrs[elmfmt]
+            
+            elif tk in ['S', 'Y', 'Z']:
+                mtype = tk
+            
+            else:
+                raise ValueError(f'{whoami(__package__)}: '
+                                 f'unknown touchstone format directive {tk}')
+            last = tk
+            
+
+        eoln = '\n'
+        
+        s = ''
+        if isinstance(comments,str):
+            comments = comments.split('\n')
+        for c in comments:
+            s += f'! {c}'+eoln
+        s += eoln
+        
+        s += f'! TouchStone file ({type(self).__name__} version {__updated__})'+eoln
+        s += f'! Date : {time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())}'+eoln
+        s += eoln
+        s += f'{tfmt}'+eoln
+        s += f'!PORTS {", ".join(self.ports)}'+eoln
+        s += eoln
+
+        Ms = {'S' : ( lambda S_: ConvertGeneral(Zref, S_, self.Zbase) ),
+              'Z' : ( lambda S_: Z_from_S(S_, self.Zbase) ),
+              'Y' : ( lambda S_: Y_from_S(S_, self.Zbase) )        
+             }[mtype](self.Ss)
+
+        Fs = np.array(self.fs) / fscale
+        
+        freq_fmt = '%9.6f '
+        freq_fmt_len = 10
+        
+        if True:
+            # find the optimal frequency format that is able to represent the
+            # smallest frequency step as well as the maximun frequency
+            
+            if len(Fs) > 1:
+                for df in list(set(sorted(np.diff(Fs)))):
+                    if df > 0.:
+                        break
+            else:
+                df = Fs[0]
+            
+            m0, dm = 15, 3
+            m = m0
+            df0 = round(df,m)
+            while m >= 0 and df0 == round(df,m):
+                m -= dm
+            m += dm
+            freq_frac = '.%df' % m
+            n = len(('%'+freq_frac) % np.max(Fs))
+            freq_fmt = ('%%%d' % n) + freq_frac + ' '
+            freq_fmt_len = n + 1
+
+        CN = 4
+        for fk, Sk in zip(Fs, Ms):
+            
+            if len(self) == 2: # touchstone convention for 2-ports
+                Sk = np.transpose(Sk)
+                
+            s += freq_fmt % fk
+            for kr, Srow in enumerate(Sk):
+                for kc, Scol in enumerate(Srow):
+                    s += elstr(Scol) + '  '
+                    
+                    if (kc % CN is (CN-1)) and (kc is not len(self)-1):
+                        if kc is (CN-1):
+                            s += ' !    row %d' % (kr+1)
+                        s += eoln+' '*freq_fmt_len
+                s += eoln
+                if kr is not len(self)-1:
+                    s += ' '*freq_fmt_len
+            s += eoln
+        return s
+    
+    #===========================================================================
+    #
+    # w r i t e _ t s f
+    #
+    def write_tsf(self, tsbasename, **kwargs):
+        
+        with open(f'{tsbasename}.s{len(self)}p', 'w') as f:
+            f.write(self.tsf2str(**kwargs))
+        
     #===========================================================================
     #
     # m a x V

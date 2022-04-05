@@ -42,7 +42,7 @@ TODO: use external sNp if available
 
 """
 
-__updated__ = "2022-03-27 10:07:09"
+__updated__ = "2022-04-05 11:43:07"
 
 if __name__ == '__main__':
     import sys
@@ -71,12 +71,16 @@ class rfCircuit(rfBase):
     #
     # _ _ i n i t _ _
     #
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         
         _debug_ = logit['DEBUG']
         _debug_ and logident('>', printargs=False)
 
+        if type(self).__name__ == 'rfCircuit':
+            self.args, self.kwargs = args, kwargs.copy()
+        
         super().__init__(**kwargs)
+        
         # pop the kwargs consumed by rfBase
         for kw in ['Id', 'ports', 'Zbase', 'xpos', 'S']:
             kwargs.pop(kw, None)
@@ -304,8 +308,20 @@ class rfCircuit(rfBase):
                     f' {name} not present.')
                 
             _debug_ and logident(f'copying "{self.Id}".blocks[{name}]["object"]')
-            subblockobj = self.blocks[name]['object'].copy()
+            
+            # we need to copy the subblock as otherwise we may also change the
+            # properties of other instances of the subblock used else where in
+            # the circuit
+            
+            try:
+                subblockobj = self.blocks[name]['object'].copy()
+            except AttributeError:
+                print(type(self).__name__)
+                print(self.Id)
+                raise
+            
             _debug_ and logident(f'adding {subblock} to "{self.Id}".blocks[{name}]')
+            
             subblockobj.addblock(subblock, RFobj, ports=ports, params=params, **kwargs)
             self.blocks[name]['object'] = subblockobj
             if '.' not in subblock:

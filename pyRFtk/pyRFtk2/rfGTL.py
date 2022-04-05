@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-03-28 09:46:37'
+__updated__ = '2022-04-05 11:44:37'
 
 """
 Arnold's Laws of Documentation:
@@ -72,9 +72,16 @@ class rfGTL(rfCircuit):
         _debug_ = logit['DEBUG']
         _debug_ and logident('>', printargs=False)
         
+        if type(self).__name__ == 'rfGTL':
+            self.args = (path2model,)
+            self.kwargs = dict(objkey=objkey, 
+                               variables=variables.copy(),
+                               **kwargs.copy())
+        
         Id = kwargs.pop('Id','rfGTL_' + _newID())
         _debug_ and logident(f'Id = {Id}')
         super().__init__(**dict(kwargs,Id=Id))
+        
         _debug_ and logident(f'self.Id <- {self.Id}')
         
         self.path2model = path2model
@@ -381,7 +388,8 @@ class rfGTL(rfCircuit):
         _debug_ = logit['DEBUG']
         _debug_ and logident('>', printargs=True)
         
-        other = type(self)(self.path2model, self.objkey, self.variables, **self.kwargs) # because rfGTL object has a path2model
+        # other = type(self)(self.path2model, self.objkey, self.variables, **self.kwargs) # because rfGTL object has a path2model
+        other = type(self)(*self.args, **self.kwargs) # because rfGTL object has a path2model
         for attr, val in self.__dict__.items():
             try:
                 _debug_ and logident(f'copy {attr}')

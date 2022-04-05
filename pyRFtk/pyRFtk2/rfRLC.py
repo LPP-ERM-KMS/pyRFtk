@@ -8,7 +8,7 @@ Created on 30 Mar 2021
 
 @author: frederic
 """
-__updated__ = "2022-03-24 09:14:50"
+__updated__ = "2022-04-05 11:45:33"
 
 import numpy as np
 import copy
@@ -58,7 +58,7 @@ class rfRLC():
     #
     # _ _ i n i t _ _
     #
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         """kwargs:
             Zbase : reference impedance [50 Ohm]
             ports : port names [['s','p']]
@@ -70,6 +70,9 @@ class rfRLC():
             Cs : series capacity [+inf F]
             xpos : list of the port positions (order 's', 'p')
         """
+        if type(self).__name__ == 'rfRLC':
+            self.args, self.kwargs  = args, kwargs.copy()
+        
         self.Id = kwargs.pop('Id', f'{type(self).__name__}_{_newID()}')
         self.Zbase = kwargs.pop('Zbase', 50.)
         self.ports = kwargs.pop('ports',['s','p'])
@@ -107,7 +110,7 @@ class rfRLC():
         
         debug = logit['DEBUG']
         debug and logident('>')
-        other = type(self)()
+        other = type(self)(*self.args, **self.kwargs)
         for attr, val in self.__dict__.items():
             try:
                 other.__dict__[attr] = copy.deepcopy(val)
