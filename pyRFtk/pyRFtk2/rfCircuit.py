@@ -42,7 +42,7 @@ TODO: use external sNp if available
 
 """
 
-__updated__ = "2022-04-05 11:43:07"
+__updated__ = "2022-07-07 15:20:07"
 
 if __name__ == '__main__':
     import sys
@@ -76,21 +76,25 @@ class rfCircuit(rfBase):
         _debug_ = logit['DEBUG']
         _debug_ and logident('>', printargs=False)
 
-        if type(self).__name__ == 'rfCircuit':
-            self.args, self.kwargs = args, kwargs.copy()
+        type_rfCircuit = type(self).__name__ == 'rfCircuit'
+        
+        if not hasattr(self,'args'):
+            self.args = args
+        if not hasattr(self,'kwargs'):
+            self.kwargs = kwargs.copy()
         
         super().__init__(**kwargs)
         
-        # pop the kwargs consumed by rfBase
-        for kw in ['Id', 'ports', 'Zbase', 'xpos', 'S']:
+        # pop the kwargs consumed by rfBase (self.kwused is initialized in rfBase)
+        for kw in self.kwused:
             kwargs.pop(kw, None)
         
         sNp = kwargs.pop('sNp', None)
         
-        # why Portnames ? 
+        # why Portnames ? ports is processed already by rfBase
         self.Portnames = kwargs.pop('Portnames', [])
         
-        if kwargs:
+        if kwargs and type_rfCircuit:
             msg = f'unprocessed kwargs: {", ".join([kw for kw in kwargs])}'
             _debug_ and logident(msg)
             warnings.warn(msg)
@@ -106,7 +110,7 @@ class rfCircuit(rfBase):
         #   'object' : RFobj,
         #   'xpos'   : xpos  <== is now also an object propery (caveat the
                             #    same opject could be in different positions
-                            #    in a circuit
+                            #    in a circuit)
         }
         self.eqns = []
         self.f = np.nan # set in rfBase to None
@@ -268,6 +272,35 @@ class rfCircuit(rfBase):
     
     #===========================================================================
     #
+    # f i n d O b j
+    #
+    def findObj(self, location):
+        
+        debug = logit['DEBUG']       
+        debug and logident(f'>', printargs=True)
+        
+        obj = self
+        try:
+            while location:
+                blk, location = (location.split('.', 1) + [''])[:2] 
+                debug and logident(f'loc: {blk}, arc: {location}')
+                obj = obj.blocks[blk]['object']
+        except KeyError:
+            if debug:
+                for s in obj.asstr(1).split('\n'):
+                    logident(s)
+                if hasattr(obj,'blocks'):
+                    for itm in obj.blocks:
+                        logident(itm)
+            logident(f'could not find {blk} in obj.blocks')
+            obj = None
+            
+        debug and logident(f'<')
+        
+        return obj
+    
+    #===========================================================================
+    #
     # a d d b l o c k
     #
     def addblock(self, name, RFobj, ports=None, params={}, **kwargs):
@@ -358,7 +391,7 @@ class rfCircuit(rfBase):
             if isinstance(ports, dict):
                 # remap port names (note: empty dict pulls the object's portnames)
                 oports = [ports.pop(_p, _p) for _p in RFobj.ports]
-                # possibly the user supplied none existing port names
+                # possibly the user supplied non-existing port names
                 if ports:
                     raise ValueError(
                         f'{whoami(__package__)}["{name}"]: ports {ports} not defined')
@@ -446,7 +479,8 @@ class rfCircuit(rfBase):
         ))
         
         # update the equation types
-        self.eqns += [f'S: {name}.{p}' for p in oports]
+        self.eqns += [f'S{"[" if k==0 else "]" if k == len(oports)-1 else "+"}' 
+                      f' {name}.{p}' for k, p in enumerate(oports)]
         
         # update the self.xpos
         # self.xpos = []
@@ -711,21 +745,153 @@ class rfCircuit(rfBase):
     #
     # s e t 
     #
-    def set(self, **kwargs):
-        
-        for blkID, blk in self.blocks.items():
-            if hasattr(blk,'set'):
-                blk['object'].set(**kwargs.pop(blkID,{}))
-            elif blkID in kwargs:
-                raise ValueError(
-                    f'{whoami(__package__)}: tried to set params for {blkID} '
-                    f'but the object has no \'set\' attribute')
+    def set(self, *args, **kwargs):
+        """set
+            kwargs: dict of 
+                        ("blkID", sdict) 
+                            where sdict is a similar dict that goes further into
+                            the chain of nested rf objects
+                        (">attr", value)
+                            where attr is an rf object's attribute that gets the
+                            value
             
-        self.invM = None # mark the circuit as not solved
+            e.g.
+               rfCircuitA
+               |
+               +- rfRLC1
+               |  |
+               |  +- Ls
+               |
+               +- rfCircuitB
+                  |
+                  +- rfTRL1
+                     |
+                     +- L
+            
+            rfCircuitA.set(rfRLC1= {"Ls":20e-9},
+                           rfCircuitB= {"rfTRL1": {"L":1.0}}
+            or
+            
+            rfCircuitA.set({'rfRLC1.Ls':20e-9, 
+                            'rfCircuitB.rfTRL1.L':1.0'})
+                            
+            or
+            
+            rfCircuitA.set('rfRLC1.Ls', 20e-9)
+            rfCircuitA.set('rfCircuitB.rfTRL1', {'L:1.0})
+            
+        """
+        
+        debug = logit['DEBUG']
+        debug and logident(f'>', printargs=True)
+        
+        modified = False
+
+        if args:
+            # update the kwargs with the args supplied
+            if len(args) == 2:
+                if isinstance(args[0],str):
+                    # set(str1,val1, kw=aval, ...)
+                    kwargs = dict([args], **kwargs)
+                    args = ()
+                    
+                elif (all([isinstance(arg, list) for arg in args]) and
+                      all([isinstance(t_,str) for t_ in args[0]]) and
+                      len(args[0]) == len(args[1]) ):
+                    # set([str1, str2, ...],[val1, val2, ...], kw=aval, ...)
+                    kwargs = dict(zip(args[0],args[1]), **kwargs)
+                    args = ()
+        
+            for arg in args:
+                if isinstance(arg, dict):
+                    #set(..., {kw1:val1, ...}, ... , kw=aval, ...)
+                    kwargs = dict(arg, **kwargs)
+                    
+                elif isinstance(arg, tuple):
+                    #set(..., (kw1, val1), ... , kw=aval, ...)
+                    kwargs = dict({arg[0]:arg[1]},**kwargs)
+        
+        # progess the kwargs
+        for kw, val in kwargs.items():
+            
+            obj = self
+            
+            if isinstance(val, (float,int)):
+                if '.' in kw:
+                    # composed/chained locator 'obj,obj1. ... .attr'
+                    hd, tl = (kw.split('.',1)+[''])[:2]
+                    while tl:
+                        obj = obj.blocks[hd]['object']
+                        hd, tl = (tl.split('.',1)+[''])[:2]
+                    # hd is now the obj's attr
+                    attr = hd
+ 
+                elif hasattr(obj, kw) and kw in obj.attrs:
+                # must be an obj's attribure but this can not be
+                    attr = kw
+
+                else:
+                    raise ValueError(
+                        f'{whoami(__package__)}: {obj.Id} has no attribute {kw}'
+                        ' that can be set'
+                    )
+                    
+                try:
+                    modified |= obj.set(**{attr:val})
+                except AttributeError:
+                    raise ValueError(
+                        f'{whoami(__package__)}: {obj.Id} has no set method'
+                )
+                
+
+            elif isinstance(val, dict):
+                if kw in self.blocks:
+                #single locator (in that case val better be a dict)
+                    tl = kw
+                    obj = self.blocks[kw]['object']
+            
+            else:
+                raise ValueError(
+                    f'{whoami(__package__)}: {obj.Id} '
+                )    
+                
+            try:
+                modified |= getattr(obj, tl) != val 
+                obj.set(**val)
+                
+            except AttributeError:
+                raise ValueError(
+                    f'{whoami(__package__)}: {obj.Id} has no set method'
+                )
+
+            # else:
+            #     attr = kw[1:]
+            #     if hasattr(self, attr):
+            #         modified |= self.__getattr__(attr) != val
+            #         self.__setattr__(attr, val)
+            #     else:
+            #         raise ValueError(
+            #             f'{whoami(__package__)}: {self.Id} has no attribute {attr}'
+            #         )
+                    
+        # for blkID, blk in self.blocks.items():
+        #     if hasattr(blk,'set'):
+        #         blk['object'].set(**kwargs.pop(blkID,{}))
+        #     elif blkID in kwargs:
+        #         raise ValueError(
+        #             f'{whoami(__package__)}: tried to set params for {blkID} '
+        #             f'but the object has no \'set\' attribute')
+                
+        if modified:
+            self.invM = None # mark the circuit as not solved
         
         if kwargs:
             print(f'circuit.set: unused kwargs:\n{kwargs}')
-            
+        
+        debug and logident(f'<')
+        
+        return modified
+    
     #===========================================================================
     #
     # g e t S 
@@ -836,6 +1002,9 @@ class rfCircuit(rfBase):
         """given a set of (internal) nodes try and find a corresponding Smatrix
         """
         
+        debug = logit['DEBUG']
+        debug and logident(f'>', printargs=True)
+        
         Zbase = self.Zbase if Zbase is None else Zbase
         
         # as nodes can be inside deeper levels an "easy" solution as was possible
@@ -869,9 +1038,18 @@ class rfCircuit(rfBase):
                 MB_E.append(Solk[iB])
             MA_Es.append(MA_E)
             MB_Es.append(MB_E)
-            
-        S = np.array(MB_Es) @ np.linalg.inv(MA_Es)
-            
+        
+        dims = np.array(MA_Es).shape
+        if dims[0] == dims[1]:
+            S = np.array(MB_Es) @ np.linalg.inv(MA_Es)
+        elif dims[0] < dims[1]:
+            S = np.array(MB_Es) @ np.linalg.pinv(MA_Es)
+        else:
+            msg = 'cannot get S-matrix for more nodes than the number of exernal ports'
+            debug and logident(msg)
+            raise ValueError(msg)
+        
+        debug and logident(f'<')
         return S
     
     #===========================================================================
@@ -884,7 +1062,7 @@ class rfCircuit(rfBase):
             solves the circuit for the excitation given in Zbase (defaults to
             self.Zbase) and flags (defaults to no flags) at frequency f
             
-            returns the solution at all nodes        
+            sets the solution at all waves in self.sol        
         """
         _debug_ = logit['DEBUG']
         _debug_ and tLogger.debug(ident(
@@ -932,6 +1110,16 @@ class rfCircuit(rfBase):
             
             E and the returned voltage wave quantities are expressed for a
             reference impedance Zbase which defaults to the circuit's one.
+            
+            nodes: None, [ nodes ]
+            
+                If the requested nodes input is None all nodes are evaluated 
+                recursively in the whole circuit. 
+                
+                If nodes is [] then anyway the nodes at the level if the object 
+                are evaluated but the nodes in subblocks are not evaluated.
+                
+                So there may be more nodes evaluated than requested. 
         """
         _debug_ = logit['DEBUG']
         _debug_ and tLogger.debug(ident(
@@ -960,10 +1148,10 @@ class rfCircuit(rfBase):
         
         if hasattr(self, 'sNp') and flags.get('sNp', True):
             # need only to solve for the exernal nodes
-            tSol = {}
+            self.tSol = {}
             
             for node, Eak, Ebk  in zip(self.ports, Ea, Eb):
-                tSol[node] = Eak + Ebk, (Eak - Ebk)/Zbase, Eak, Ebk
+                self.tSol[node] = Eak + Ebk, (Eak - Ebk)/Zbase, Eak, Ebk
         
         else:
             # need to solve also all internal nodes as gtl was enforced
@@ -984,7 +1172,7 @@ class rfCircuit(rfBase):
             self.sol = self.invM @ Es
             
             # get all the voltages and currents
-            tSol = {}
+            self.tSol = {}
             for kf, w in enumerate(self.waves):
                 # only process forward waves and look up reflected waves
                 if w[:2] == '->':
@@ -994,12 +1182,12 @@ class rfCircuit(rfBase):
                     Ik = (self.sol[kf] - self.sol[kr]) / self.Zbase
                     Vf = (Vk + Zbase * Ik) / 2
                     Vr = (Vk - Zbase * Ik) / 2
-                    tSol[node] = Vk, Ik, Vf, Vr
+                    self.tSol[node] = Vk, Ik, Vf, Vr
                 
         if _debug_:
             tLogger.debug(ident(f'tSol:'))
-            ls = max([len(_) for _ in tSol])
-            for node, (Vn, In, An, Bn) in tSol.items():
+            ls = max([len(_) for _ in self.tSol])
+            for node, (Vn, In, An, Bn) in self.tSol.items():
                 tLogger.debug(ident(
                     f'  {node:{ls}s} : {Vn:15.3f}V, {In:15.3f}A,'
                     f' {An:13.3f}V+, {Bn:13.3f}V-'
@@ -1009,7 +1197,7 @@ class rfCircuit(rfBase):
             nodesleft = None
             
         elif nodes:
-            nodesleft = [node for node in nodes if node not in tSol]
+            nodesleft = [node for node in nodes if node not in self.tSol]
             
         else:
             nodesleft = []
@@ -1017,7 +1205,7 @@ class rfCircuit(rfBase):
         _debug_ and tLogger.debug(ident(f'nodesleft= {nodesleft}'))
                
         # recursively solve the internal nodes of the blocks in the circuit
-        if nodesleft is None or nodesleft:
+        if nodesleft != []:
             _debug_ and tLogger.debug(ident(f'further looking for {nodesleft}'))
             # if nodesleft is not None:
             #     # strip the leading blockname
@@ -1039,16 +1227,16 @@ class rfCircuit(rfBase):
                 _debug_ and tLogger.debug(ident(f'snodesleft: {snodesleft}'))
                 
                 # if hasattr(obj, 'Solution') and check:
-                if hasattr(obj, 'Solution') and snodesleft:   
+                if hasattr(obj, 'Solution') and (snodesleft != []):   
                     # -> build the excitation to pass on to the Solution method.    
                     
                     Ek = {}
                     for pobj in obj.ports:
                         try:
-                            Ek[pobj] = tSol[f'{blkID}.{pobj}'][2]
+                            Ek[pobj] = self.tSol[f'{blkID}.{pobj}'][2]
                             # print(f'[OK] {blkID}.{pobj} -> {Ek[pobj]:7.3f}')
                         except KeyError:
-                            for k, s in tSol.items():
+                            for k, s in self.tSol.items():
                                 print(f'[EE] {k:30s} -> {s[2]:7.3f}')
                             print(f'{whoami(__package__)}')
                             raise
@@ -1064,10 +1252,10 @@ class rfCircuit(rfBase):
                     
                     # collect and add the result to tSol
                     for tnode, tval in tSolr.items():
-                        tSol[f'{blkID}.{tnode}'] = tval
+                        self.tSol[f'{blkID}.{tnode}'] = tval
                         
         _debug_ and tLogger.debug(ident('< [cicuit.Solution]',-1))
-        return tSol
+        return self.tSol
     
     #===========================================================================
     #

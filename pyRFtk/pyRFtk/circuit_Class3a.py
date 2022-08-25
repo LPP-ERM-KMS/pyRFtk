@@ -1533,7 +1533,7 @@ class circuit():
             for port, wave in excitations.items() :
                 self.Excite(port,wave)
 
-        if self.invM == None : # only the excitations changed ?
+        if isinstance(self.invM, type(None)) : # only the excitations changed ?
             Neq, Nunknowns = self.M.shape
             # print(self.M.shape)
             if Neq == Nunknowns: # ??? "is" does not seem to work

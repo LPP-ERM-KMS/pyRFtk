@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-04-05 11:44:37'
+__updated__ = '2022-05-17 12:57:05'
 
 """
 Arnold's Laws of Documentation:
@@ -51,6 +51,7 @@ import numpy as np            # @UnusedImport but it is used in the eval strings
 from pprint import pprint
 import ast
 import os
+import warnings
 from copy import deepcopy
 
 
@@ -72,8 +73,10 @@ class rfGTL(rfCircuit):
         _debug_ = logit['DEBUG']
         _debug_ and logident('>', printargs=False)
         
-        if type(self).__name__ == 'rfGTL':
+        if not hasattr(self,'args'):
             self.args = (path2model,)
+            
+        if not hasattr(self,'kwargs'):
             self.kwargs = dict(objkey=objkey, 
                                variables=variables.copy(),
                                **kwargs.copy())
@@ -296,7 +299,12 @@ class rfGTL(rfCircuit):
                                 else:
                                     err = (positions[p1] - xp1) - (positions[p] - xp)
                                     if np.abs(err) > 1E-5:
-                                        print(f'rfGTL: inconsistent positions {err*1e3}mm for {blkId}.{p} and {blkId}.{p1}')
+                                        msg = ('rfGTL: inconsistent positions '
+                                               f'{err*1e3}mm for {blkId}.{p} and '
+                                               f'{blkId}.{p1}')
+                                        _debug_ and logident(msg)
+                                        if np.abs(err) > 1E-2:
+                                            warnings.warn(msg)
                         break
                 
                         

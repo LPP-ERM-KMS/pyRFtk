@@ -128,7 +128,7 @@ Frederic Durodie 2009-04-21
 
 """
 
-__updated__ = '2022-02-15 11:39:14'
+__updated__ = '2022-05-03 13:39:56'
 
 
 #===============================================================================
@@ -997,8 +997,8 @@ class TouchStone:
         returns the format of the touchstone data as a format string
         """
         return  "%s %s %s R %.3f" % (
-                   {1e+0:'HZ',1e+3:'KHZ',1e+6:'MHZ',1e+9:'GHZ'}[self.fscale],
-                   self.mtype, self.format, self.zref)
+                   {1e+0:'HZ',1e+3:'KHZ',1e+6:'MHZ',1e+9:'GHZ', 1e12:'THZ'}[
+                       self.fscale], self.mtype, self.format, self.zref)
     
 #===============================================================================
 
@@ -1122,7 +1122,8 @@ class TouchStone:
                 if not tfscale:
                     tfunit = t
                     try:
-                        tfscale = {'HZ':1e+0,'KHZ':1e+3,'MHZ':1e+6,'GHZ':1e+9}[t]
+                        tfscale = {'HZ':1e+0,'KHZ':1e+3,'MHZ':1e+6,
+                                   'GHZ':1e+9,'THZ':1e12}[t]
                     except KeyError:
                         raise TouchStoneError('Unknown frequency unit "%s"' % (t))
                 else:

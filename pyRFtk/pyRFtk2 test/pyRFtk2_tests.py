@@ -8,7 +8,7 @@ Created on 12 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2022-03-25 17:28:44"
+__updated__ = "2022-04-21 10:52:29"
 
 import numpy as np
 import matplotlib.pyplot as pl
@@ -27,10 +27,11 @@ alltests = False
 tests = [
 #    'rfBase-maxV',
 #    'rfCircuit-basic',
+    'rfCircuit-junctions',
 #    'rfArc',
 #    'rfBase-basic',
 #    'plotVSWs',
-    'rfGTL'
+#    'rfGTL'
 ]
 
 setLogLevel('CRITICAL')
@@ -63,7 +64,32 @@ if testhdr('rfGTL'):
     
 #===============================================================================
 #
-# r f C i r c u i t
+# r f C i r c u i t - j u n c t i o n s
+#
+if testhdr('rfCircuit-junctions'):
+    A = rfCircuit()
+    A.addblock('TL1', rfTRL(L=0))
+    A.addblock('TL2', rfTRL(L=0))
+    A.connect('TL1.1','TL2.1','TA')
+    print(A)
+    
+    B = rfCircuit()
+    B.addblock('TL1', rfTRL(L=0))
+    B.addblock('TL2', rfTRL(L=0))
+    B.connect('TL1.1','TL2.1','TB')
+    
+    C = rfCircuit()
+    C.addblock('A', A)
+    C.addblock('B', B)
+    C.addblock('TL3',rfTRL(L=0))
+    C.connect('A.TA','B.TB','TL3.1')
+    
+    printMA(C.getS(1E6))
+    print(C.asstr(-1))
+    
+#===============================================================================
+#
+# r f C i r c u i t - b a s i c
 #
 if testhdr('rfCircuit-basic'):
     acircuit = rfCircuit()

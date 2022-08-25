@@ -11,7 +11,7 @@ Created on 18 Dec 2020
 This is a template for a rfObject: but it may be obsoleted ...
 
 """
-__updated__ = "2022-04-05 11:45:17"
+__updated__ = "2022-06-28 16:59:33"
 
 if __name__ == '__main__':
     import sys
@@ -78,9 +78,12 @@ class rfObject():
             fixme: no parameters to set the Zcs and Gms port properties
         """
         
-        if type(self).__name__ == 'rfObject':
-            self.args, self.kwargs = args, kwargs.copy()
-
+        if not hasattr(self,'args'):
+            self.args = args
+        
+        if not hasattr(self,'kwargs'):
+            self.kwargs = kwargs.copy()
+        
         self.Id = kwargs.pop('Id',f'{type(self).__name__}_{_newID()}')
         
         #TODO: validate allowed port names
@@ -542,7 +545,7 @@ class rfObject():
         self.fs = r['fs']   # * (FUNITS[r['funit'].upper()] 
                             #  / FUNITS[self.funit.upper()])
         self.Ss = r['Ss']
-        self.ports = r['ports']
+        self.ports = r['ports'] if not self.ports else self.ports
         self.Zbase = r['Zbase']
         self.part = r['part']
         self.numbering = r['numbering']

@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-04-05 11:44:22'
+__updated__ = '2022-04-18 08:27:39'
 
 """
 Arnold's Laws of Documentation:
@@ -55,7 +55,8 @@ OHM = u'\N{Greek Capital Letter Omega}'
 import numpy as np
 import copy
 import time
-   
+import warnings
+
 from .config import logident, logit, _newID
 from .Utilities import whoami, strM
 from .CommonLib import ConvertGeneral, _check_3D_shape_, Z_from_S, Y_from_S
@@ -107,36 +108,48 @@ class rfBase():
         _debug_ = logit['DEBUG']
         _debug_ and logident('>', printargs=False)
         
+        type_rfBase = type(self).__name__ == 'rfBase'
+        
         # only save the args and kwargs when creating a rfBase object
-        if type(self).__name__ == 'rfBase':
-            self.args, self.kwargs = args, kwargs.copy()
+        if not hasattr(self,'args'):
+            self.args = args
+        if not hasattr(self,'kwargs'):
+            self.kwargs = kwargs.copy()
         
         self.Id = kwargs.pop('Id', f'{type(self).__name__}_{_newID()}')
         self.Zbase = kwargs.pop('Zbase', 50.)
+        
+        # self.kwused = ['Id', 'Zbase']
         
         if 'Ss' in kwargs:
             _, self.Ss = _check_3D_shape_(np.array(kwargs.pop('Ss'), dtype=complex)) # Ss is there
             _debug_ and logident(f'self.Ss.shape={self.Ss.shape}')
             _debug_ and logident(f'self.Ss={self.Ss}')
         
+            # self.kwused.append('Ss')
+            
             if 'ports' in kwargs:
                 self.ports = kwargs.pop('ports')
                 if len(self.ports) != self.Ss.shape[1]:
                     raise ValueError(
                         'pyRFtk2.rfBase: inconsitent "ports" and "S" given'
                     )
+                # self.kwused.append('ports')
             else:
                 self.ports = [f'{p_}' for p_ in range(1,self.Ss.shape[1]+1)]
             
         elif 'ports' in kwargs:
             self.ports = kwargs.pop('ports')
             self.Ss = 1j*np.zeros((0, len(self.ports),len(self.ports)))
-        
+            # self.kwused.append('ports')
+            
         else:
             self.ports = []
             self.Ss = 1j*np.zeros((0, 0, 0))
         
         self.fs = np.array(kwargs.pop('fs', range(self.Ss.shape[0])), dtype=float)
+        # self.kwused.append('fs')
+        
         _debug_ and logident(f'self.fs={self.fs}')
         if self.Ss.shape[0] != self.fs.shape[0]:
             raise ValueError(
@@ -145,10 +158,31 @@ class rfBase():
             )
         
         self.xpos = kwargs.pop('xpos', [0.] * len(self))
+        # self.kwused.append('xpos')
+        
         self.f, self.S = None, None
         
-        _debug_ and logident('<')
+        if kwargs and type_rfBase:
+            msg = f'unprocessed kwargs: {", ".join([kw for kw in kwargs])}'
+            _debug_ and logident(msg)
+            warnings.warn(msg)
         
+        self.kwused = [kw for kw in self.kwargs if kw not in kwargs]
+        
+        # this also initialized the setable attributes of child classed to none
+        # by default. The child class will have to set it explicitly if required.
+        
+        self.attrs = []
+        
+        _debug_ and logident('<')
+    
+    #===========================================================================
+    #
+    # a s s t r
+    #
+    def asstr(self, full=0):
+        return self.__str__(full)
+    
     #===========================================================================
     #
     # _ _ s t r _ _
@@ -214,6 +248,36 @@ class rfBase():
     
     #===========================================================================
     #
+    # s e t 
+    #
+    def set(self, **kwargs):
+        """set attributes of the object if present
+        """
+        modified = False
+        for kw, val in kwargs:
+            try:
+                if kw in self.attrs:
+                    if hasattr(self, kw):
+                        modified |= getattr(self, kw) != val
+                        setattr(self, kw, val)
+                    else:
+                        raise ValueError(
+                            f'{whoami(__package__)}: {self.Id} has no attribute {kw}'
+                        )
+                else:
+                    raise AttributeError()
+            except AttributeError:
+                raise ValueError(
+                        f'{whoami(__package__)}: attribute {kw} of {self.Id} '
+                        'cannot be set'
+                    )
+        if modified:
+            self.f, self.S = None, None
+            
+        return modified
+                
+    #===========================================================================
+    #
     # g e t 1 S 
     #
     def get1S(self, f):
@@ -271,13 +335,17 @@ class rfBase():
             of the rfBase object's data.
             
             kwargs:
-                Zbase: [self.Zbase] get the S-matrix data on reference 
-                       impedance Zbase
+                fs:    [Hz]  (default self.fs) frequencies to collect in the
+                             touchstone
+                             
+                Zbase: [Ohm] (default self.Zbase) get the S-matrix data on 
+                             reference impedance Zbase
                 
-                tfmt : [f'#MHZ S MA R {self.Zbase}'] the touchstone file format
+                tfmt : []    (default f'#MHZ S MA R {self.Zbase}') the touchstone 
+                             file format
                 
-                comments: [self.Id] a multiline comment string added at the 
-                          top of the file
+                comments: [] (default self.Id) a multiline comment string added
+                             at the top of the file
             
             Note: Zbase is only used when R is not supplied in tfmt to define
                   the reference impedance Zref for the touchstone. If Zref is
@@ -286,7 +354,8 @@ class rfBase():
         Zbase = kwargs.pop('Zbase', self.Zbase)
         tfmt = kwargs.pop('tfmt', f'# MHZ S MA R {Zbase}')
         comments = kwargs.pop('comments', f'{self}')
-
+        fs = kwargs.pop('fs', None)
+        
         if kwargs:
             raise TypeError(f'{whoami(__package__)}: '
                             f'Unknown kwargs {", ".join([kw for kw in kwargs])}')
@@ -345,12 +414,18 @@ class rfBase():
         s += f'!PORTS {", ".join(self.ports)}'+eoln
         s += eoln
 
+        if fs is None:
+            fs = self.fs
+            Ss = self.Ss
+        else:
+            Ss = self.getS(fs)
+            
         Ms = {'S' : ( lambda S_: ConvertGeneral(Zref, S_, self.Zbase) ),
               'Z' : ( lambda S_: Z_from_S(S_, self.Zbase) ),
               'Y' : ( lambda S_: Y_from_S(S_, self.Zbase) )        
-             }[mtype](self.Ss)
+             }[mtype](Ss)
 
-        Fs = np.array(self.fs) / fscale
+        Fs = np.array(fs) / fscale
         
         freq_fmt = '%9.6f '
         freq_fmt_len = 10

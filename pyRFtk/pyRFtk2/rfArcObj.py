@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-04-05 11:45:00'
+__updated__ = '2022-04-13 13:17:12'
 
 """
 Arnold's Laws of Documentation:
@@ -85,11 +85,16 @@ class rfArcObj(rfBase):
         _debug_ = logit['DEBUG']
         _debug_ and logident('>', True)
         
-        if type(self).__name_ == 'rfArcObj':
-            self.args, self.kwargs = args, kwargs.copy()
+        if not hasattr(self,'args'):
+            self.args = args
+            
+        if not hasattr(self,'kwargs'):
+            self.kwargs = kwargs.copy()
             
         _debug_ and logident(f'{kwargs}')
+        
         super().__init__(**kwargs)
+        
         _debug_ and logident(f'{kwargs}')
         
         Larc, args = (args[0], args[1:]) if len(args) else (+np.inf, ())
@@ -98,6 +103,8 @@ class rfArcObj(rfBase):
             _debug_ and logident(f'{len(args)} unprocessed args')
         
         self.f, self.S = None, None
+        
+        self.attrs = ['Larc']
         
         _debug_ and logident('<')
         
@@ -108,7 +115,7 @@ class rfArcObj(rfBase):
     def __str__(self, full=0):
         s  = super().__str__()
         if full:
-            s += f'\n| Larc = {self.Larc} [nH]\n^'
+            s += f'\n| Larc = {self.Larc * 1e9} [nH]\n^'
         return s
    
     #===========================================================================

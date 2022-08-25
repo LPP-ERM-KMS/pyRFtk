@@ -8,7 +8,7 @@ Created on 16 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2022-04-05 11:45:54"
+__updated__ = "2022-05-16 14:00:49"
 
 if __name__ == '__main__':
     import sys
@@ -63,7 +63,7 @@ class rfTRL():
         TL section
         
     dx:
-        (default int(36)) dimensional step along the axis of the TL section that
+        (default int(72)) dimensional step along the axis of the TL section that
         is used to solve the telegraphist's ODE as well as the requested VI 
         standing waves.
         
@@ -195,9 +195,12 @@ class rfTRL():
     
     """
     def __init__(self, *args, **kwargs):
-        
-        if type(self).__name__ == 'rfTRL':
-            self.args, self.kwargs = args, kwargs.copy()
+
+        if not hasattr(self,'args'):
+            self.args = args
+            
+        if not hasattr(self,'kwargs'):
+            self.kwargs = kwargs.copy()
             
         self.Id = kwargs.pop('Id','rfTRL_'+_newID())
         self.ports = kwargs.pop('ports',['1','2'])
@@ -209,6 +212,8 @@ class rfTRL():
         self.constant = True
         self.f = np.NaN
         self.S = None
+        self.attrs = ['L']
+        
         xpos = kwargs.pop('xpos', [0., self.L])
                         
         if isinstance(xpos, list):
@@ -308,11 +313,18 @@ class rfTRL():
      
     #===========================================================================
     #
+    # a s  s t r
+    #
+    def asstr(self,full=False):
+        return self.__str__(full)
+        
+    #===========================================================================
+    #
     # _ _ s t r _ _
     #
     def __str__(self, full=False):
         
-        s = f'rfTRL at {id(self)} (version {__updated__}) \n'
+        s = f'{self.Id}: rfTRL at {id(self)} (version {__updated__}) \n'
         s += f'| Zbase: {self.Zbase} Ohm \n'
         s += f'| ports: {self.ports} \n'
         s += f'| length: {self.L:.3f}m; '
@@ -354,17 +366,22 @@ class rfTRL():
             raise ValueError(
                 f'{whoami(__package__)}: not possible because the transmission '
                              'line parameters are not constant')
-            
+        modified = False
         for kw, val in kwargs.items():
             if not hasattr(self, kw):
                 raise ValueError(
                     f'{whoami(__package__)}: parameter {kw} not present')
-            
+                
+            modified |= getattr(self,kw) != val
             setattr(self, kw, val)
             self.kwargs[kw] = val
+            if kw == 'L':
+                self.xpos = [self.xpos[0], self.L + self.xpos[0]]
         
         self.solved = {}
         
+        return modified
+    
     #===========================================================================
     #
     # s o l v e V I

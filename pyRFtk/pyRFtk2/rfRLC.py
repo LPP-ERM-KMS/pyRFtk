@@ -8,7 +8,7 @@ Created on 30 Mar 2021
 
 @author: frederic
 """
-__updated__ = "2022-04-05 11:45:33"
+__updated__ = "2022-04-22 12:33:15"
 
 import numpy as np
 import copy
@@ -70,8 +70,12 @@ class rfRLC():
             Cs : series capacity [+inf F]
             xpos : list of the port positions (order 's', 'p')
         """
-        if type(self).__name__ == 'rfRLC':
-            self.args, self.kwargs  = args, kwargs.copy()
+            
+        if not hasattr(self,'args'):
+            self.args = args
+            
+        if not hasattr(self,'kwargs'):
+            self.kwargs = kwargs.copy()
         
         self.Id = kwargs.pop('Id', f'{type(self).__name__}_{_newID()}')
         self.Zbase = kwargs.pop('Zbase', 50.)
@@ -85,6 +89,7 @@ class rfRLC():
         self.f = None
         self.S = np.array([[0,1],[1,0]], dtype=complex)
         self.xpos = kwargs.pop('xpos',[0., 0.])
+        self.attrs = ['Rs', 'Ls', 'Cs', 'Rp', 'Lp', 'Cp']
     
     #===========================================================================
     #
@@ -124,6 +129,13 @@ class rfRLC():
 
     #===========================================================================
     #
+    # a s  s t r
+    #
+    def asstr(self,full=False):
+        return self.__str__(full)
+        
+    #===========================================================================
+    #
     # _ _ s t r _ _
     #
     def __str__(self, full=0):
@@ -153,14 +165,19 @@ class rfRLC():
     #
     def set(self, **kwargs):
         
+        modified = False
         for kw, val in kwargs.items():
-            if not hasattr(self, kw):
+            if not hasattr(self, kw) or kw not in self.attrs:
                 raise ValueError(f'rfTRL.set: parameter {kw} not present')
-            
+        
+            modified |= getattr(self, kw) != val
             setattr(self, kw, val)
             self.kwargs[kw] = val
         
-        self.solved = {}
+        if modified:
+            self.f, self.S = None, None
+            
+        return modified
     
     #===========================================================================
     #
