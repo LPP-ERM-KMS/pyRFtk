@@ -42,7 +42,7 @@ TODO: use external sNp if available
 
 """
 
-__updated__ = "2022-07-07 15:20:07"
+__updated__ = "2022-10-07 12:29:55"
 
 if __name__ == '__main__':
     import sys
@@ -1001,7 +1001,7 @@ class rfCircuit(rfBase):
     def Get_internalSmatrix(self, f, nodes, Zbase=None):
         """given a set of (internal) nodes try and find a corresponding Smatrix
         """
-        
+                
         debug = logit['DEBUG']
         debug and logident(f'>', printargs=True)
         
@@ -1010,6 +1010,8 @@ class rfCircuit(rfBase):
         # as nodes can be inside deeper levels an "easy" solution as was possible
         # in pyRFtk.circuit_Class3a.Get_Smatrix is no longer possible
         
+        self.getS(f)    # if the circuit was not yet completed for external ports 
+                        # this will force the definition of the ports
        
         # first we get all the solutions for exciting each external port successively
         

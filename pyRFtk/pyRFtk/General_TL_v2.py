@@ -1187,7 +1187,7 @@ if __name__ == '__main__':
     from pyRFtk import TouchStoneClass3a as _ts
     from pyRFtk import scatter3a as _sc
     
-    import dill
+    # import dill
     
     fMHz, Zbase, L = 55.0, 50., 10.000
     
