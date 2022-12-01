@@ -30,7 +30,7 @@
 #                                                                              #
 ################################################################################
 
-__updated__ = '2022-03-27 17:36:13'
+__updated__ = '2022-10-27 10:36:29'
 
 """
 Arnold's Laws of Documentation:
@@ -49,7 +49,7 @@ import matplotlib.pyplot as pl
 from pyRFtk2.config import setLogLevel, logit, tLogger, ident
 from pyRFtk2.Utilities import str_dict
 
-#===========================================================================
+#===============================================================================
 #
 # p l o t V S W s 
 #
@@ -60,16 +60,25 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
     
     if 'num' not in figkwargs:
         if Id is None and len(VSWs)==1:
-            Id = next(iter(VSWs))
+            Id = str(list(VSWs)[0])
             
     if Id: 
         if 'num' not in figkwargs:
+            # set num to Id b
             figkwargs['num'] = Id.replace('\\','').replace('$','')
         else:
             raise ValueError(
-                'pyRFtk2.commonLib.plotVSWs: only one of "ID" or "num" kwargs allowed')
+                'pyRFtk2.commonLib.plotVSWs: only one of "Id" or "num" kwargs allowed')
+    
+    if "num" in kwargs or not(len(pl.get_fignums())):
+        tfig, ax = pl.subplots(**figkwargs)
         
-    tfig, ax = pl.subplots(**figkwargs)
+    else:
+        tfig = pl.gcf()
+        if len(tfig.get_axes()):
+            ax = pl.gca()
+        else:
+            ax = pl.subplot(1,1,1)
     
     plotnodes = kwargs.pop('plotnodes', False)
     plotpoints = kwargs.pop('plotpoints', False)

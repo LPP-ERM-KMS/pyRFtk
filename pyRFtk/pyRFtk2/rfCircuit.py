@@ -42,7 +42,7 @@ TODO: use external sNp if available
 
 """
 
-__updated__ = "2022-10-07 12:29:55"
+__updated__ = "2022-12-01 14:47:07"
 
 if __name__ == '__main__':
     import sys
@@ -174,7 +174,7 @@ class rfCircuit(rfBase):
                     sij = Mr[idx]
                     s += f'[{idx:3d}] {sij.real:+7.4f}{sij.imag:+7.4f}j '
             elif typ[0] == 'T':
-                idxs = sorted(self.T[port])
+                idxs = sorted(self.T[port][:-1])
                 for idx in idxs:
                     sij = Mr[idx]
                     s += f'[{idx:3d}] {sij.real:+7.4f}{sij.imag:+7.4f}j '
@@ -610,12 +610,7 @@ class rfCircuit(rfBase):
         if len(kwargs) > 1:
             raise ValueError(
                 f'{whoami(__package__)}: only one of "RC", "Y", "Z" kwargs allowed')
-        
-        # update the port list
-        _kp = self.ports.index(port)
-        self.ports.pop(_kp)
-        self.xpos.pop(_kp)
-        
+                
         if 'Z' in kwargs:
             Z = kwargs.pop('Z')
             rho = (Z - self.Zbase) / (Z + self.Zbase)
@@ -632,20 +627,39 @@ class rfCircuit(rfBase):
         # equation is:
         # rho . B_port - A_port = 0
         
-        # add a row to self.M
-        self.M = np.vstack((
-            self.M, 
-            np.zeros((1, self.M.shape[1]), dtype=np.complex)
-        ))
-        self.M[-1,idxA] = -1
-        self.M[-1,idxB] = rho
+        if port not in self.T:
+            # this port was not terminated yet
+            
+            # update the port list
+            try:
+                _kp = self.ports.index(port)
+                self.ports.pop(_kp)
+                self.xpos.pop(_kp)
+            except IndexError:
+                raise ValueError(
+                    f'{whoami(__package__)}: port {port} already in use'
+                )
         
-        # update the equations
-        self.eqns.append(f'T: {port}')
+            # add a row to self.M
+            self.M = np.vstack((
+                self.M, 
+                np.zeros((1, self.M.shape[1]), dtype=np.complex)
+            ))
+            self.M[-1,idxA] = -1
+            self.M[-1,idxB] = rho
+            
+            # update the equations
+            self.eqns.append(f'T: {port}')
+            
+            self.T[port] = idxA, idxB, self.M.shape[0] - 1
         
-        self.T[port] = idxA, idxB
-    
-    
+        else:
+            # this port was already terminated
+        
+            idxA, idxB, eqn = self.T[port]
+            self.M[eqn, idxB] = rho
+            self.invM = None
+            
     #===========================================================================
     #
     # e x t S
