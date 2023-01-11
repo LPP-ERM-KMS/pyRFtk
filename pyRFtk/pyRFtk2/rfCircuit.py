@@ -374,20 +374,21 @@ class rfCircuit(rfBase):
         """deembed
             
             IntPorts: list of size 2 tuples or dict
-                [ (RFobj.port, rfCircuit.port), ... ] or
-                { RFobj.port:rfCircuit.port, ... }
+                [ (rfCircuit.port, rfCircuit.port_new), ... ] or
+                { rfCircuit.port:rfCircuit.port_new, ... }
                 
                 these are the "internal" ports of the circuit i.e. these are
                 connected through the RFobj
                 
             ExtPorts: list of size 2 tuples or dict
-                [ (RFobj.port, rfCircuit.port), ... ] or
-                { RFobj.port:rfCircuit.port, ... }
+                [ (rfCircuit.port, rfCircuit.port), ... ] or
+                { rfCircuit.port:rfCircuit.port, ... }
                 
                 these are the "external" ports of the circuit i.e. these are
                 connected through the RFobj
                 
-                
+            State of the rfCircuit object: it solves for 
+            
             +-------------------------------------------------+
             |                 Sexternal                       |
             |                                                 |
@@ -407,7 +408,7 @@ class rfCircuit(rfBase):
             |    |       ip    |    :    | dpi dpe |     :    | ep
             |    |             |    :    |         |     :    |
             |    |            ( )-------( )       ( )--------( )
-            |    |             |         | {Name}  |          |
+            |    |             |         |         |          |
             |    +-------------+         +---------+          |
             |                                                 |
             +-------------------------------------------------+
@@ -418,6 +419,27 @@ class rfCircuit(rfBase):
             IntPorts = {dpi:ip, ...}
             ExtPorts = {dpe:ep, ...}
             
+            The result is the rfCircuit solving for
+            
+            +-------------+ 
+            |  Sinternal  | 
+            |            ( )
+            |             | 
+            |             | 
+            |             | 
+            |            ( )
+            |             | 
+            |             | 
+            |             | 
+            |             | 
+            |            ( )
+            |             | 
+            |       ip    | 
+            |             | 
+            |            ( )
+            |             | 
+            +-------------+ 
+
         """
         
         _debug_ = logit['DEBUG'] 
@@ -452,29 +474,15 @@ class rfCircuit(rfBase):
         
         # add the columns for the internal ports
         
-        print(f'self.M.shape: {self.M.shape}')
         self.M = np.hstack((
                     self.M,
                     np.zeros((self.M.shape[0],2*len(IntPorts)),dtype=np.complex)
                 ))
-        print(f'self.M.shape: {self.M.shape}')
         
         # add the new internal ports and find the remaining ports of the
         # deembed object
-        
-        print('self.ports')
-        for _ in self.ports:
-            print(f'  {_}')
-            
-        # dports = [f'{name}.{_}' for _ in self.blocks[name]['ports']]
-        #
-        # print(f'ports of {name}')
-        # for _ in dports:
-        #     print(f'  {_}')
-        
+                            
         for dp, ip in IntPorts:
-            
-            # dports.pop(dports.index(dp))
             
             if ip in self.ports:
                 raise ValueError(
@@ -546,18 +554,9 @@ class rfCircuit(rfBase):
             self.eqns.append(f'De {ep}')
             
             # now we need to remove the remaining ports of the port list
-            # dports.pop(dports.index(dp))
             self.ports.pop(self.ports.index(dp))
             self.ports.pop(self.ports.index(ep))
-                       
-        # if dports:
-        #     raise ValueError(
-        #         f'{whoami(__package__)}: unresolved ports of {name}: '
-        #         f'{",".join([_ for _ in dports])}'
-        #     )
-             
-            
-            
+                        
         _debug_ and tLogger.debug(ident(
             f'< [circuit.deembed]', -1
         ))
