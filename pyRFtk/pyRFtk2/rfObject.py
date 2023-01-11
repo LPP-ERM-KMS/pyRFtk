@@ -151,7 +151,7 @@ class rfObject():
                 # print(f'copying {attr}')
                 other.__dict__[attr] = copy.deepcopy(val)
             except:
-                print(f'{whoami(__package__)}: could not deepcopy {attr}')
+                print(f'{whoami(__package__)}: could not deepcopy {attr}')   # @UndefinedVariable
                 raise
         
         return other

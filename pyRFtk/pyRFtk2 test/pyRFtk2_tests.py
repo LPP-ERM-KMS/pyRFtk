@@ -25,9 +25,10 @@ from pyRFtk2.CommonLib import plotVSWs, strVSW
 
 alltests = False
 tests = [
+    'deembed',
 #    'rfBase-maxV',
 #    'rfCircuit-basic',
-    'rfCircuit-junctions',
+#    'rfCircuit-junctions',
 #    'rfArc',
 #    'rfBase-basic',
 #    'plotVSWs',
@@ -42,6 +43,36 @@ def testhdr(t):
     if testit:
         print('#'*100 +f'\n#\n# t e s t -- {t1}\n#\n')
     return testit
+
+#===============================================================================
+#
+# d e e m b e d 
+#
+if testhdr('deembed'):
+    ct = rfCircuit()
+    ct.addblock('TL', rfTRL(L=1))
+    ct.addblock('DTL', rfTRL(L=1), ports=['i','e'])
+    print(ct.asstr(-1))
+    ct.deembed([('DTL.i','TL.i')], [('DTL.e','TL.2')])
+    print(ct.asstr(-1))
+    printMA(ct.getS(55E6))
+    
+    ct = rfCircuit()
+    ct.addblock('TL', rfTRL(L=1), ports=['1','t'])
+    # printMA(ct.getS(55e6))
+    
+    ct.addblock('TL1', rfTRL(L=1), ports=['t','2'])
+    ct.addblock('TL2', rfTRL(L=1), ports=['t','2'])
+    ct.connect('TL.t','TL1.t','TL2.t')
+    
+    ct.addblock('DTL1', rfTRL(L=1), ports=['t','e'])
+    ct.addblock('DTL2', rfTRL(L=1), ports=['t','e'])
+    ct.connect('DTL1.t','DTL2.t','DTLi')
+    print(ct.asstr(-1))
+    
+    ct.deembed([('DTLi','TL.i')], [('DTL1.e','TL1.2'), ('DTL2.e','TL2.2')])
+    print(ct.asstr(-1))
+    printMA(ct.getS(55E6))
 
 #===============================================================================
 #

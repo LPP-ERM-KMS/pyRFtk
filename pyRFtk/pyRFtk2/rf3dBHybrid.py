@@ -108,7 +108,7 @@ class rf3dBHybrid(rfBase):
         ports = kwargs.pop('ports', ['A1','A2','B1','B2'])
         if len(ports) != 4:
             raise ValueError(
-                f'{whoami(__package__)}: there must be exactly 4 ports'
+                f'{whoami(__package__)}: there must be exactly 4 ports' # @UndefinedVariable
             )
             
         super().__init__(**dict(kwargs, ports=ports))
@@ -125,13 +125,13 @@ class rf3dBHybrid(rfBase):
         if 'sNp' in kwargs:
             # sNp = kwargs.pop('sNp', None)
             raise NotImplementedError(
-                f'{whoami(__package__)}: sNp not yet implemented'
+                f'{whoami(__package__)}: sNp not yet implemented' # @UndefinedVariable
             )
 
         if self.kc:
             if self.kcdB:
                 raise ValueError(
-                    f'{whoami(__package__)}: only one of kc or kcdB can be given'
+                    f'{whoami(__package__)}: only one of kc or kcdB can be given' # @UndefinedVariable
                 )
             else:
                 self.kcdB = 20 * np.log10(self.kc)
@@ -145,7 +145,7 @@ class rf3dBHybrid(rfBase):
         if self.Lc:
             if self.f0Hz:
                 raise ValueError(
-                    f'{whoami(__package__)}: only one of Lc or f0Hz can be given'
+                    f'{whoami(__package__)}: only one of Lc or f0Hz can be given' # @UndefinedVariable
                 )
             self.f0Hz = c0/(4*self.Lc)
         else:

@@ -120,7 +120,7 @@ class rfRLC():
             try:
                 other.__dict__[attr] = copy.deepcopy(val)
             except:
-                msg = f'{whoami(__package__)}: could not deepcopy {attr}'
+                msg = f'{whoami(__package__)}: could not deepcopy {attr}'  # @UndefinedVariable
                 debug and logident(msg)
                 raise RuntimeError(msg)
             

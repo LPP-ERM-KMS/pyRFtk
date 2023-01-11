@@ -41,6 +41,7 @@ TODO: check logic for the status of solved or not
 TODO: use external sNp if available
 
 """
+from pickle import NONE
 
 __updated__ = "2022-12-01 14:47:07"
 
@@ -100,7 +101,7 @@ class rfCircuit(rfBase):
             warnings.warn(msg)
             
         self.M = np.array([],dtype=np.complex).reshape((0,0))
-        self.ports = [] # FIXME: resets ports set by rfBase from kwargs
+        # self.ports = [] # FIXedME: resets ports set by rfBase from kwargs
         self.waves = []
         self.nodes = {}
         self.blocks = {
@@ -154,7 +155,7 @@ class rfCircuit(rfBase):
         l1 = max([len(eqn) for eqn in self.eqns])
         l2 = max(len(wave) for wave in self.waves)
         for k, (Mr, eqn) in enumerate(zip(self.M, self.eqns)):
-            s += f'| {self.waves[k]:<{l2}s} [{k:3d}] {eqn:<{l1}s} '
+            s += f'| {k:3d} {self.waves[k]:<{l2}s} [{k:3d}] {eqn:<{l1}s} '
             typ, port = tuple(eqn.split())
             name = port.split('.')[0]
             # print(typ,port,name)
@@ -173,6 +174,11 @@ class rfCircuit(rfBase):
                 for idx in idxs:
                     sij = Mr[idx]
                     s += f'[{idx:3d}] {sij.real:+7.4f}{sij.imag:+7.4f}j '
+            elif typ[0] == 'D':
+                # brute force: we are just looking for non-zeros
+                for idx, sij in enumerate(Mr):
+                    if -1E-6 < (np.abs(sij) - 1) < 1E-6:
+                        s += f'[{idx:3d}] {sij.real:+7.4f}{sij.imag:+7.4f}j '
             elif typ[0] == 'T':
                 idxs = sorted(self.T[port][:-1])
                 for idx in idxs:
@@ -185,7 +191,7 @@ class rfCircuit(rfBase):
             s += '\n'
         
         for k, p in zip(range(self.M.shape[0], len(self.waves)), self.ports):
-            s += f'| {self.waves[k]:<{l2}s} [{k:3d}] E? {p:<{l1}s}\n'
+            s += f'| {k:3d} {self.waves[k]:<{l2}s} [{k:3d}] E? {p:<{l1}s}\n'
         
         alreadylisted = {}
         if self.blocks:
@@ -301,6 +307,265 @@ class rfCircuit(rfBase):
     
     #===========================================================================
     #
+    # _ s u b s t p o r t s
+    #
+    def _substports(self, name, RFobj, ports):
+        
+        _debug_ = logit['DEBUG'] 
+        _debug_ and tLogger.debug(ident(
+            f'> [circuit._substports] '
+            f'name= {name}, RFobj= {RFobj.Id}, '
+            f'ports= {ports}' ,
+            1
+        ))
+        
+        # RFobj must have len method (this is also true for an nd.array
+        #
+        N = len(RFobj)
+        
+        oports = []
+        if hasattr(RFobj,'ports'):
+            ports = {} if ports is None else ports
+            if isinstance(ports, dict):
+                # remap port names (note: empty dict pulls the object's portnames)
+                oports = [ports.pop(_p, _p) for _p in RFobj.ports]
+                # possibly the user supplied non-existing port names
+                if ports:
+                    raise ValueError(
+                        f'{whoami(__package__)}["{name}"]: ports {ports} not defined')
+              
+        if not oports:  # thus ports supplied was not a dict 
+                        # [or there were no RFobj.ports e.g. an array obj]
+            ports = "%d" if ports is None else ports
+            
+            if isinstance(ports, dict):
+                # this can only happen when the object has no attribute ports
+                # otherwise oports would have been filled
+                raise TypeError(
+                    f'{whoami(__package__)}["{name}"]: the object has no ports ' 
+                     'attribute. Therfore a dict port mapping cannot be used.')
+                
+            elif isinstance(ports, list):
+                oports = ports
+    
+            elif isinstance(ports, str):
+                oports = [ports % k for k in range(1,N+1)]
+                 
+            else:
+                raise ValueError( f'{whoami(__package__)}: expecting str, dict '
+                                  'or list to remap port names')  
+        
+        if len(oports) != N:
+            raise ValueError(
+                f'{whoami(__package__)}["{name}"]: RFobj len(ports)={len(oports)} '  
+                f'and len(RFobj)={N} mismatch')
+        
+        _debug_ and tLogger.debug(ident(
+            f'< [circuit._substports], N={N}, oports={oports}', -1
+        ))
+        
+        return N, oports
+
+    #===========================================================================
+    #
+    # d e e m b e d
+    #
+    def deembed(self, IntPorts={}, ExtPorts={}):
+        """deembed
+            
+            IntPorts: list of size 2 tuples or dict
+                [ (RFobj.port, rfCircuit.port), ... ] or
+                { RFobj.port:rfCircuit.port, ... }
+                
+                these are the "internal" ports of the circuit i.e. these are
+                connected through the RFobj
+                
+            ExtPorts: list of size 2 tuples or dict
+                [ (RFobj.port, rfCircuit.port), ... ] or
+                { RFobj.port:rfCircuit.port, ... }
+                
+                these are the "external" ports of the circuit i.e. these are
+                connected through the RFobj
+                
+                
+            +-------------------------------------------------+
+            |                 Sexternal                       |
+            |                                                 |
+            |    +-------------+                              |
+            |    |  Sinternal  |                              |
+            |    |            ( )----------------------------( )
+            |    |             |               :              |
+            |    |             |               :              |
+            |    |             |               :              |
+            |    |            ( )----------------------------( )
+            |    |             |                              |
+            |    |             |         +---------+          |
+            |    |             |         | Deembed |          |
+            |    |             |         |         |          |
+            |    |            ( )-------( )       ( )--------( )
+            |    |             |    :    |         |     :    |
+            |    |       ip    |    :    | dpi dpe |     :    | ep
+            |    |             |    :    |         |     :    |
+            |    |            ( )-------( )       ( )--------( )
+            |    |             |         | {Name}  |          |
+            |    +-------------+         +---------+          |
+            |                                                 |
+            +-------------------------------------------------+
+        
+            known: Sexternal (SE), Deembed (SD)
+            find : Sinternal (SI)
+        
+            IntPorts = {dpi:ip, ...}
+            ExtPorts = {dpe:ep, ...}
+            
+        """
+        
+        _debug_ = logit['DEBUG'] 
+        _debug_ and tLogger.debug(ident(
+            f'> [circuit.deembed] IntPorts= {IntPorts}, ExtPorts= {ExtPorts}',
+            1
+        ))
+
+        self.S = None 
+        self.invM = None
+        
+        # validate partially input IntPorts and ExtPorts
+        
+        for Ports, typ in zip([IntPorts, ExtPorts],['Int','Ext']):
+            if isinstance(Ports, dict):
+                Ports = [( dp, p) for dp, p in Ports.items()] 
+            
+            if not (
+                isinstance(Ports, list) 
+                and all( [ isinstance(t, tuple) and len(t)==2 and 
+                           all(isinstance(q, str) for q in t) for t in Ports
+                           
+                         ]
+                       )
+               ):
+                
+                raise ValueError(
+                    f'{whoami(__package__)}: {typ}Ports: expecting dict or '
+                    'list of tuples to remap port names'
+                )
+            
+        
+        # add the columns for the internal ports
+        
+        print(f'self.M.shape: {self.M.shape}')
+        self.M = np.hstack((
+                    self.M,
+                    np.zeros((self.M.shape[0],2*len(IntPorts)),dtype=np.complex)
+                ))
+        print(f'self.M.shape: {self.M.shape}')
+        
+        # add the new internal ports and find the remaining ports of the
+        # deembed object
+        
+        print('self.ports')
+        for _ in self.ports:
+            print(f'  {_}')
+            
+        # dports = [f'{name}.{_}' for _ in self.blocks[name]['ports']]
+        #
+        # print(f'ports of {name}')
+        # for _ in dports:
+        #     print(f'  {_}')
+        
+        for dp, ip in IntPorts:
+            
+            # dports.pop(dports.index(dp))
+            
+            if ip in self.ports:
+                raise ValueError(
+                    f'{whoami(__package__)}: (internal) port {ip} already exists '
+                )
+            
+            # create the new internal port
+            self.waves += [f'->{ip}', f'<-{ip}']
+            self.ports.append(ip)
+                        
+            if dp not in self.ports:
+                raise ValueError(
+                    f'{whoami(__package__)}: (external) port {dp} does not exist'
+                )
+                
+            idxA = self.waves.index(f'->{dp}')
+            idxB = self.waves.index(f'<-{dp}')
+            
+            # add two rows to self.M
+            self.M = np.vstack((
+                self.M, 
+                np.zeros((2, self.M.shape[1]), dtype=np.complex)
+            ))
+        
+            self.M[-2, idxA] = 1
+            self.M[-2, len(self.waves)-1] = -1
+            self.M[-1, idxB] = 1
+            self.M[-1, len(self.waves)-2] = -1
+            
+            # remove the deembeded port
+            self.ports.pop(self.ports.index(dp))
+            
+            # update the equation types
+            self.eqns.append(f'Di {dp}')
+            self.eqns.append(f'Di {ip}')
+            
+        
+        for dp, ep in ExtPorts:
+            
+            if dp not in self.ports:
+                raise ValueError(
+                    f'{whoami(__package__)}: (external) port {dp} does not exist'
+                )
+                
+            if ep not in self.ports:
+                raise ValueError(
+                    f'{whoami(__package__)}: (external) port {ep} does not exist'
+                )
+                
+            # add two rows to self.M
+            self.M = np.vstack((
+                self.M, 
+                np.zeros((2, self.M.shape[1]), dtype=np.complex)
+            ))
+        
+            idxAd = self.waves.index(f'->{dp}')
+            idxBd = self.waves.index(f'<-{dp}')
+
+            idxAe = self.waves.index(f'->{ep}')
+            idxBe = self.waves.index(f'<-{ep}')
+
+            self.M[-2, idxAd] = 1
+            self.M[-2, idxAe] = -1
+            self.M[-1, idxBd] = 1
+            self.M[-1, idxBe] = -1
+            
+            # update the equation types
+            self.eqns.append(f'De {dp}')
+            self.eqns.append(f'De {ep}')
+            
+            # now we need to remove the remaining ports of the port list
+            # dports.pop(dports.index(dp))
+            self.ports.pop(self.ports.index(dp))
+            self.ports.pop(self.ports.index(ep))
+                       
+        # if dports:
+        #     raise ValueError(
+        #         f'{whoami(__package__)}: unresolved ports of {name}: '
+        #         f'{",".join([_ for _ in dports])}'
+        #     )
+             
+            
+            
+        _debug_ and tLogger.debug(ident(
+            f'< [circuit.deembed]', -1
+        ))
+        
+        return
+
+    #===========================================================================
+    #
     # a d d b l o c k
     #
     def addblock(self, name, RFobj, ports=None, params={}, **kwargs):
@@ -337,7 +602,7 @@ class rfCircuit(rfBase):
             name, subblock = name.split('.',1)
             if name not in self.blocks:
                 raise ValueError(
-                    f'{whoami(__package__)}: [update subblock {name+"."+subblock}]:'
+                    f'{whoami(__package__)}: [update subblock {name+"."+subblock}]:'  
                     f' {name} not present.')
                 
             _debug_ and logident(f'copying "{self.Id}".blocks[{name}]["object"]')
@@ -368,7 +633,7 @@ class rfCircuit(rfBase):
         elif name in self.blocks:
             if len(RFobj) != len(self.blocks[name]['object']):
                 raise ValueError(
-                    f'{whoami(__package__)}: [update {name}] number of ports mismatch: '
+                    f'{whoami(__package__)}: [update {name}] number of ports mismatch: ' 
                     f'existing {len(self.blocks["object"])}, new {len(RFobj)}')
             
             #TODO: maybe some other checks are in order / necessary
@@ -403,7 +668,7 @@ class rfCircuit(rfBase):
                 # this can only happen when the object has no attribute ports
                 # otherwise oports would have been filled
                 raise TypeError(
-                    f'{whoami(__package__)}["{name}"]: the object has no ports '
+                    f'{whoami(__package__)}["{name}"]: the object has no ports ' 
                      'attribute. Therfore a dict port mapping cannot be used.')
                 
             elif isinstance(ports, list):
@@ -414,17 +679,17 @@ class rfCircuit(rfBase):
                  
             else:
                 raise ValueError(
-                    f'{whoami(__package__)}: expecting str, dict or list to remap port names')
+                    f'{whoami(__package__)}: expecting str, dict or list to remap port names')  
         
         if len(oports) != N:
             raise ValueError(
-                f'{whoami(__package__)}["{name}"]: RFobj len(ports)={len(oports)} '
+                f'{whoami(__package__)}["{name}"]: RFobj len(ports)={len(oports)} '  
                 f'and len(RFobj)={N} mismatch')
         
         # check the position parameter xpos
         
         if 'xpos' in kwargs:
-            warnings.warn(f'{whoami(__package__)}: xpos depreciated; use relpos')
+            warnings.warn(f'{whoami(__package__)}: xpos depreciated; use relpos')  
             relpos = kwargs.pop('xpos', 0.)
         else:
             relpos = kwargs.pop('relpos', 0.)
@@ -535,7 +800,7 @@ class rfCircuit(rfBase):
         newports = [p for p in ports if ('->'+p) not in self.waves]
         if len(newports) > 1:
             raise ValueError(
-                f'{whoami(__package__)}: cannot have more than one new port'
+                f'{whoami(__package__)}: cannot have more than one new port'  
         )
             
         oldports = [p for p in ports if ('->'+p) in self.waves]
@@ -609,7 +874,7 @@ class rfCircuit(rfBase):
        
         if len(kwargs) > 1:
             raise ValueError(
-                f'{whoami(__package__)}: only one of "RC", "Y", "Z" kwargs allowed')
+                f'{whoami(__package__)}: only one of "RC", "Y", "Z" kwargs allowed')  
                 
         if 'Z' in kwargs:
             Z = kwargs.pop('Z')
@@ -637,7 +902,7 @@ class rfCircuit(rfBase):
                 self.xpos.pop(_kp)
             except IndexError:
                 raise ValueError(
-                    f'{whoami(__package__)}: port {port} already in use'
+                    f'{whoami(__package__)}: port {port} already in use'  
                 )
         
             # add a row to self.M
@@ -690,7 +955,7 @@ class rfCircuit(rfBase):
             if self.Portnames:
                 if len(self.Portnames) != len(self.ports):
                     raise ValueError(
-                        f'{whoami(__package__)}: incompatible number of anounced ports set '
+                        f'{whoami(__package__)}: incompatible number of anounced ports set '  
                         f'via kwarg Portnames [{len(self.Portnames)}] and the resolved '
                         f'number of free external ports [{len(self.ports)}].'
                     )
@@ -698,7 +963,7 @@ class rfCircuit(rfBase):
                     for p in self.ports:
                         if p not in self.Portnames:
                             raise ValueError(
-                                f'{whoami(__package__)}: resolved free port name {p} not found '
+                                f'{whoami(__package__)}: resolved free port name {p} not found '  
                                 f'in list of announced port names'
                             )
                 # use external port ordering
@@ -736,7 +1001,7 @@ class rfCircuit(rfBase):
             print('idxAs:', [(k, self.waves[k]) for k in idxAs])
             print('idxBs:', [(k, self.waves[k]) for k in idxBs])
             print(QA)
-            print(f'{whoami(__package__)}')
+            print(f'{whoami(__package__)}')  
             raise
         
         QB = self.invM[np.r_[idxBs],:][:,np.r_[self.idxEs]] # N x E
@@ -846,7 +1111,7 @@ class rfCircuit(rfBase):
 
                 else:
                     raise ValueError(
-                        f'{whoami(__package__)}: {obj.Id} has no attribute {kw}'
+                        f'{whoami(__package__)}: {obj.Id} has no attribute {kw}'  
                         ' that can be set'
                     )
                     
@@ -854,7 +1119,7 @@ class rfCircuit(rfBase):
                     modified |= obj.set(**{attr:val})
                 except AttributeError:
                     raise ValueError(
-                        f'{whoami(__package__)}: {obj.Id} has no set method'
+                        f'{whoami(__package__)}: {obj.Id} has no set method'  
                 )
                 
 
@@ -866,7 +1131,7 @@ class rfCircuit(rfBase):
             
             else:
                 raise ValueError(
-                    f'{whoami(__package__)}: {obj.Id} '
+                    f'{whoami(__package__)}: {obj.Id} '  
                 )    
                 
             try:
@@ -875,7 +1140,7 @@ class rfCircuit(rfBase):
                 
             except AttributeError:
                 raise ValueError(
-                    f'{whoami(__package__)}: {obj.Id} has no set method'
+                    f'{whoami(__package__)}: {obj.Id} has no set method'  
                 )
 
             # else:
@@ -1254,7 +1519,7 @@ class rfCircuit(rfBase):
                         except KeyError:
                             for k, s in self.tSol.items():
                                 print(f'[EE] {k:30s} -> {s[2]:7.3f}')
-                            print(f'{whoami(__package__)}')
+                            print(f'{whoami(__package__)}')  
                             raise
     
                     if _debug_:
@@ -1362,7 +1627,7 @@ class rfCircuit(rfBase):
         except KeyError:
             undef = [p for p in self.ports if p not in E]
             raise ValueError(
-                f'{whoami(__package__)}: undeclared ports {undef}'
+                f'{whoami(__package__)}: undeclared ports {undef}'  
             ) from None
         
         # print('pyRFtk2.circuit.maxV')

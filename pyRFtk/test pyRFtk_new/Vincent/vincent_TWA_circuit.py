@@ -15,8 +15,11 @@ __updated__ = "2021-10-08 14:41:25"
 
 import numpy as np
 from matplotlib import pyplot as pl
+import sys
 
-from pyRFtk2 import rfObject, rfRLC, circuit
+sys.path.insert(0,"20210930-0000")
+
+from pyRFtk2 import rfObject, rfRLC, rfCircuit as circuit
 
 import WEST_TWA_7s_4_No_FS_protruding_match as match
 
@@ -68,9 +71,9 @@ def PrintSol(fMHz, Efeed=1., Zbase=match.Zit):
 # read the touchstone
 #
 cases = {
-    'new':'n/WEST_TWA_7s_4_No_FS_protruding_sweep.s7p',
-    'new1':'n/WEST_TWA_7s_4_No_FS_protruding.s7p',
-    'orig':'WEST_TWA_7s_4_No_FS_protruding.s7p'
+    # 'new':'n/WEST_TWA_7s_4_No_FS_protruding_sweep.s7p',
+    # 'new1':'n/WEST_TWA_7s_4_No_FS_protruding.s7p',
+    'orig':'20210930-0000/WEST_TWA_7s_4_No_FS_protruding.s7p'
 }
 
 fig1 = pl.figure('all cases')

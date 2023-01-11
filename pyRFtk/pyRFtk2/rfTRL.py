@@ -305,7 +305,7 @@ class rfTRL():
                 debug and tLogger.debug(ident(f'copy {attr}'))
                 other.__dict__[attr] = copy.deepcopy(val)
             except:
-                print(f'{whoami(__package__)}: could not deepcopy {attr}')
+                print(f'{whoami(__package__)}: could not deepcopy {attr}')  # @UndefinedVariable
                 raise
         
         debug and tLogger.debug(ident(f'< circuit.__deepcopy__ {self.Id}', -1))
@@ -364,13 +364,13 @@ class rfTRL():
         
         if kwargs and not self.constant:
             raise ValueError(
-                f'{whoami(__package__)}: not possible because the transmission '
+                f'{whoami(__package__)}: not possible because the transmission '  # @UndefinedVariable
                              'line parameters are not constant')
         modified = False
         for kw, val in kwargs.items():
             if not hasattr(self, kw):
                 raise ValueError(
-                    f'{whoami(__package__)}: parameter {kw} not present')
+                    f'{whoami(__package__)}: parameter {kw} not present')  # @UndefinedVariable
                 
             modified |= getattr(self,kw) != val
             setattr(self, kw, val)

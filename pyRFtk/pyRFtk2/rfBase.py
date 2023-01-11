@@ -239,7 +239,7 @@ class rfBase():
                 # print(f'copying {attr}')
                 other.__dict__[attr] = copy.deepcopy(val)
             except:
-                print(f'{whoami(__package__)}: could not deepcopy {attr}')
+                print(f'{whoami(__package__)}: could not deepcopy {attr}')  # @UndefinedVariable
                 raise
         
         # change the Id
@@ -262,13 +262,13 @@ class rfBase():
                         setattr(self, kw, val)
                     else:
                         raise ValueError(
-                            f'{whoami(__package__)}: {self.Id} has no attribute {kw}'
+                            f'{whoami(__package__)}: {self.Id} has no attribute {kw}'  # @UndefinedVariable
                         )
                 else:
                     raise AttributeError()
             except AttributeError:
                 raise ValueError(
-                        f'{whoami(__package__)}: attribute {kw} of {self.Id} '
+                        f'{whoami(__package__)}: attribute {kw} of {self.Id} '  # @UndefinedVariable
                         'cannot be set'
                     )
         if modified:
@@ -291,7 +291,7 @@ class rfBase():
         
         if len(k) == 0:
             raise ValueError(
-                f'{whoami(__package__)}: f={f}Hz is not available'
+                f'{whoami(__package__)}: f={f}Hz is not available'  # @UndefinedVariable
             )
         
         _debug_ and logident(f'self.Ss={self.Ss}')
@@ -357,8 +357,8 @@ class rfBase():
         fs = kwargs.pop('fs', None)
         
         if kwargs:
-            raise TypeError(f'{whoami(__package__)}: '
-                            f'Unknown kwargs {", ".join([kw for kw in kwargs])}')
+            raise TypeError(f'{whoami(__package__)}: ' # @UndefinedVariable
+                            f'Unknown kwargs {", ".join([kw for kw in kwargs])}') 
                     
         elmfmt, mtype, Zref, fscale, funit = 'MA', 'S', 50.0, 1.0, 'MHZ'
         fscales = {'HZ': 1, 'KHZ':1e3, 'MHZ':1e6, 'GHZ':1e9}
@@ -393,7 +393,7 @@ class rfBase():
                 mtype = tk
             
             else:
-                raise ValueError(f'{whoami(__package__)}: '
+                raise ValueError(f'{whoami(__package__)}: '  # @UndefinedVariable
                                  f'unknown touchstone format directive {tk}')
             last = tk
             
@@ -515,7 +515,7 @@ class rfBase():
             msg = (f' could not understand supplied xpos: {type(xpos)} '
                    f'{("[%d]"%len(xpos)) if hasattr(xpos,"__iter__") else ""}')
             _debug_ and logident(msg)
-            raise ValueError(f'{whoami(__package__)}: {msg}')
+            raise ValueError(f'{whoami(__package__)}: {msg}')  # @UndefinedVariable
 
         Zbase = Zbase if Zbase else self.Zbase
         S = self.getS(f, Zbase=Zbase, **kwargs)

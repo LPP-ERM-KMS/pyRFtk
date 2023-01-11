@@ -145,7 +145,7 @@ class rfGTL(rfCircuit):
         for p in positions:
             if p not in self.Portnames:
                 raise ValueError(
-                    f'{whoami(__package__)}: port name {p} is not in list of'
+                    f'{whoami(__package__)}: port name {p} is not in list of'  # @UndefinedVariable
                     f' declared ports {self.Portnames}'
                 )
             else:
@@ -187,7 +187,7 @@ class rfGTL(rfCircuit):
                         tkwargs[kw] = eval(val, globals(), self.vars)
                     except ():
                         raise RuntimeError(
-                            f'{whoami(__package__)}: could not eval substitution for "{kw}"'
+                            f'{whoami(__package__)}: could not eval substitution for "{kw}"'  # @UndefinedVariable
                             f' = "{val}" in GTL block "{blk}"'
                         )
             #----------------------------------------------------- convert units  
@@ -254,7 +254,7 @@ class rfGTL(rfCircuit):
                 
         if nports != len(self.Portnames):
             raise ValueError(
-                f'{whoami(__package__)}: number of declared ports ({len(self.Portnames)})'
+                f'{whoami(__package__)}: number of declared ports ({len(self.Portnames)})'  # @UndefinedVariable
                 f' and the resulting free ports ({nports}) mismatch')
         
         # resolve the internal port positions
@@ -338,7 +338,7 @@ class rfGTL(rfCircuit):
                 
             else:
                 raise ValueError(
-                    f'{whoami(__package__)}: declared port name "{_p}" not found'
+                    f'{whoami(__package__)}: declared port name "{_p}" not found'  # @UndefinedVariable
                     ' in the list of resulting free ports'
                 )
                 
@@ -350,7 +350,7 @@ class rfGTL(rfCircuit):
         
         if self.ports != self.Portnames:
             raise RuntimeError(
-                f'{whoami(__package__)}: self.ports and self.Portnames differ !'
+                f'{whoami(__package__)}: self.ports and self.Portnames differ !'  # @UndefinedVariable
             )
                     
         # found = True # prime the loop
@@ -403,7 +403,7 @@ class rfGTL(rfCircuit):
                 _debug_ and logident(f'copy {attr}')
                 other.__dict__[attr] = deepcopy(val)
             except:
-                print(f'{whoami(__package__)}: failed to deepcopy {attr}')
+                print(f'{whoami(__package__)}: failed to deepcopy {attr}')  # @UndefinedVariable
                 raise
         
         _debug_ and logident('<')
