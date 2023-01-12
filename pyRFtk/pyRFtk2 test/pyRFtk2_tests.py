@@ -25,7 +25,8 @@ from pyRFtk2.CommonLib import plotVSWs, strVSW
 
 alltests = False
 tests = [
-    'deembed',
+#    'deembed',
+    'port-order',
 #    'rfBase-maxV',
 #    'rfCircuit-basic',
 #    'rfCircuit-junctions',
@@ -35,7 +36,7 @@ tests = [
 #    'rfGTL'
 ]
 
-setLogLevel('CRITICAL')
+setLogLevel('DEBUG')
 
 def testhdr(t):
     testit = alltests or t in tests
@@ -46,34 +47,114 @@ def testhdr(t):
 
 #===============================================================================
 #
+# p o r t - o r d e r
+#
+if testhdr('port-order'):
+    
+    fHz = 50e6
+    ct = rfCircuit()
+    TLS = []
+    for k, L in enumerate([0.5,1.0,1.5]):
+        TLS.append(f'TL{k+1}')
+        ct.addblock(TLS[-1], rfTRL(L=L), ports=[f'{k+1}','t'])
+    ct.connect(*[f'{t}.t' for t in TLS])
+    
+    ct.Portnames = [f'{t}.{t[-1]}' for t in TLS]
+
+    print(ct.asstr(-1))
+    SN = ct.getS(fHz)
+    printMA(SN)
+    
+    ct.Portnames.reverse()
+    ct.S = None
+    ct.invM = None
+    print(ct.Portnames)
+    SR = ct.getS(fHz)
+    printMA(SR)
+
+    M = np.array([[0j,0j,1], [0j,1,0j], [1,0j,0j]])
+    
+    printMA(SN - M  @ SR @ M)
+ 
+#===============================================================================
+#
 # d e e m b e d 
 #
 if testhdr('deembed'):
+    
+    # equal internal and exteral ports
+    #
+    #         +----------------------------+
+    #   TL.1 -+           TL               +- TL.2
+    #         +----------------------------+
+    #
+    # 
+    #         +-----+                +---------+
+    #   TL.1 -+ TLi +- TL.i = DTL.i -+   DTL   +- DTL.e
+    #         +-----+                +---------+
+    
     ct = rfCircuit()
     ct.addblock('TL', rfTRL(L=1))
     ct.addblock('DTL', rfTRL(L=1), ports=['i','e'])
     print(ct.asstr(-1))
-    ct.deembed([('DTL.i','TL.i')], [('DTL.e','TL.2')])
+    ct.deembed([('DTL.i','TLi')], [('DTL.e','TL.2')])
     print(ct.asstr(-1))
     printMA(ct.getS(55E6))
+    
+    print('\n','-'*120,'\n')
+    
+    #
+    # ct = rfCircuit()
+    # ct.addblock('TL', rfTRL(L=1), ports=['1','t'])
+    # # printMA(ct.getS(55e6))
+    #
+    # # more external than internal ports
+    #
+    # ct.addblock('TL1', rfTRL(L=1), ports=['t','2'])
+    # ct.addblock('TL2', rfTRL(L=1), ports=['t','2'])
+    # ct.connect('TL.t','TL1.t','TL2.t')
+    #
+    # ct.addblock('DTL1', rfTRL(L=1), ports=['t','e'])
+    # ct.addblock('DTL2', rfTRL(L=1), ports=['t','e'])
+    # ct.connect('DTL1.t','DTL2.t','DTLi')
+    # print(ct.asstr(-1))
+    #
+    # ct.deembed([('DTLi','TL.i')], [('DTL1.e','TL1.2'), ('DTL2.e','TL2.2')])
+    # print(ct.asstr(-1))
+    # printMA(ct.getS(55E6))
+    #
+
+    # more internal than external ports
     
     ct = rfCircuit()
-    ct.addblock('TL', rfTRL(L=1), ports=['1','t'])
-    # printMA(ct.getS(55e6))
     
-    ct.addblock('TL1', rfTRL(L=1), ports=['t','2'])
+    ct.addblock('TL1', rfTRL(L=1), ports=['t','1'])
     ct.addblock('TL2', rfTRL(L=1), ports=['t','2'])
-    ct.connect('TL.t','TL1.t','TL2.t')
-    
-    ct.addblock('DTL1', rfTRL(L=1), ports=['t','e'])
-    ct.addblock('DTL2', rfTRL(L=1), ports=['t','e'])
-    ct.connect('DTL1.t','DTL2.t','DTLi')
-    print(ct.asstr(-1))
-    
-    ct.deembed([('DTLi','TL.i')], [('DTL1.e','TL1.2'), ('DTL2.e','TL2.2')])
-    print(ct.asstr(-1))
-    printMA(ct.getS(55E6))
+    ct.addblock('TL3', rfTRL(L=1), ports=['t','3'])
+    ct.connect('TL1.t','TL2.t','TL3.t')
+    ct.connect('TL2.2','TL3.3','TL_common')
 
+    printMA(ct.getS(55E6))
+    
+    dt = rfCircuit()
+    dt.addblock('DTL1', rfTRL(L=1), ports=['i1','t'])
+    dt.addblock('DTL2', rfTRL(L=1), ports=['i2','t'])
+    dt.connect('DTL1.t', 'DTL2.t', 'DTLext')
+    
+    printMA(dt.getS(55E6))
+    
+    CT = rfCircuit()
+    CT.addblock('spider', ct)
+    CT.addblock('deembed', dt)
+    
+    print(CT.asstr(1))
+
+    CT.deembed({'deembed.DTL1.i1':'spider_i1', 'deembed.DTL2.i2':'spider_i2'}, 
+               {'deembed.DTLext': 'spider.TL_common'})
+    
+    print(CT.asstr(1))
+    printMA(CT.getS(55e6))
+    
 #===============================================================================
 #
 # r f G T L

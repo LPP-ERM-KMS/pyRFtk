@@ -140,12 +140,17 @@ class rfCircuit(rfBase):
     #
     def __str__(self, full=0):
         s = super().__str__(full=0)
+        plines = '\n|  '.join(self.ports)
+        s += f'\n| ports: [\n|  {plines}\n| ]\n'
+        s += '|\n'
+        s += f'+ {self.M.shape[0]} equations, {self.M.shape[1]} unknowns \n'
+            
         if not full:
             return s
         
-        s += f'\n| ports: {self.ports} \n'
-        s += '|\n'
-        s += f'+ {self.M.shape[0]} equations, {self.M.shape[1]} unknowns \n'
+        # s += f'\n| ports: {self.ports} \n'
+        # s += '|\n'
+        # s += f'+ {self.M.shape[0]} equations, {self.M.shape[1]} unknowns \n'
         s += '| \n'
             
         if self.M.shape[0] == 0:
@@ -387,7 +392,8 @@ class rfCircuit(rfBase):
                 these are the "external" ports of the circuit i.e. these are
                 connected through the RFobj
                 
-            State of the rfCircuit object: it solves for 
+            State of the rfCircuit object: it solves for (Sinternal is not
+            explicitly known)
             
             +-------------------------------------------------+
             |                 Sexternal                       |
@@ -419,7 +425,7 @@ class rfCircuit(rfBase):
             IntPorts = {dpi:ip, ...}
             ExtPorts = {dpe:ep, ...}
             
-            The result is the rfCircuit solving for
+            The result is the rfCircuit object solving for
             
             +-------------+ 
             |  Sinternal  | 
@@ -451,11 +457,15 @@ class rfCircuit(rfBase):
         self.S = None 
         self.invM = None
         
+        if isinstance(IntPorts, dict):
+            IntPorts = [( dp, p) for dp, p in IntPorts.items()] 
+        
+        if isinstance(ExtPorts, dict):
+            ExtPorts = [( dp, p) for dp, p in ExtPorts.items()] 
+        
         # validate partially input IntPorts and ExtPorts
         
         for Ports, typ in zip([IntPorts, ExtPorts],['Int','Ext']):
-            if isinstance(Ports, dict):
-                Ports = [( dp, p) for dp, p in Ports.items()] 
             
             if not (
                 isinstance(Ports, list) 
@@ -481,7 +491,7 @@ class rfCircuit(rfBase):
         
         # add the new internal ports and find the remaining ports of the
         # deembed object
-                            
+          
         for dp, ip in IntPorts:
             
             if ip in self.ports:
@@ -800,7 +810,11 @@ class rfCircuit(rfBase):
         if len(newports) > 1:
             raise ValueError(
                 f'{whoami(__package__)}: cannot have more than one new port'  
-        )
+            )
+        elif len(newports) and '.' in newports[0]:
+            raise ValueError(
+                f"{whoami(__package__)}: a new port name can't contain a '.'"  
+            )
             
         oldports = [p for p in ports if ('->'+p) in self.waves]
         
@@ -979,13 +993,15 @@ class rfCircuit(rfBase):
                 self.M[-1,self.waves.index('->'+p)] = 1
                 self.eqns.append(f'E: {p}')
                 self.E[p] = self.M.shape[0]-1
-                self.idxEs.append(self.M.shape[0]-1)
+                # self.idxEs.append(self.M.shape[0]-1) # <===== also need to change for different port order
                
         _debug_ and tLogger.debug(ident(f'Portnames= {self.Portnames}'))
         _debug_ and tLogger.debug(ident(f'ports=     {self.ports}'))
         
-        idxAs = [self.waves.index('->'+p) for p in self.ports]
-        idxBs = [self.waves.index('<-'+p) for p in self.ports]
+        ports = self.Portnames
+        self.idxEs = [ self.E[p] for p in ports]
+        idxAs = [self.waves.index('->'+p) for p in ports] # <===== also need to change for different port order
+        idxBs = [self.waves.index('<-'+p) for p in ports] # <===== also need to change for different port order
 
         self.invM = np.linalg.inv(self.M)
         
