@@ -438,6 +438,7 @@ class rfObject():
             if k.size:
                 return self.Ss[k[0]]
             else:
+                # print('--interpolating--')
                 return self._interp_(fk)[0]
         
         if hasattr(fs,'__iter__'):

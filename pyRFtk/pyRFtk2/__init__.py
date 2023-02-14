@@ -1,12 +1,14 @@
 ################################################################################
 #                                                                              #
-# Copyright 2018-2020                                                          #
+# Copyright 2018-present                                                       #
 #                                                                              #
 #                   Laboratory for Plasma Physics                              #
 #                   Royal Military Academy                                     #
 #                   Brussels, Belgium                                          #
 #                                                                              #
 #                   ITER Organisation                                          #
+#                                                                              #
+#                   EUROfusion                                                 #
 #                                                                              #
 # Author : frederic.durodie@rma.ac.be                                          #
 #                          @gmail.com                                          #

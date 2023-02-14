@@ -25,8 +25,8 @@ from pyRFtk2.CommonLib import plotVSWs, strVSW
 
 alltests = False
 tests = [
-#    'deembed',
-    'port-order',
+    'deembed',
+#    'port-order',
 #    'rfBase-maxV',
 #    'rfCircuit-basic',
 #    'rfCircuit-junctions',
@@ -90,7 +90,7 @@ if testhdr('deembed'):
     #
     # 
     #         +-----+                +---------+
-    #   TL.1 -+ TLi +- TL.i = DTL.i -+   DTL   +- DTL.e
+    #   TL.1 -+ TLi +- TL.i = DTL.i -+   DTL   +- DTL.e = TL.2
     #         +-----+                +---------+
     
     ct = rfCircuit()

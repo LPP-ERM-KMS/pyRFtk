@@ -54,3 +54,4 @@ from .maxfun import maxfun
 from .resolveTLparams import TLresolver
 from .plotVSWs import plotVSWs, scaleVSW, strVSW
 from ._check_3D_shape_ import _check_3D_shape_
+from .symetrize2port import symmetrize2port
