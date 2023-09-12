@@ -481,10 +481,10 @@ class rfTRL():
                 # special case of a 0-length TL section
                 
                 xs = np.array([xs[0],xs[-1]])
-                U10 = np.ones(np.array(xs).shape, dtype=np.complex)
-                I10 = np.zeros(np.array(xs).shape, dtype=np.complex)
-                U01 = np.zeros(np.array(xs).shape, dtype=np.complex)
-                I01 = np.ones(np.array(xs).shape, dtype=np.complex)
+                U10 = np.ones(np.array(xs).shape, dtype=complex)
+                I10 = np.zeros(np.array(xs).shape, dtype=complex)
+                U01 = np.zeros(np.array(xs).shape, dtype=complex)
+                I01 = np.ones(np.array(xs).shape, dtype=complex)
                 
             elif self.constant:
                 

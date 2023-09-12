@@ -1,37 +1,3 @@
-#region copyright
-################################################################################
-#                                                                              #
-# Copyright 2018-2022                                                          #
-#                                                                              #
-#                   Laboratory for Plasma Physics                              #
-#                   Royal Military Academy                                     #
-#                   Brussels, Belgium                                          #
-#                                                                              #
-#                   ITER Organisation                                          #
-#                                                                              #
-# Author : frederic.durodie@rma.ac.be                                          #
-#                          @gmail.com                                          #
-#                          @ccfe.ac.uk                                         #
-#                          @telenet.be                                         #
-#                          .lpprma@telenet.be                                  #
-#                                                                              #
-# Licensed under the EUPL, Version 1.2 or – as soon they will be approved by   #
-# the European Commission - subsequent versions of the EUPL (the "Licence");   #
-#                                                                              #
-# You may not use this work except in compliance with the Licence.             #
-# You may obtain a copy of the Licence at:                                     #
-#                                                                              #
-# https://joinup.ec.europa.eu/collection/eupl/eupl-text-11-12                  #
-#                                                                              #
-# Unless required by applicable law or agreed to in writing, software          #
-# distributed under the Licence is distributed on an "AS IS" basis,            #
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.     #
-# See the Licence for the specific language governing permissions and          #
-# limitations under the Licence.                                               #
-#                                                                              #
-################################################################################
-#endregion
-
 __updated__ = '2022-04-18 08:27:39'
 
 """
@@ -60,9 +26,11 @@ import time
 import warnings
 
 from .config import logident, logit, _newID
-from . import whoami
+from .whoami import whoami
 from .printMatrices import strM
-from . import ConvertGeneral, _check_3D_shape_, Z_from_S, Y_from_S
+from .ConvertGeneral import ConvertGeneral
+from . import Z_from_S, Y_from_S
+from ._check_3D_shape_ import _check_3D_shape_
         
 #===============================================================================
 #

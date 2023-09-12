@@ -18,7 +18,7 @@ from scipy.constants import speed_of_light as c0
 from pyRFtk.printMatrices import printMA 
 from pyRFtk.findpath import findpath
 
-from pyRFtk import rfBase, circuit, rfCircuit, rfTRL, rfObject, rfGTL, rfRLC, rfArcObj
+from pyRFtk import rfBase, rfCircuit, rfTRL, rfObject, rfGTL, rfRLC, rfArcObj
 from pyRFtk.config import setLogLevel
 from pyRFtk import printM, str_dict
 from pyRFtk import plotVSWs, strVSW
