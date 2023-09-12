@@ -1,8 +1,3 @@
-.. pyRFtk documentation master file, created by
-   sphinx-quickstart on Tue Sep 12 14:19:33 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Usage
 ==================================
 Installation
@@ -12,6 +7,10 @@ To install the program you'll just have to move to go to the folder "dist" and r
 .. code-block:: console
 
         (.venv) $pip install pyrftk2-2.0.0-py3-none-any.whl
+
+A simple circuit
+---------------------------------
+
 
 Indices and tables
 ==================

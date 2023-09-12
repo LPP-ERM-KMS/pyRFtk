@@ -46,7 +46,7 @@ __updated__ = "2022-03-22 09:34:07"
 
 if __name__ == '__main__':
     import sys
-    sys.path.append('../pyRFtk2 test')
+    sys.path.append('../pyRFtk test')
     print('importing test_circuit ...')
     import test_circuit                        # @UnresolvedImport @UnusedImport
     sys.exit(0)
@@ -188,7 +188,7 @@ class circuit():
     # _ _ s t r _ _
     #
     def __str__(self, full=0):
-        s = f'{type(self).__name__} Id="{self.Id}" at {hex(id(self))} (pyRFtk2.circuit version {__updated__}) \n'
+        s = f'{type(self).__name__} Id="{self.Id}" at {hex(id(self))} (pyRFtk.circuit version {__updated__}) \n'
         s += f'| Zbase: {self.Zbase} Ohm\n'
         s += f'| ports: {self.ports} \n'
         
@@ -1121,7 +1121,7 @@ class circuit():
                 f'{whoami(__package__)}: undeclared ports {undef}'
             ) from None
         
-        # print('pyRFtk2.circuit.maxV')
+        # print('pyRFtk.circuit.maxV')
         Eb = self.getS(f, Zbase, flags=flags) @ Ea   # implicitly updates and solves the circuit
                                         # except if a sNp is present but in that case ...
 

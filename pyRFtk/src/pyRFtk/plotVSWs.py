@@ -46,8 +46,8 @@ Created on 14 Oct 2021
 import numpy as np
 import matplotlib.pyplot as pl
 
-from pyRFtk2.config import setLogLevel, logit, tLogger, ident
-from pyRFtk2.str_dict import str_dict
+from pyRFtk.config import setLogLevel, logit, tLogger, ident
+from pyRFtk.str_dict import str_dict
 
 #===============================================================================
 #
@@ -68,7 +68,7 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
             figkwargs['num'] = Id.replace('\\','').replace('$','')
         else:
             raise ValueError(
-                'pyRFtk2.commonLib.plotVSWs: only one of "Id" or "num" kwargs allowed')
+                'pyRFtk.commonLib.plotVSWs: only one of "Id" or "num" kwargs allowed')
     
     if "num" in kwargs or not(len(pl.get_fignums())):
         tfig, ax = pl.subplots(**figkwargs)
@@ -299,7 +299,7 @@ if __name__ == '__main__':
     import pickle
     from pprint import pprint
     
-    with open('../../pyRFtk2 test/Launcher_VSWs.bin','rb') as f:
+    with open('../../pyRFtk test/Launcher_VSWs.bin','rb') as f:
         VSWs = pickle.load(f)
     setLogLevel('DEBUG')
     VSWs1 = VSWs['<top>']['VTL_1']

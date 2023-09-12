@@ -41,7 +41,7 @@ def str_dict(adict):
         
 if __name__ == '__main__':
     import pickle
-    with open('../../pyRFtk2 test/fpj_vsw.bin','rb') as f:
+    with open('../../pyRFtk test/fpj_vsw.bin','rb') as f:
         vsws = pickle.load(f)
 #    vsws = {'a': 1, 'B': {'c': 2, 'D': {'e':1}}}
     s = str_dict(vsws)

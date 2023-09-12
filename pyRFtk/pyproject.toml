@@ -2,7 +2,7 @@
 requires = ["hatchling","numpy","matplotlib","logging"]
 build-backend = "hatchling.build"
 [project]
-name = "pyRFtk2"
+name = "pyRFtk"
 version = "2.0.0"
 authors = [
   { name="Frederic Durodie", email="frederic.durodie@rma.ac.be" },
