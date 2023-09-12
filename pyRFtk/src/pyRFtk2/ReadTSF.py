@@ -12,9 +12,9 @@ __updated__ = "2023-09-12 10:02:08"
 
 import numpy as np
 import re
-from ..Utilities import getlines 
-from ..config import tLogger, logit, ident
-from ..config import fscale
+from .getlines import getlines 
+from .config import tLogger, logit, ident
+from .config import fscale
 
 from . import ConvertGeneral, S_from_Z, S_from_Y
 

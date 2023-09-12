@@ -19,11 +19,11 @@ import copy
 
 if __name__ == '__main__':
     from config import _newID, logit, logident # @UnresolvedImport @UnusedImport
-    from Utilities import whoami               # @UnresolvedImport @UnusedImport
+    from whoami import whoami               # @UnresolvedImport @UnusedImport
     
 else:
     from .config import _newID, logit, logident                      # @Reimport
-    from .Utilities import whoami                                    # @Reimport
+    from .whoami import whoami                                    # @Reimport
 
 
 #===============================================================================

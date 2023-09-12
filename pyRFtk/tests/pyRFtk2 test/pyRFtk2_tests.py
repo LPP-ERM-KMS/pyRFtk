@@ -15,13 +15,13 @@ import matplotlib.pyplot as pl
 import sys
 import copy
 from scipy.constants import speed_of_light as c0
-from pyRFtk2.Utilities.printMatrices import printMA 
-from pyRFtk2.Utilities.findpath import findpath
+from pyRFtk2.printMatrices import printMA 
+from pyRFtk2.findpath import findpath
 
 from pyRFtk2 import rfBase, circuit, rfCircuit, rfTRL, rfObject, rfGTL, rfRLC, rfArcObj
 from pyRFtk2.config import setLogLevel
-from pyRFtk2.Utilities import printM, str_dict
-from pyRFtk2.CommonLib import plotVSWs, strVSW
+from pyRFtk2 import printM, str_dict
+from pyRFtk2 import plotVSWs, strVSW
 
 alltests = False
 tests = [

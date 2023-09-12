@@ -18,8 +18,8 @@ from scipy.constants import speed_of_light as c0
 
 from pyRFtk2 import circuit, rfTRL, rfObject, rfGTL, rfRLC
 from pyRFtk2.config import setLogLevel
-from pyRFtk2.Utilities import printM, str_dict
-from pyRFtk2.CommonLib import plotVSWs
+from pyRFtk2 import printM, str_dict
+from pyRFtk2 import plotVSWs
 
 alltests = False
 tests = [

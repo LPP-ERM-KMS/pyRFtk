@@ -47,7 +47,7 @@ import numpy as np
 import matplotlib.pyplot as pl
 
 from pyRFtk2.config import setLogLevel, logit, tLogger, ident
-from pyRFtk2.Utilities import str_dict
+from pyRFtk2.str_dict import str_dict
 
 #===============================================================================
 #

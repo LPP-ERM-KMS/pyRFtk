@@ -28,11 +28,11 @@ import numpy as np
 from scipy.interpolate import interp1d
 import copy
 
-from .CommonLib import ReadTSF
-from .CommonLib import ConvertGeneral
-from .CommonLib import S_from_Y
-from .CommonLib import S_from_Z
-from .CommonLib import _check_3D_shape_
+from .ReadTSF import ReadTSF
+from .ConvertGeneral import ConvertGeneral
+from .S_from_Y import S_from_Y
+from .S_from_Z import S_from_Z
+from ._check_3D_shape_ import _check_3D_shape_
 
 from .config import tLogger, logit, ident
 from .config import _newID
@@ -41,7 +41,7 @@ from .config import fscale
 from .config import FUNITS
 
 from .rfTRL import rfTRL
-from .Utilities import whoami
+from .whoami import whoami
 
 #===============================================================================
 #
@@ -128,9 +128,9 @@ class rfObject():
         # initialize arrays and stuff
         self.fs = np.array([],dtype=float).reshape((0,))
         self.sorted = True
-        self.Ss = np.array([], dtype=np.complex).reshape((0, self.N, self.N))
-        self.Zcs = np.array([], dtype=np.complex).reshape(0, self.N)
-        self.Gms = np.array([], dtype=np.complex).reshape(0, self.N)
+        self.Ss = np.array([], dtype=complex).reshape((0, self.N, self.N))
+        self.Zcs = np.array([], dtype=complex).reshape(0, self.N)
+        self.Gms = np.array([], dtype=complex).reshape(0, self.N)
         self.process_kwargs()
         # self.type = TYPE_GENERIC        
         

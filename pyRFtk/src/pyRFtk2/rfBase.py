@@ -60,8 +60,9 @@ import time
 import warnings
 
 from .config import logident, logit, _newID
-from .Utilities import whoami, strM
-from .CommonLib import ConvertGeneral, _check_3D_shape_, Z_from_S, Y_from_S
+from . import whoami
+from .printMatrices import strM
+from . import ConvertGeneral, _check_3D_shape_, Z_from_S, Y_from_S
         
 #===============================================================================
 #

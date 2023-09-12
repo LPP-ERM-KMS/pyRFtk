@@ -13,7 +13,7 @@ __updated__ = "2022-01-19 11:30:52"
 import numpy as np
 import matplotlib.pyplot as pl
 
-from ..config import logit, tLogger, ident
+from .config import logit, tLogger, ident
 
 VERBOSE = False
 

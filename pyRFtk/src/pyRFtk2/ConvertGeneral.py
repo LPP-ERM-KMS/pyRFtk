@@ -12,7 +12,7 @@ __updated__ = "2022-02-23 09:58:17"
 
 import numpy as np
 
-from ..config import logit, logident
+from .config import logit, logident
 from ._check_3D_shape_ import _check_3D_shape_ 
 
 #===============================================================================

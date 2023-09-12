@@ -19,11 +19,11 @@ degSign = u'\N{DEGREE SIGN}'
 if __name__ == '__main__':
     from pyRFtk2 import rfBase
     from pyRFtk2.config import logit, logident
-    from pyRFtk2.Utilities import whoami
+    from pyRFtk2.whoami import whoami
 else:
     from . import rfBase
     from .config import logit, logident
-    from .Utilities import whoami
+    from .whoami import whoami
 
 from scipy.constants import speed_of_light as c0
 

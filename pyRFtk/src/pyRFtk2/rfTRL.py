@@ -35,14 +35,14 @@ from .config import _newID
 from .config import rcparams
 from .config import fscale
 
-from .CommonLib import ConvertGeneral
-from .CommonLib import S_from_VI
-from .CommonLib import maxfun
-from .CommonLib import ReadTSF
+from .ConvertGeneral import ConvertGeneral
+from .S_from_VI import S_from_VI
+from .maxfun import maxfun
+from .ReadTSF import ReadTSF
 
-from .CommonLib import TLresolver
+from .resolveTLparams import TLresolver
 
-from .Utilities import whoami
+from .whoami import whoami
 
 #===============================================================================
 #

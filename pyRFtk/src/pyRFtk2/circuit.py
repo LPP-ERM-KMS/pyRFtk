@@ -55,9 +55,10 @@ import numpy as np
 import matplotlib.pyplot as pl
 from copy import deepcopy
 
-from .CommonLib import ConvertGeneral
-from .Utilities import strM, tic, toc
-from .Utilities import whoami
+from .ConvertGeneral import ConvertGeneral
+from .tictoc import tic, toc
+from .printMatrices import strM
+from .whoami import whoami
 
 from . import rfObject # the name may change ... e.g. rfTSF
 from .config import logit, tLogger, ident, _newID, logident

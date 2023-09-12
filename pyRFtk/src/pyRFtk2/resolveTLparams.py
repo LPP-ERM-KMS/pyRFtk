@@ -16,7 +16,7 @@ import numpy as np
 from scipy.interpolate import interp1d
 from scipy.constants import speed_of_light as c0, mu_0 as mu0, epsilon_0 as e0
 
-from ..Utilities import whoami
+from .whoami import whoami
 
 #===============================================================================
 

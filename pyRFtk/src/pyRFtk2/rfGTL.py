@@ -56,7 +56,7 @@ from copy import deepcopy
 
 
 from . import rfCircuit, rfTRL, rfRLC, rfObject, rfArcObj
-from .Utilities import whoami 
+from .whoami import whoami 
 from .config import logit, tLogger, ident, _newID, logident
 
 #===============================================================================

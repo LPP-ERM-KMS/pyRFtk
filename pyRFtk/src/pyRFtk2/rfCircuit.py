@@ -58,9 +58,9 @@ import matplotlib.pyplot as pl
 from copy import deepcopy
 import warnings
 
-from .CommonLib import ConvertGeneral
-from .Utilities import strM
-from .Utilities import whoami
+from .ConvertGeneral import ConvertGeneral
+from .printMatrices import strM
+from .whoami import whoami
 
 from . import rfBase, rfObject # the name may change ... e.g. rfTSF
 from .config import logit, tLogger, ident, logident
@@ -102,7 +102,7 @@ class rfCircuit(rfBase):
             _debug_ and logident(msg)
             warnings.warn(msg)
             
-        self.M = np.array([],dtype=np.complex).reshape((0,0))
+        self.M = np.array([],dtype=complex).reshape((0,0))
         # self.ports = [] # FIXedME: resets ports set by rfBase from kwargs
         self.waves = []
         self.nodes = {}
@@ -488,7 +488,7 @@ class rfCircuit(rfBase):
         
         self.M = np.hstack((
                     self.M,
-                    np.zeros((self.M.shape[0],2*len(IntPorts)),dtype=np.complex)
+                    np.zeros((self.M.shape[0],2*len(IntPorts)),dtype=complex)
                 ))
         
         # add the new internal ports and find the remaining ports of the
@@ -516,7 +516,7 @@ class rfCircuit(rfBase):
             # add two rows to self.M
             self.M = np.vstack((
                 self.M, 
-                np.zeros((2, self.M.shape[1]), dtype=np.complex)
+                np.zeros((2, self.M.shape[1]), dtype=complex)
             ))
         
             self.M[-2, idxA] = 1
@@ -547,7 +547,7 @@ class rfCircuit(rfBase):
             # add two rows to self.M
             self.M = np.vstack((
                 self.M, 
-                np.zeros((2, self.M.shape[1]), dtype=np.complex)
+                np.zeros((2, self.M.shape[1]), dtype=complex)
             ))
         
             idxAd = self.waves.index(f'->{dp}')
@@ -745,12 +745,12 @@ class rfCircuit(rfBase):
         self.M = np.vstack((
             np.hstack((
                 self.M,
-                np.zeros((self.M.shape[0],2*N),dtype=np.complex)
+                np.zeros((self.M.shape[0],2*N),dtype=complex)
             )),
             np.hstack((
-                np.zeros((N, self.M.shape[1]), dtype=np.complex),
-                np.nan * np.ones((N, N), dtype=np.complex),
-                -np.eye(N, dtype=np.complex)
+                np.zeros((N, self.M.shape[1]), dtype=complex),
+                np.nan * np.ones((N, N), dtype=complex),
+                -np.eye(N, dtype=complex)
             ))
         ))
         
@@ -859,7 +859,7 @@ class rfCircuit(rfBase):
         # ideal Kirchhoff N-port junction
         SJ = np.array([[2/N - (1 if kc == kr else 0)
                         for kc in range(N)] for kr in range(N)],
-                      dtype=np.complex)
+                      dtype=complex)
         
         # the equations are 
         #   [[SJ]] . [B_ports] - [A_ports] = [0]
@@ -868,7 +868,7 @@ class rfCircuit(rfBase):
             # add a row to self.M
             self.M = np.vstack((
                 self.M, 
-                np.zeros((1, self.M.shape[1]), dtype=np.complex)
+                np.zeros((1, self.M.shape[1]), dtype=complex)
             ))
             self.M[-1,idxA] = -1
             
@@ -976,7 +976,7 @@ class rfCircuit(rfBase):
             # add a row to self.M
             self.M = np.vstack((
                 self.M, 
-                np.zeros((1, self.M.shape[1]), dtype=np.complex)
+                np.zeros((1, self.M.shape[1]), dtype=complex)
             ))
             self.M[-1,idxA] = -1
             self.M[-1,idxB] = rho
@@ -1040,7 +1040,7 @@ class rfCircuit(rfBase):
             for p in self.ports:                
                 self.M = np.vstack((
                     self.M,
-                    np.zeros((1, self.M.shape[1]), dtype=np.complex)
+                    np.zeros((1, self.M.shape[1]), dtype=complex)
                 ))
                 self.M[-1,self.waves.index('->'+p)] = 1
                 self.eqns.append(f'E: {p}')
@@ -1433,7 +1433,7 @@ class rfCircuit(rfBase):
         Ei = ((Ea + Eb) + self.Zbase/Zbase * (Ea - Eb)) / 2  
         
         # build the excitation vector @ self.Zbase
-        Es = np.zeros(self.M.shape[0], dtype=np.complex)
+        Es = np.zeros(self.M.shape[0], dtype=complex)
         for p, Ek in zip(self.ports, Ei):
             Es[self.E[p]] = Ek
         
@@ -1508,7 +1508,7 @@ class rfCircuit(rfBase):
             # need to solve also all internal nodes as gtl was enforced
             
             # build the excitation vector @ self.Zbase
-            Es = np.zeros(self.M.shape[0], dtype=np.complex)
+            Es = np.zeros(self.M.shape[0], dtype=complex)
             for p, Ek in zip(self.ports, Ei):
                 Es[self.E[p]] = Ek
             
@@ -1708,7 +1708,7 @@ class rfCircuit(rfBase):
         Ei = ((Ea + Eb) + self.Zbase/Zbase * (Ea - Eb)) / 2 
         
         # Es is the excitation : M . Ewaves = Es
-        Es = np.zeros(self.M.shape[0], dtype=np.complex)
+        Es = np.zeros(self.M.shape[0], dtype=complex)
         for p, Ek in zip(self.ports, Ei):
             Es[self.E[p]] = Ek
 
