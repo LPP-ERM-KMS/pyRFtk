@@ -5,16 +5,11 @@
 
 Welcome to pyRFtk's documentation!
 ==================================
-**pyRFtk** is a Python library to analyse RF circuits in the MHz range, especially designed
+**pyRFtk** is a Python library to build and analyse RF circuits in the MHz range, especially designed
 for ICRH antennae
 
 .. note::
    This project is under active development.
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-   Installation
 
 Contents
 --------
