@@ -11,7 +11,7 @@ Created on 30 Sep 2021
 Test/evaluate Vincent's TWA circuit
 
 """
-__updated__ = "2021-10-08 14:41:25"
+__updated__ = "2023-03-15 15:57:25"
 
 import numpy as np
 from matplotlib import pyplot as pl
@@ -20,8 +20,11 @@ import sys
 sys.path.insert(0,"20210930-0000")
 
 from pyRFtk2 import rfObject, rfRLC, rfCircuit as circuit
+from pyRFtk2.config import setLogLevel
 
 import WEST_TWA_7s_4_No_FS_protruding_match as match
+
+# setLogLevel('DEBUG')
 
 #===============================================================================
 # print the solution at the nodes for a given frequency and impedance base
@@ -55,7 +58,7 @@ def PrintSol(fMHz, Efeed=1., Zbase=match.Zit):
     s += f'# TWA input forward voltage waves on {Zbase} Ohm\n'
     s += 'Vf = [ \n'
     for k in range(1,8):
-        Vf = tSol[f'TWA.{k}'][2]
+        Vf = tSol[f'TWA.port-{k:03d}'][2]
         s += f'   {Vf.real:+.10f}{Vf.imag:+.10f}i , # TWA.{k}\n'
     s += ']\n'
     
@@ -89,13 +92,14 @@ for case, tspath in cases.items():
         CT.addblock(f'C{k}',rfRLC(Cs=match.__dict__[f'C{k}']*1e-12))
         CT.terminate(f'C{k}.p',Z=0)
         if 1 < k < 7:
-            CT.connect(f'C{k}.s', f'TWA.{k}')
+            CT.connect(f'C{k}.s', f'TWA.port-{k:03d}')
         elif k == 7:
-            CT.connect(f'C{k}.s', f'TWA.{k}','load')
-            CT.terminate('load',Z=match.Zit)
+            CT.connect(f'C{k}.s', f'TWA.port-{k:03d}','load')
+            CT.terminate(f'load',Z=match.Zit)
         else:
-            CT.connect(f'C{k}.s', f'TWA.{k}','feed')
+            CT.connect(f'C{k}.s', f'TWA.port-{k:03d}','feed')
     
+    print(CT.asstr(-1))
     
     # Plot the reflection coefficient vs frequency
     pl.figure(f'{case} -> {tspath}')
@@ -133,12 +137,12 @@ for case, tspath in cases.items():
     Vfeed, Ifeed = tSol['feed'][0:2]
     
     # print the solution at Zbase = port impedance TWA
-    Zbase = 8.59
+    Zbase = match.Zit
     Efeed = (Vfeed + Zbase * Ifeed) / 2
     tSol2 = PrintSol(fMHz, Efeed=Efeed, Zbase=Zbase)
 
     with open(f'TWA_{case}.txt','a') as f:
-        f.write('\nCircuit object\n')
-        f.write(str(CT))
+        f.write('\n\nCircuit object\n')
+        f.write(CT.asstr(-1))
 
 
