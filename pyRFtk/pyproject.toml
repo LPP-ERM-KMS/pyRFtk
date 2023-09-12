@@ -6,7 +6,7 @@ name = "pyRFtk2"
 version = "2.0.0"
 authors = [
   { name="Frederic Durodie", email="frederic.durodie@rma.ac.be" },
-  { name="Arthur", email="arthur.adriaens@mil.be" },
+  { name="Arthur Adriaens", email="arthur.adriaens@mil.be" },
 ]
 description = "Design tool for RF antennae networks"
 readme = "README.md"

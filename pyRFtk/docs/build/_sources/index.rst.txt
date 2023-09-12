@@ -14,12 +14,9 @@ for ICRH antennae
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   Installation
+   Get Started/Installation
+   Get Started/Basic Circuit
 
-Contents
---------
-.. toctree::
-        usage
 
 
 Indices and tables

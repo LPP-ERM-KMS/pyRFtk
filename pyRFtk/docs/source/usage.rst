@@ -3,24 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pyRFtk's documentation!
+Usage
 ==================================
-**pyRFtk** is a Python library to analyse RF circuits in the MHz range, especially designed
-for ICRH antennae
+Installation
+---------------------------------
+To install the program you'll just have to move to go to the folder "dist" and run 
 
-.. note::
-   This project is under active development.
+.. code-block:: console
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-   Installation
-
-Contents
---------
-.. toctree::
-        usage
-
+        (.venv) $pip install pyrftk2-2.0.0-py3-none-any.whl
 
 Indices and tables
 ==================
