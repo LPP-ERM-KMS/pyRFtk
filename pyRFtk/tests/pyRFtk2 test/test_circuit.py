@@ -16,7 +16,7 @@ import sys
 import copy
 from scipy.constants import speed_of_light as c0
 
-from pyRFtk2 import circuit, rfTRL, rfObject, rfGTL, rfRLC
+from pyRFtk2 import rfCircuit, rfTRL, rfObject, rfGTL, rfRLC
 from pyRFtk2.config import setLogLevel
 from pyRFtk2 import printM, str_dict
 from pyRFtk2 import plotVSWs
@@ -41,9 +41,9 @@ if alltests or 'add block port renaming' in tests:
     
     setLogLevel('DEBUG')
     
-    C1 = circuit()
-    C1.addblock('TL1',rfTRL(L=1, ports=['a','b']), xpos= [0., 1.])
-    C1.addblock('TL2',rfTRL(L=2), xpos= [1., 3.], ports=['c','d'])
+    C1 = rfCircuit()
+    C1.addblock('TL1',rfTRL(L=1, ports=['a','b']), relpos= [0., 1.])
+    C1.addblock('TL2',rfTRL(L=2), relpos= [1., 3.], ports=['c','d'])
     C1.addblock('RLC', rfRLC(Cp=100e-12),ports=['m','n'])
     C1.connect('TL1.b','TL2.c')
     C1.connect('TL2.d','RLC.m')
@@ -228,8 +228,8 @@ aTL = rfTRL(L=2 + QWL, Zbase = 30, dx=dx,
             OD=0.230, rho=2E-8)
 
 ctQWL = circuit(Zbase=30)
-ctQWL.addblock('QWL', aTL, ['p30','p50'], xpos = [0, 2+QWL])
-ctQWL.addblock('LWQ', aTL, ['p30','p50'], xpos = [4+2*QWL,2+QWL])
+ctQWL.addblock('QWL', aTL, ['p30','p50'], relpos = [0, 2+QWL])
+ctQWL.addblock('LWQ', aTL, ['p30','p50'], relpos = [4+2*QWL,2+QWL])
 ctQWL.connect('QWL.p50','LWQ.p50')
 ctQWL.terminate('LWQ.p30',Z=40)
 print(ctQWL)
@@ -254,7 +254,7 @@ bTL = rfTRL(L=4 + 2* QWL, Zbase = 30, dx=dx,
             OD=0.230, rho=2E-8)
 
 ctQWL2 = circuit(Zbase=30)
-ctQWL2.addblock('QWL', bTL, ['p1','p2'], xpos=[0,4+2*QWL])
+ctQWL2.addblock('QWL', bTL, ['p1','p2'], relpos=[0,4+2*QWL])
 ctQWL2.terminate('QWL.p2',Z=40)
 
 S30 = ctQWL2.getS(f0)
