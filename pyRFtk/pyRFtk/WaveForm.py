@@ -274,267 +274,306 @@ class WaveForm():
         return ts,ws
     
 #===============================================================================
-
-import tkinter as Tk
-import pylab as pl
-import numpy as np
-from copy import deepcopy
-
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
-
-#===============================================================================
-
-class WF_Edit(Tk.Tk):
-    def __init__(self, title='WaveForm Editor', parent=None,      
-                 wf={'dt':0.001,
-                     'prolog':[(0,0)],
-                     'repeat':[(0,0)],
-                     'Nrepeat':0,
-                     'epilog':[(0,0)]}):
-        
-        Tk.Tk.__init__(self,parent)
-        self.wm_title(title)
-        self.parent = parent
-        self.twf = deepcopy(wf)
-        self.result = deepcopy(wf)
-        self.phase = 'prolog'
-        self.point = 0
-        
-        self.v0 = Tk.DoubleVar()
-        self.v0.set(self.twf['dt'])
-        l0 = Tk.Label(text='dt:').grid(row=1,column=1)
-        self.e0 = Tk.Entry(self,
-                           width=5,
-                           textvariable=self.v0
-                          )
-        self.e0.grid(row=1,column=2)
-        
-        b_prolog = Tk.Button(self,
-                             text="Prolog",
-                             command=self.prolog
-                            ).grid(row=1,column=3)
-        
-        b_repeat = Tk.Button(self,
-                             text="Repeat",
-                             command=self.repeat
-                            ).grid(row=1,column=4)
-        
-        self.v1 = Tk.IntVar()
-        self.v1.set(self.twf['Nrepeat'])
-        l1 = Tk.Label(text='N=').grid(row=1,column=5)
-        self.e1 = Tk.Entry(self,
-                           width=5,
-                           textvariable=self.v1
-                          )
-        self.e1.grid(row=1,column=6)
-        
-        b_epilog = Tk.Button(self,
-                             text="Epilog",
-                             command=self.epilog
-                            ).grid(row=1,column=7)
-        
-        self.plot_frame = Tk.Frame(self)
-        self.plot_frame.grid(row=2,column=1,columnspan=10)
-        
-        self.fig = pl.figure(figsize=(8,8))
-        self.ax = pl.subplot(1,1,1)
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.plot_frame)
-        self.toolbar = NavigationToolbar2TkAgg(self.canvas, self.plot_frame)
-        
-        self.toolbar.pack(side=Tk.TOP)
-        self.canvas.get_tk_widget().pack(side=Tk.TOP)
-                
+if False:
+    def strdir(obj, cols=4, width=30, skip=True ):
+        s = ''
+        dk = 0
+        for d in dir(obj):
+            if skip and d[0] == '_':
+                continue
+            dk += 1
+            s += f'{d:{width}s} '
+            if dk == cols:
+                s += '\n'
+                dk = 0
+        if s[-1] == '\n':
+            s = s[:-1]
+        return s
     
-        b1 = Tk.Button(self,
-                       text="<",
-                       command=self.previous
-                      ).grid(row=3,column=1)
-                      
-        b2 = Tk.Button(self,
-                       text=">",
-                       command=self.next
-                      ).grid(row=3,column=2)
-                      
-        b3 = Tk.Button(self,
-                       text='Remove',
-                       command=self.remove
-                      ).grid(row=3,column=3)
+    import tkinter as Tk
+    import pylab as pl
+    import numpy as np
+    from copy import deepcopy
+    
+    import matplotlib
+    print(matplotlib.__version__)
+    
+    print('\nmatplotlib\n')
+    
+    print(strdir(matplotlib))
+    
+    print('\nmatplotlib.image\n')
+    print(strdir(matplotlib.image))
+    
+    print('\nmatplotlib.backend_tools\n')
+    print(strdir(matplotlib.backend_tools))
 
-        l3 = Tk.Label(self,text='time:').grid(row=3,column=4)
-        self.v3 = Tk.DoubleVar()
-        self.v3.set(self.twf[self.phase][self.point][0])
-        self.e3 = Tk.Entry(self,
-                           width=10,
-                           textvariable=self.v3
-                          ).grid(row=3,column=5)
-                      
-        l4 = Tk.Label(self,text='value:').grid(row=3,column=6)
-        self.v4 = Tk.DoubleVar()
-        self.v4.set(self.twf[self.phase][self.point][1])
-        self.e4 = Tk.Entry(self,
-                           width=10,
-                           textvariable=self.v4
-                          ).grid(row=3,column=7)
-        
-        b4 = Tk.Button(self,
-                       text='Add',
-                       command=self.add
-                      ).grid(row=3,column=8)
-                      
-        b5 = Tk.Button(self,
-                       text='Cancel',
-                       command=self.cancel
-                      ).grid(row=3,column=9)
-                      
-        b6 = Tk.Button(self,
-                       text='OK',
-                       command=self.done
-                      )
-        b6.grid(row=3,column=10)
-        
-        self.plot_wave = Tk.Frame(self)
-        self.plot_wave.grid(row=4,column=1,columnspan=10)
+    print('\nmatplotlib.backend_bases\n')
+    print(strdir(matplotlib.backend_bases))
+
+    print('\nmatplotlib.backend_managers\n')
+    print(strdir(matplotlib.backend_managers))
+    
+    #
+    # these have changed with the matplotlib versions (sigh)
+    #
+    from matplotlib.backends.backend_agg import FigureCanvas as FigureCanvasTkAgg
+    from matplotlib.backends.backend_agg import NavigationToolbar2 as NavigationToolbar2TkAgg
+    
+    #===============================================================================
+    
+    class WF_Edit(Tk.Tk):
+        def __init__(self, title='WaveForm Editor', parent=None,      
+                     wf={'dt':0.001,
+                         'prolog':[(0,0)],
+                         'repeat':[(0,0)],
+                         'Nrepeat':0,
+                         'epilog':[(0,0)]}):
+            
+            Tk.Tk.__init__(self,parent)
+            self.wm_title(title)
+            self.parent = parent
+            self.twf = deepcopy(wf)
+            self.result = deepcopy(wf)
+            self.phase = 'prolog'
+            self.point = 0
+            
+            self.v0 = Tk.DoubleVar()
+            self.v0.set(self.twf['dt'])
+            l0 = Tk.Label(text='dt:').grid(row=1,column=1)
+            self.e0 = Tk.Entry(self,
+                               width=5,
+                               textvariable=self.v0
+                              )
+            self.e0.grid(row=1,column=2)
+            
+            b_prolog = Tk.Button(self,
+                                 text="Prolog",
+                                 command=self.prolog
+                                ).grid(row=1,column=3)
+            
+            b_repeat = Tk.Button(self,
+                                 text="Repeat",
+                                 command=self.repeat
+                                ).grid(row=1,column=4)
+            
+            self.v1 = Tk.IntVar()
+            self.v1.set(self.twf['Nrepeat'])
+            l1 = Tk.Label(text='N=').grid(row=1,column=5)
+            self.e1 = Tk.Entry(self,
+                               width=5,
+                               textvariable=self.v1
+                              )
+            self.e1.grid(row=1,column=6)
+            
+            b_epilog = Tk.Button(self,
+                                 text="Epilog",
+                                 command=self.epilog
+                                ).grid(row=1,column=7)
+            
+            self.plot_frame = Tk.Frame(self)
+            self.plot_frame.grid(row=2,column=1,columnspan=10)
+            
+            self.fig = pl.figure(figsize=(8,8))
+            self.ax = pl.subplot(1,1,1)
+            
+            self.canvas = FigureCanvasTkAgg(self.fig, master=self.plot_frame)
+            self.toolbar = NavigationToolbar2TkAgg(self.canvas, self.plot_frame)
+            
+            self.toolbar.pack(side=Tk.TOP)
+            self.canvas.get_tk_widget().pack(side=Tk.TOP)
                     
-        self.bind('<Left>', self.previous)
-        self.bind('<Right>',self.next)
-        # self.bind('<Return>',self.handlereturn)
-        self.bind('<Escape>',self.cancel)
-        b6.bind('<Return>',self.done)
-        self.e1.bind('<KeyRelease>',self.replot)
         
-        self.replot()
-        # print('entering main loop')
-        self.mainloop()
-        # print('leaving mainloop')
-        
-    #===========================================================================
-
-    def replot(self,event=None):
-        self.twf[self.phase].sort()
-        x = [t[0] for t in self.twf[self.phase]]
-        y = [t[1] for t in self.twf[self.phase]]
-        dx, dy = x[-1]-x[0], np.max(y)-np.min(y)
-        dx = dx if dx else 1
-        dy = dy if dy else 1
-        
-        self.fig.clf()
-        pl.subplot(2,1,1)
-        pl.plot(x,y,'bo-',markersize=6)
-        pl.plot(x[self.point],y[self.point],'r',
-                marker='o',
-                markersize=16,
-                markerfacecolor='none',
-                markeredgecolor='r',
-                markeredgewidth=3)
-        pl.grid()
-        
-        pl.title('Waveform Edit : '+self.phase)
-        pl.ylabel('value')
-        pl.xlim(xmin=x[0]-0.05*dx, xmax=x[-1]+0.05*dx)
-        pl.ylim(ymin=np.min(y)-0.05*dy, ymax=np.max(y)+0.05*dy)
-        
-        pl.subplot(2,1,2)
-        self.twf['dt']=float(self.v0.get())
-        self.twf['Nrepeat']=int(self.v1.get())
-        xi, yi = WaveForm(**self.twf)[:]
-        pl.plot(xi, yi, 'r.-', markersize=6)
-        pl.grid()
-        pl.xlabel('time [s]')
-        pl.ylabel('value')
-        pl.xlim(xmin=xi[0]-0.05*dx, xmax=xi[-1]+0.05*dx)
-        pl.ylim(ymin=np.min(yi)-0.05*dy, ymax=np.max(yi)+0.05*dy)
-        
-        pl.tight_layout()
-        self.fig.canvas.draw()
-        
-        self.v3.set(self.twf[self.phase][self.point][0])
-        self.v4.set(self.twf[self.phase][self.point][1])
-             
-    #===========================================================================
-
-    def handlereturn(self, event):
-        print("return: event.widget is",event.widget)
-        print("focus is:",self.focus_get())  
-              
-    #===========================================================================
-
-    def previous(self,event=None): 
-        # print('previous')
-        self.point -= 1 if self.point > 0 else 0
-        self.replot()
-        
-    #===========================================================================
-
-    def next(self,event=None):
-        # print('next')
-        self.point += 1 if self.point < len(self.twf[self.phase]) -1 else 0
-        self.replot()
-                
-    #===========================================================================
-
-    def add(self):
-        # print('add')
-        xn, yn = self.v3.get(),self.v4.get()
-        x = [t[0] for t in self.twf[self.phase]]
-        try:
-            N = x.index(xn)
-            self.twf[self.phase][N]= (xn,yn)
-            self.point=N
-        except ValueError:
-            self.twf[self.phase].append((xn,yn))
+            b1 = Tk.Button(self,
+                           text="<",
+                           command=self.previous
+                          ).grid(row=3,column=1)
+                          
+            b2 = Tk.Button(self,
+                           text=">",
+                           command=self.next
+                          ).grid(row=3,column=2)
+                          
+            b3 = Tk.Button(self,
+                           text='Remove',
+                           command=self.remove
+                          ).grid(row=3,column=3)
+    
+            l3 = Tk.Label(self,text='time:').grid(row=3,column=4)
+            self.v3 = Tk.DoubleVar()
+            self.v3.set(self.twf[self.phase][self.point][0])
+            self.e3 = Tk.Entry(self,
+                               width=10,
+                               textvariable=self.v3
+                              ).grid(row=3,column=5)
+                          
+            l4 = Tk.Label(self,text='value:').grid(row=3,column=6)
+            self.v4 = Tk.DoubleVar()
+            self.v4.set(self.twf[self.phase][self.point][1])
+            self.e4 = Tk.Entry(self,
+                               width=10,
+                               textvariable=self.v4
+                              ).grid(row=3,column=7)
+            
+            b4 = Tk.Button(self,
+                           text='Add',
+                           command=self.add
+                          ).grid(row=3,column=8)
+                          
+            b5 = Tk.Button(self,
+                           text='Cancel',
+                           command=self.cancel
+                          ).grid(row=3,column=9)
+                          
+            b6 = Tk.Button(self,
+                           text='OK',
+                           command=self.done
+                          )
+            b6.grid(row=3,column=10)
+            
+            self.plot_wave = Tk.Frame(self)
+            self.plot_wave.grid(row=4,column=1,columnspan=10)
+                        
+            self.bind('<Left>', self.previous)
+            self.bind('<Right>',self.next)
+            # self.bind('<Return>',self.handlereturn)
+            self.bind('<Escape>',self.cancel)
+            b6.bind('<Return>',self.done)
+            self.e1.bind('<KeyRelease>',self.replot)
+            
+            self.replot()
+            # print('entering main loop')
+            self.mainloop()
+            # print('leaving mainloop')
+            
+        #===========================================================================
+    
+        def replot(self,event=None):
             self.twf[self.phase].sort()
-            self.point = [t[0] for t in self.twf[self.phase]].index(xn)
-        
-        self.replot()
-                
-    #===========================================================================
-
-    def remove(self):
-        # print('remove')
-        self.twf[self.phase].pop(self.point)
-        if self.point > len(self.twf[self.phase])-1:
-            self.point -= 1
-        self.replot()
-        
-    #===========================================================================
-
-    def cancel(self,event=None):
-        # print('cancel')
-        self.quit()
-        
-    #===========================================================================
-
-    def prolog(self):
-        # print('prolog')
-        self.phase='prolog'
-        self.point=0
-        self.replot()
-        
-    #===========================================================================
-
-    def repeat(self):
-        # print('repeat')
-        self.phase='repeat'
-        self.point=0
-        self.replot()
-
-    #===========================================================================
-
-    def epilog(self):
-        # print('epilog')
-        self.phase='epilog'
-        self.point=0
-        self.replot()
-        
-    #===========================================================================
-
-    def done(self,event=None):
-        # print('done')
-        self.twf['dt']=float(self.v0.get())
-        self.twf['Nrepeat']=int(self.v1.get())
-        self.result = deepcopy(self.twf)
-        self.quit()
-        
+            x = [t[0] for t in self.twf[self.phase]]
+            y = [t[1] for t in self.twf[self.phase]]
+            dx, dy = x[-1]-x[0], np.max(y)-np.min(y)
+            dx = dx if dx else 1
+            dy = dy if dy else 1
+            
+            self.fig.clf()
+            pl.subplot(2,1,1)
+            pl.plot(x,y,'bo-',markersize=6)
+            pl.plot(x[self.point],y[self.point],'r',
+                    marker='o',
+                    markersize=16,
+                    markerfacecolor='none',
+                    markeredgecolor='r',
+                    markeredgewidth=3)
+            pl.grid()
+            
+            pl.title('Waveform Edit : '+self.phase)
+            pl.ylabel('value')
+            pl.xlim(xmin=x[0]-0.05*dx, xmax=x[-1]+0.05*dx)
+            pl.ylim(ymin=np.min(y)-0.05*dy, ymax=np.max(y)+0.05*dy)
+            
+            pl.subplot(2,1,2)
+            self.twf['dt']=float(self.v0.get())
+            self.twf['Nrepeat']=int(self.v1.get())
+            xi, yi = WaveForm(**self.twf)[:]
+            pl.plot(xi, yi, 'r.-', markersize=6)
+            pl.grid()
+            pl.xlabel('time [s]')
+            pl.ylabel('value')
+            pl.xlim(xmin=xi[0]-0.05*dx, xmax=xi[-1]+0.05*dx)
+            pl.ylim(ymin=np.min(yi)-0.05*dy, ymax=np.max(yi)+0.05*dy)
+            
+            pl.tight_layout()
+            self.fig.canvas.draw()
+            
+            self.v3.set(self.twf[self.phase][self.point][0])
+            self.v4.set(self.twf[self.phase][self.point][1])
+                 
+        #===========================================================================
+    
+        def handlereturn(self, event):
+            print("return: event.widget is",event.widget)
+            print("focus is:",self.focus_get())  
+                  
+        #===========================================================================
+    
+        def previous(self,event=None): 
+            # print('previous')
+            self.point -= 1 if self.point > 0 else 0
+            self.replot()
+            
+        #===========================================================================
+    
+        def next(self,event=None):
+            # print('next')
+            self.point += 1 if self.point < len(self.twf[self.phase]) -1 else 0
+            self.replot()
+                    
+        #===========================================================================
+    
+        def add(self):
+            # print('add')
+            xn, yn = self.v3.get(),self.v4.get()
+            x = [t[0] for t in self.twf[self.phase]]
+            try:
+                N = x.index(xn)
+                self.twf[self.phase][N]= (xn,yn)
+                self.point=N
+            except ValueError:
+                self.twf[self.phase].append((xn,yn))
+                self.twf[self.phase].sort()
+                self.point = [t[0] for t in self.twf[self.phase]].index(xn)
+            
+            self.replot()
+                    
+        #===========================================================================
+    
+        def remove(self):
+            # print('remove')
+            self.twf[self.phase].pop(self.point)
+            if self.point > len(self.twf[self.phase])-1:
+                self.point -= 1
+            self.replot()
+            
+        #===========================================================================
+    
+        def cancel(self,event=None):
+            # print('cancel')
+            self.quit()
+            
+        #===========================================================================
+    
+        def prolog(self):
+            # print('prolog')
+            self.phase='prolog'
+            self.point=0
+            self.replot()
+            
+        #===========================================================================
+    
+        def repeat(self):
+            # print('repeat')
+            self.phase='repeat'
+            self.point=0
+            self.replot()
+    
+        #===========================================================================
+    
+        def epilog(self):
+            # print('epilog')
+            self.phase='epilog'
+            self.point=0
+            self.replot()
+            
+        #===========================================================================
+    
+        def done(self,event=None):
+            # print('done')
+            self.twf['dt']=float(self.v0.get())
+            self.twf['Nrepeat']=int(self.v1.get())
+            self.result = deepcopy(self.twf)
+            self.quit()
+            
 #===============================================================================
 #
 # _ _ m a i n _ _
@@ -542,6 +581,7 @@ class WF_Edit(Tk.Tk):
 if __name__ == '__main__' :
 
     from pprint import pformat
+    from matplotlib import pyplot as pl
     
 #     wf = WaveForm(dt = 0.005,
 #                   Nrepeat = 3,
@@ -561,7 +601,7 @@ if __name__ == '__main__' :
 #                            (0.500,-2.),
 #                            (1.000,-2.0)])
 
-    if False:
+    if True:
         wf = WaveForm(dt=0.0001,prolog=[(0.000, 0),(0.500,0),(0.500,255),(30.000,255),(30.001,0)])
         print(wf)
     

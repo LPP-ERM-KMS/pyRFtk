@@ -1,3 +1,5 @@
+###               see copyright notice at the end of the file                ###
+
 """
 Arnold's Laws of Documentation:
     (1) If it should exist, it doesn't.
@@ -11,7 +13,7 @@ Created on 18 Dec 2020
 This is a template for a rfObject: but it may be obsoleted ...
 
 """
-__updated__ = "2022-06-28 16:59:33"
+__updated__ = "2023-02-21 08:53:47"
 
 if __name__ == '__main__':
     import sys
@@ -46,16 +48,36 @@ from .Utilities import whoami
 #  r f O b j e c t
 #
 class rfObject():
-    """rfObject is a template class
-            
-    methods:
-        getS(fMHz, **kwargs) : 
-            kwargs could be parameters determining the object
-                for nested objects (circuits) it would be called
-                
-        getS(frequency, **kwargs }
+    """rfObject
+    
+    The purpose of rfObject is to create a frequency vs. S-matrix "glorified" LUT
+    
+    The creation of the rfObject can be done in several manners:
+    
+    1) the simplest is to load a touchstone file e.g. produced by Ansys/HFSS and
+       the likes
+       
+       myObject = rfObject(touchstone=<path_to_touchstone>)
         
-        maxV(frequency, excitation, Zbase, ID)
+    2) another method is the fill the table manually
+    
+       portnames = <list of ports>
+       myObject = rfObject(ports = portnames]
+       
+       for fHz in fHzs:
+           S = <calculate S>
+           myObject.setS(fHz, S)
+           
+    Once an rfObject is created the 2 main methods of use are:
+    
+    rfObject.getS(fHz, Zbase=None)
+    
+    and 
+    
+    excitation = {port1:a1, ... }
+    Vamx, rfObject.maxV(fHz, excitation)
+    
+   
     """
     #===========================================================================
     #
@@ -517,7 +539,7 @@ class rfObject():
     #
     #  m a x V
     #
-    def maxV(self, f, E, Zbase=None, ID='<rfOBject>', **kwargs):
+    def maxV(self, f, E, Zbase=None, ID='<rfObject>', **kwargs):
         
         # kwargs : catchall for other parameters
         
@@ -652,4 +674,38 @@ class rfObject():
             raise ValueError(
                 f'pyRFtk2.rfObject.deembed: port(s) {",".join([p for p in ports])}'
                 ' not found.')
+
+################################################################################
+#                                                                              #
+# Copyright 2018-present                                                       #
+#                                                                              #
+#                   Laboratory for Plasma Physics                              #
+#                   Royal Military Academy                                     #
+#                   Brussels, Belgium                                          #
+#                                                                              #
+#                   ITER Organisation                                          #
+#                                                                              #
+#                   EUROfusion                                                 #
+#                                                                              #
+# Author : frederic.durodie@rma.ac.be                                          #
+#                          @gmail.com                                          #
+#                          @ccfe.ac.uk                                         #
+#                          @telenet.be                                         #
+#                          .lpprma@telenet.be                                  #
+#                                                                              #
+# Licensed under the EUPL, Version 1.2 or – as soon they will be approved by   #
+# the European Commission - subsequent versions of the EUPL (the "Licence");   #
+#                                                                              #
+# You may not use this work except in compliance with the Licence.             #
+# You may obtain a copy of the Licence at:                                     #
+#                                                                              #
+# https://joinup.ec.europa.eu/collection/eupl/eupl-text-11-12                  #
+#                                                                              #
+# Unless required by applicable law or agreed to in writing, software          #
+# distributed under the Licence is distributed on an "AS IS" basis,            #
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.     #
+# See the Licence for the specific language governing permissions and          #
+# limitations under the Licence.                                               #
+#                                                                              #
+################################################################################
             

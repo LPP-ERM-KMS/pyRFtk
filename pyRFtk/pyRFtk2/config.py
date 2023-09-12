@@ -8,7 +8,8 @@ Created on 20 Dec 2020
 
 @author: frederic
 """
-__updated__ = "2022-03-27 09:04:33"
+
+__updated__ = "2023-04-20 08:40:02"
 
 import time
 import string
@@ -16,6 +17,10 @@ import random
 import logging
 import inspect
 
+import os
+import atexit
+
+LOGFILE = 'rfCommon.log'
 #===============================================================================
 #
 #    setup logging
@@ -25,11 +30,11 @@ logit = dict([(lvl, True) for lvl in logging._nameToLevel])
 tLogger = logging.getLogger('pyRFtk2')
 
 logging.basicConfig(
-    level=logging.CRITICAL, 
-    filename='rfCommon.log',
+    level = logging.CRITICAL, 
+    filename = LOGFILE,
     filemode = 'w',
-    format='%(levelname)-8s - %(filename)-20s %(funcName)-15s'
-           ' [%(lineno)5d]: %(message)s'
+    format = '%(levelname)-8s - %(filename)-20s %(funcName)-15s'
+             ' [%(lineno)5d]: %(message)s'
 )
 
 # tLogger = logging.getLogger('pyRFtk2')
@@ -59,6 +64,19 @@ def setLogLevel(level):
 #=-----------------------------------------------------------------------------#
 
 setLogLevel(logging.CRITICAL)
+
+def CleanUpLogFile():
+    try:
+        s = os.path.getsize(LOGFILE)
+        if s == 0:
+            # print(f'pyRFtk.config.CleanUpLogFile: deleting {LOGFILE} [{s} bytes]')
+            os.remove(LOGFILE)
+        else:
+            print(f'pyRFtk.config.CleanUpLogFile: keeping {LOGFILE} [{s} bytes]')
+    except FileNotFoundError:
+        pass
+
+atexit.register(CleanUpLogFile)
 
 #=-----------------------------------------------------------------------------#
 

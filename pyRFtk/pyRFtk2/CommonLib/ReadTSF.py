@@ -8,7 +8,7 @@ Created on 18 Dec 2020
 
 @author: frederic
 """
-__updated__ = "2022-02-11 18:10:45"
+__updated__ = "2023-09-12 10:02:08"
 
 import numpy as np
 import re
@@ -399,3 +399,11 @@ def ReadTSF(src, **kwargs):
         "datafmt"   : datafmt,
     }
 
+#===============================================================================
+#
+#  _ _ m a i n _ _ 
+#
+if __name__ == '__main__':
+    # ReadTSF(src)
+    pass
+    

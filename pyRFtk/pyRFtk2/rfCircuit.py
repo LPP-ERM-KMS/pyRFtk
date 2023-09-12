@@ -1,6 +1,6 @@
 ###               see copyright notice at the end of the file                ###
 
-__updated__ = "2022-12-01 14:47:07"
+__updated__ = "2023-03-15 15:45:33"
 
 """
 Arnold's Laws of Documentation:
@@ -807,6 +807,13 @@ class rfCircuit(rfBase):
             inputs are existing as well as not yet existing ports
         """
         
+        _debug_ = logit['DEBUG'] 
+        _debug_ and tLogger.debug(ident(
+            f'> [circuit.connect] '
+            f'ports= {ports}',
+            1
+        ))
+
         # create possibly missing nodes
         newports = [p for p in ports if ('->'+p) not in self.waves]
         if len(newports) > 1:
@@ -873,12 +880,22 @@ class rfCircuit(rfBase):
             
             for SJrc, idxB in zip(SJr,idxBs):
                 self.M[-1, idxB] = SJrc
+
+        _debug_ and tLogger.debug(ident(
+            f'< [circuit.connect]', -1
+        ))
                             
     #===========================================================================
     #
     # t e r m i n a t e
     #
     def terminate(self, port, **kwargs):
+        
+        _debug_ = logit['DEBUG'] 
+        _log_ = lambda *args: _debug_ and tLogger.debug(ident(*args))
+        
+        _log_(f'> [circuit.terminate] port= "{port}", kwargs= {kwargs}', 1)
+
         
         try:        
             idxA = self.waves.index('->'+port)
@@ -907,9 +924,45 @@ class rfCircuit(rfBase):
         # equation is:
         # rho . B_port - A_port = 0
         
-        if port not in self.T:
-            # this port was not terminated yet
+        if port in self.T:
+            # this port was already terminated
+            _debug_ and tLogger.debug(ident(f'port already terminated'))
+        
+            idxA, idxB, eqn = self.T[port]
+            self.M[eqn, idxB] = rho
+            self.invM = None
+        
+        elif port in self.E:
+            # this port was and external port
+            if _debug_:
+                tLogger.debug(ident(f'port was an external port'))
+                _log_(f'"{port}" -> idxA: {idxA}, idxB: {idxB}')
+                tLogger.debug(ident(f'self.E["{port}"] = {self.E[port]}'))
+                for k, mp in enumerate(self.M[self.E[port],:]):
+                    if np.abs(mp) > 0.:
+                        tLogger.debug(ident(f'self.M[{k}] -> {mp}'))
+                        
+            eqn = self.E[port]
+            self.M[eqn, idxA] = -1.
+            self.M[eqn, idxB] = rho
+            self.eqns[eqn] = f'T: {port}'
+            self.T[port] = idxA, idxB, eqn
+            self.E.pop(port)
+            _kp = self.ports.index(port)
+            self.ports.pop(_kp)
+            self.xpos.pop(_kp)
+            self.invM = None
+            self.S = None
+                        
+        elif port in self.C:
+            _debug_ and tLogger.debug(ident(f'port already connected !'))
+            raise ValueError(
+                f'{whoami(__package__)}: port {port} already conneccted' 
+            )
             
+        else:
+            # this port was not terminated yet
+            _debug_ and tLogger.debug(ident(f'port not yet used'))
             # update the port list
             try:
                 _kp = self.ports.index(port)
@@ -932,14 +985,11 @@ class rfCircuit(rfBase):
             self.eqns.append(f'T: {port}')
             
             self.T[port] = idxA, idxB, self.M.shape[0] - 1
-        
-        else:
-            # this port was already terminated
-        
-            idxA, idxB, eqn = self.T[port]
-            self.M[eqn, idxB] = rho
-            self.invM = None
-            
+
+        _debug_ and tLogger.debug(ident(
+            f'< [circuit.terminate]', -1
+        ))
+
     #===========================================================================
     #
     # e x t S
@@ -1372,6 +1422,9 @@ class rfCircuit(rfBase):
         
         # incident voltage waves @  Zbase to the circuits feed ports
         Ea = [E[p] for p in self.ports]
+        if _debug_ :
+            tLogger.debug(ident(f'self.ports = {self.ports}'))
+            tLogger.debug(ident(f'Ea = {Ea}'))
         
         # reflected voltage waves @ Zbase from the circuit's feed ports
         Eb = self.getS(f,Zbase,flags=flags) @ Ea  # (implicitly updates and solves the circuit)

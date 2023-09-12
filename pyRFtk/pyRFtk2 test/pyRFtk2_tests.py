@@ -8,7 +8,7 @@ Created on 12 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2022-04-21 10:52:29"
+__updated__ = "2023-03-08 18:36:48"
 
 import numpy as np
 import matplotlib.pyplot as pl
@@ -25,7 +25,8 @@ from pyRFtk2.CommonLib import plotVSWs, strVSW
 
 alltests = False
 tests = [
-    'deembed',
+    'DEMO_KoM',
+#    'deembed',
 #    'port-order',
 #    'rfBase-maxV',
 #    'rfCircuit-basic',
@@ -327,5 +328,26 @@ if testhdr('plotVSWs'):
     plotVSWs(VSWs)
     
 #===============================================================================
+
+if testhdr('DEMO_KoM'):
+    
+    TRL1 = rfTRL(L=1.1, OD=0.230, ID=[0.100, 0.130], dx=360) # a conical TL
+    TRL2 = rfTRL(L=1.1, Z0TL=40, dx=360)
+    TRL3 = rfTRL(L=2, ports=['E', 'T'], Zbase=40, dx=360) # <- just for fun
+    RLC2 = rfRLC(Cp=100e-12)
+    
+    ct = rfCircuit()
+    ct.addblock('TL1', TRL1, ports=['T', 'E'], relpos=TRL3.L)
+    ct.addblock('TL2', TRL2, ports=['T', 'E'], relpos=TRL3.L)
+    ct.addblock('TL3', TRL3)
+    ct.addblock('Cap', RLC2, ports=['E','oc'], relpos=TRL3.L + TRL2.L)
+    ct.connect('TL1.T', 'TL2.T', 'TL3.T')
+    ct.connect('TL1.E', 'Cap.E')
+    ct.terminate('Cap.oc', Y=0)   # open circuit !
+    ct.terminate('TL2.E', Z=10)  # finite impedance
+    
+    maxV, where, VSWs = ct.maxV(f=55e6, E={'TL3.E': 1})
+    plotVSWs(VSWs) 
+    print(f'max: {maxV:.3f}V {where}')
 
 pl.show()

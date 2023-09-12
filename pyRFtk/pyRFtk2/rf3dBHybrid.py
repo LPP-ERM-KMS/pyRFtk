@@ -1,6 +1,6 @@
 ###               see copyright notice at the end of the file                ###
 
-__updated__ = '2022-04-12 15:18:53'
+__updated__ = '2023-03-30 10:36:30'
 
 """
 Arnold's Laws of Documentation:
@@ -49,7 +49,7 @@ class rf3dBHybrid(rfBase):
         return the Scatter object of a hybrid coupler defined by :
         
           Identifier          Id     []    'rf3dBHydrid_#'
-          ref. impedance      Zbase  [Ohm] (defaults to 30. Ohm)
+          ref. impedance      Zbase  [Ohm] (defaults to rfBase.Zbase)
           coupler length      Lc     [m]   (defaults to quarter wave lenght when 
                                             f0Hz is given)
           coupler center f    f0Hz   [Hz]  (defaults to quarter wave f when Lc
@@ -180,9 +180,9 @@ class rf3dBHybrid(rfBase):
 #
 if __name__ == '__main__':
     from Utilities.printMatrices import printMA
-    my3dB = rf3dBHybrid()
-    print(my3dB.asstr())
-    printMA(my3dB.getS(40e6))
+    my3dB = rf3dBHybrid(kcdB=80.5)
+    print(my3dB.asstr(-1))
+    printMA(my3dB.getS(40e6),pfmt='%14.10f %+12.7f' )
 
 ################################################################################
 #                                                                              #
