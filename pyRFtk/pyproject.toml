@@ -1,0 +1,19 @@
+[build-system]
+requires = ["hatchling","numpy","matplotlib","logging"]
+build-backend = "hatchling.build"
+[project]
+name = "pyRFtk2"
+version = "2.0.0"
+authors = [
+  { name="Frederic Durodie", email="frederic.durodie@rma.ac.be" },
+  { name="Arthur", email="arthur.adriaens@mil.be" },
+]
+description = "Design tool for RF antennae networks"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+[project.urls]
+"Homepage" = "https://gitlab.com/justfred/pyrftk/-/tree/current?ref_type=heads"

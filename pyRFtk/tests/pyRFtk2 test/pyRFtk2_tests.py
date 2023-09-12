@@ -15,8 +15,8 @@ import matplotlib.pyplot as pl
 import sys
 import copy
 from scipy.constants import speed_of_light as c0
-from Utilities.printMatrices import printMA 
-from Utilities.findpath import findpath
+from pyRFtk2.Utilities.printMatrices import printMA 
+from pyRFtk2.Utilities.findpath import findpath
 
 from pyRFtk2 import rfBase, circuit, rfCircuit, rfTRL, rfObject, rfGTL, rfRLC, rfArcObj
 from pyRFtk2.config import setLogLevel

@@ -1,3 +1,0 @@
-## ideas to integrate ...
-#
-# provide pickle methods
