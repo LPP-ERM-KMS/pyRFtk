@@ -11,6 +11,78 @@ To install the program you'll just have to move to go to the folder "dist" and r
 A simple circuit
 ---------------------------------
 
+.. code-block:: python
+
+        import matplotlib.pyplot as plt
+
+        from pyRFtk import rfCircuit, rfTRL, rfRLC
+        from pyRFtk.config import setLogLevel
+        from pyRFtk import plotVSWs
+
+
+        TRL1 = rfTRL(L=1.1, OD=0.230, ID=[0.100, 0.130], dx=360) # a conical TL
+        TRL2 = rfTRL(L=1.1, Z0TL=40, dx=360)
+        TRL3 = rfTRL(L=2, ports=['E', 'T'], Zbase=40, dx=360) # <- just for fun
+        RLC2 = rfRLC(Cp=100e-12)
+
+        ct = rfCircuit()
+        ct.addblock('TL1', TRL1, ports=['T', 'E'], relpos=TRL3.L)
+        ct.addblock('TL2', TRL2, ports=['T', 'E'], relpos=TRL3.L)
+        ct.addblock('TL3', TRL3)
+        ct.addblock('Cap', RLC2, ports=['E','oc'], relpos=TRL3.L + TRL2.L)
+        ct.connect('TL1.T', 'TL2.T', 'TL3.T')
+        ct.connect('TL1.E', 'Cap.E')
+        ct.terminate('Cap.oc', Y=0)   # open circuit !
+        ct.terminate('TL2.E', Z=10)  # finite impedance
+
+        maxV, where, VSWs = ct.maxV(f=55e6, E={'TL3.E': 1})
+        plotVSWs(VSWs) 
+
+        plt.show()
+
+**rfTRL** makes a radio frequency Transmission Line object, L is the length of the TL section,
+OD is the outer diameter, ID is the inner diameter and dx is the dimensional step along the TL
+used to solve the telegraphist's ODE.
+
+
+**rfRLC** can build a circuit structure as:
+"""rfRLC
+    
+    (s) -- Cs -- Ls -- Rs --+-- (p)
+                            |
+                        +---+---+
+                        |   |   |
+                        Cp  Lp  Rp
+                        |   |   |
+                        +---+---+
+                            |
+                           Gnd
+    kwargs:
+        Zbase : reference impedance [50 Ohm]
+        ports : port names [['s','p']]
+        Rp : parallel resistance [+inf Ohm]
+        Lp : parallel inductance [+inf H]
+        Cp : parallel capacity [0 F]
+        Rs : series resistance [0 Ohm]
+        Ls : series inductance [0 H]
+        Cs : series capacity [+inf F]  
+
+"""
+Here we only implement a parallel capacitor, i.e:
+"""rfRLC
+    
+    (s) --+-- (p)
+          |
+          |
+          | 
+          Cp
+          |
+          |
+          |
+         Gnd
+
+"""
+
 
 
 Indices and tables
