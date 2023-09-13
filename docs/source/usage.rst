@@ -8,8 +8,8 @@ To install the program you'll just have to move to go to the folder "dist" and r
 
         (.venv) $pip install pyrftk2-2.0.0-py3-none-any.whl
 
-A simple circuit
----------------------------------
+A simple circuit: DEMO_KoM.py
+-----------------------------
 
 .. code-block:: python
 
@@ -40,49 +40,84 @@ A simple circuit
 
         plt.show()
 
-**rfTRL** makes a radio frequency Transmission Line object, L is the length of the TL section,
-OD is the outer diameter, ID is the inner diameter and dx is the dimensional step along the TL
-used to solve the telegraphist's ODE.
+**rfTRL** makes a radio frequency Transmission Line object, L is the length of
+the TL section, OD is the outer diameter, ID is the inner diameter, Z0TL is the
+characteristic impedance, Zbase is the reference impedance of the S-matrix representing the TL section and dx is the dimensional step along the TL used to solve the telegraphist's ODE.
+
+As can be seen in the definition of TRL1, we create a conical TL by specifying an inner diameter
+at the leftmost side of 0.1 and an inner diameter at the rightmost side of 0.13.
 
 
 **rfRLC** can build a circuit structure as:
-"""rfRLC
-    
-    (s) -- Cs -- Ls -- Rs --+-- (p)
-                            |
-                        +---+---+
-                        |   |   |
-                        Cp  Lp  Rp
-                        |   |   |
-                        +---+---+
-                            |
-                           Gnd
-    kwargs:
-        Zbase : reference impedance [50 Ohm]
-        ports : port names [['s','p']]
-        Rp : parallel resistance [+inf Ohm]
-        Lp : parallel inductance [+inf H]
-        Cp : parallel capacity [0 F]
-        Rs : series resistance [0 Ohm]
-        Ls : series inductance [0 H]
-        Cs : series capacity [+inf F]  
 
-"""
+.. image:: Images/RLC.png
+
+the *kwargs* are:
+
+* Zbase : reference impedance [50 Ohm]
+* ports : port names [['s','p']]
+* Rp : parallel resistance [+inf Ohm]
+* Lp : parallel inductance [+inf H]
+* Cp : parallel capacity [0 F]
+* Rs : series resistance [0 Ohm]
+* Ls : series inductance [0 H]
+* Cs : series capacity [+inf F]  
+
 Here we only implement a parallel capacitor, i.e:
-"""rfRLC
-    
-    (s) --+-- (p)
-          |
-          |
-          | 
-          Cp
-          |
-          |
-          |
-         Gnd
 
-"""
 
+.. image:: Images/RLCSC.png
+
+Now that we have our building blocks, it's time to put them together in a circuit. To do this
+we create a rfCircuit() instance which we'll call ct and add the blocks.
+
+The first block which we'll add is TRL1 which we'll call 'TL1', we'll label the leftmost
+port 'T' and the rightmost port 'E'. As a reference point we'll use the length of TRL3,
+then we'll connect both TRL2 and TRL3 to the same input port 'T' and output port 'E' (note that
+we have specified the ports of TRL3 already in the block itself).
+
+Now we'll add our T-section
+
+
+in which we labeled the source (s) as "E" and the output p as "oc", we place this circuit part
+1.1 from the place where we put our transmission lines.
+
+These ports now need to be connected, we first connect all the ports labeled "T" and then
+all the ports labeled "E". We then proceed to leave the circuit open at the righthand side (Y=0 means zero admittance at oc) and place a 10 Ohm impedance at E, terminating the circuit there.
+
+In the end, our circuit thus looks like:
+
+.. figure:: Images/SC.png
+
+Now we apply a signal to the point 'TL3.E' with a frequency of 55MHz, using maxV  we can
+then get back maxV, which is the maximal voltage over the full circuit, where, which says where this happened and VSWs which is an array-like value containing data on how the voltage changes over the distance, this can then be plotted using plotVSWs.
+
+Junction
+--------
+
+.. code-block:: python
+
+        from pyRFtk import rfCircuit, rfTRL
+        from pyRFtk.printMatrices import printMA 
+
+        A = rfCircuit()
+        A.addblock('TL1', rfTRL(L=0))
+        A.addblock('TL2', rfTRL(L=0))
+        A.connect('TL1.1','TL2.1','TA')
+        print(A)
+
+        B = rfCircuit()
+        B.addblock('TL1', rfTRL(L=0))
+        B.addblock('TL2', rfTRL(L=0))
+        B.connect('TL1.1','TL2.1','TB')
+
+        C = rfCircuit()
+        C.addblock('A', A)
+        C.addblock('B', B)
+        C.addblock('TL3',rfTRL(L=0))
+        C.connect('A.TA','B.TB','TL3.1')
+
+        printMA(C.getS(1E6))
 
 
 Indices and tables

@@ -1,0 +1,113 @@
+.ansi-block {
+    width: auto;
+    background-color: #111111;
+    color: #000000;
+    font-size: 14px;
+    font-family: "NSimSun", monospace;
+    letter-spacing: 0px;
+    word-spacing: 0px;
+    line-height: 1.0em;
+    box-shadow: 8px 8px 5px #888888;
+}
+
+.ansi-bold {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.ansi-black {
+    color: #000000;
+}
+
+.ansi-red {
+    color: #b21717;
+}
+
+.ansi-green {
+    color: #17b217;
+}
+
+.ansi-yellow {
+    color: #b26717;
+}
+
+.ansi-blue {
+    color: #1717b2;
+}
+
+.ansi-magenta {
+    color: #b217b2;
+}
+
+.ansi-cyan {
+    color: #17b2b2;
+}
+
+.ansi-white {
+    color: #b2b2b2;
+}
+
+.ansi-bold-white {
+    color: #ffffff;
+}
+
+.ansi-bold-black {
+    color: #686868;
+}
+
+.ansi-bold-red {
+    color: #ff5454;
+}
+
+.ansi-bold-green {
+    color: #54ff54;
+}
+
+.ansi-bold-yellow {
+    color: #ffff54;
+}
+
+.ansi-bold-blue {
+    color: #5454ff;
+}
+
+.ansi-bold-magenta {
+    color: #ff54ff;
+}
+
+.ansi-bold-cyan {
+    color: #54ffff;
+}
+
+.ansi-bg_black {
+    background-color: #111111;
+}
+
+.ansi-bg_red {
+    background-color: #b21717;
+}
+
+.ansi-bg_green {
+    background-color: #227700;
+}
+
+.ansi-bg_yellow {
+    background-color: #b26717;
+}
+
+.ansi-bg_blue {
+    background-color: #1717b2;
+}
+
+.ansi-bg_magenta {
+    background-color: #b217b2;
+}
+
+.ansi-bg_cyan {
+    background-color: #17b2b2;
+}
+
+.ansi-bg_white {
+    background-color: #b2b2b2;
+}
+

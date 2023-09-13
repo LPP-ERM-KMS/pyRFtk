@@ -1647,7 +1647,7 @@ class rfCircuit(rfBase):
     def maxV(self,f, E, Zbase=None, Id=None,flags={}, **kwargs):
         
         """
-        kwargs : future extesnsion ?
+        kwargs : future extension ?
         """
         
         _debug_ = logit['DEBUG']

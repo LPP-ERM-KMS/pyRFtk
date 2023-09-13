@@ -114,7 +114,7 @@ class rfTRL():
     
     Global TL properties:
     
-        Z0TL: [Ohm] characteristic iimpedance of the TL
+        Z0TL: [Ohm] characteristic impedance of the TL
     
         LTL: [H/m] line inductance of the TL
         CTL: [F/m] line capacitance of the TL 
