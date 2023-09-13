@@ -11,6 +11,7 @@
     <script src="_static/documentation_options.js?v=51b770b3"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Welcome to pyRFtk’s documentation!" href="index.html" />
@@ -109,6 +110,8 @@ then get back maxV, which is the maximal voltage over the full circuit, where, w
 </section>
 <section id="junction">
 <h2>Junction<a class="headerlink" href="#junction" title="Link to this heading">¶</a></h2>
+<p>The program is capable of combining circuits and calculating the S matrix for
+certain frequencies, an example is given below:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyRFtk</span> <span class="kn">import</span> <span class="n">rfCircuit</span><span class="p">,</span> <span class="n">rfTRL</span>
 <span class="kn">from</span> <span class="nn">pyRFtk.printMatrices</span> <span class="kn">import</span> <span class="n">printMA</span>
 
@@ -116,7 +119,6 @@ then get back maxV, which is the maximal voltage over the full circuit, where, w
 <span class="n">A</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TL1&#39;</span><span class="p">,</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 <span class="n">A</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TL2&#39;</span><span class="p">,</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 <span class="n">A</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;TL1.1&#39;</span><span class="p">,</span><span class="s1">&#39;TL2.1&#39;</span><span class="p">,</span><span class="s1">&#39;TA&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
 
 <span class="n">B</span> <span class="o">=</span> <span class="n">rfCircuit</span><span class="p">()</span>
 <span class="n">B</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TL1&#39;</span><span class="p">,</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
@@ -132,6 +134,13 @@ then get back maxV, which is the maximal voltage over the full circuit, where, w
 <span class="n">printMA</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">getS</span><span class="p">(</span><span class="mf">1E6</span><span class="p">))</span>
 </pre></div>
 </div>
+<p>Here we create a circuit C consisting of a transmission line of length 0, which has as an input
+(if no port names are given, 1 is the left input and 2 is the right output) of A and B, each of
+which are two 0 lenght coax cables of which the inputs are wired together.</p>
+<p>We calculate the S matrix at 1MHz and print it using printMA, this funciton makes it posible
+to print complex matrices in easy to read format, e.g it will give an output <em>0.6 +180°</em> impying</p>
+<div class="math notranslate nohighlight">
+\[\rho e^{i\theta} = 0.6 e^{i\pi} = -0.6\]</div>
 </section>
 </section>
 <section id="indices-and-tables">

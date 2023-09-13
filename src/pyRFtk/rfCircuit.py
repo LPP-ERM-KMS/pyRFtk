@@ -1704,7 +1704,7 @@ class rfCircuit(rfBase):
         Eb = self.getS(f, Zbase, flags=flags) @ Ea   # implicitly updates and solves the circuit
                                         # except if a sNp is present but in that case ...
 
-        # Ei are the forward waves into to circuit's ports at self.Zbase
+        # Ei are the forward waves into the circuit's ports at self.Zbase
         Ei = ((Ea + Eb) + self.Zbase/Zbase * (Ea - Eb)) / 2 
         
         # Es is the excitation : M . Ewaves = Es
