@@ -17,18 +17,18 @@ RFobject must implement following methods/attributes
     (attribute) ports     list of strings
     (method)    __len__   integer = number of ports (#p)
     (method)    getS      input:
-                            fs float or list/array of floats, frequencies in Hz 
-                            Zbase float, 
+                            fs float or list/array of floats, frequencies in Hz
+                            Zbase float,
                             params dict
                           output:
                           - list/array of f's -> array of Smatrices [#f,#p,#p]
                              single f -> single Smatrix [#p,#p]
-                          - the resulting Smatrices are converted to Zbase if 
+                          - the resulting Smatrices are converted to Zbase if
                             given else the Smatrix is given in the circuit's
                             Zbase (default 50 Ohm)
     (method)    set       *args, **kwargs
-                     
-    
+
+
 circuit building methods
     addblock(name, RFobj, ports, params)
     connect(*ports)
@@ -43,94 +43,80 @@ TODO: check logic for the status of solved or not
 TODO: use external sNp if available
 
 """
-from pickle import NONE
-
-if __name__ == '__main__':
-    import sys
-    sys.path.append('../pyRFtk2 test')
-    import pyRFtk2_tests                       # @UnresolvedImport @UnusedImport
-    sys.exit(0)
-
 import numpy as np
 import matplotlib.pyplot as pl
-from copy import deepcopy
 import warnings
 
 from .ConvertGeneral import ConvertGeneral
 from .printMatrices import strM
 from .whoami import whoami
 
-from . import rfBase, rfObject # the name may change ... e.g. rfTSF
+from . import rfBase, rfObject  # the name may change ... e.g. rfTSF
 from .config import logit, tLogger, ident, logident
 
-#===============================================================================
-#
-# r f C i r c u i t
-#
+
 class rfCircuit(rfBase):
-    #===========================================================================
-    #
-    # _ _ i n i t _ _
-    #
+
     def __init__(self, *args, **kwargs):
-        
+
         _debug_ = logit['DEBUG']
         _debug_ and logident('>', printargs=False)
 
         type_rfCircuit = type(self).__name__ == 'rfCircuit'
-        
-        if not hasattr(self,'args'):
+
+        if not hasattr(self, 'args'):
             self.args = args
-        if not hasattr(self,'kwargs'):
+        if not hasattr(self, 'kwargs'):
             self.kwargs = kwargs.copy()
-        
+
         super().__init__(**kwargs)
-        
-        # pop the kwargs consumed by rfBase (self.kwused is initialized in rfBase)
+
+        """
+        pop the kwargs consumed by rfBase
+        (self.kwused is initialized in rfBase)
+        """
         for kw in self.kwused:
             kwargs.pop(kw, None)
-        
+
         sNp = kwargs.pop('sNp', None)
-        
+
         # why Portnames ? ports is processed already by rfBase
         self.Portnames = kwargs.pop('Portnames', [])
-        
+
         if kwargs and type_rfCircuit:
             msg = f'unprocessed kwargs: {", ".join([kw for kw in kwargs])}'
             _debug_ and logident(msg)
             warnings.warn(msg)
-            
-        self.M = np.array([],dtype=complex).reshape((0,0))
+
+        self.M = np.array([], dtype=complex).reshape((0, 0))
         # self.ports = [] # FIXedME: resets ports set by rfBase from kwargs
         self.waves = []
         self.nodes = {}
         self.blocks = {
-        #   'params' : params,
-        #   'ports'  : oports,
-        #   'loc'    : self.M.shape,
-        #   'object' : RFobj,
-        #   'xpos'   : xpos  <== is now also an object propery (caveat the
-                            #    same opject could be in different positions
-                            #    in a circuit)
+        """
+        'params' : params,
+        'ports'  : oports,
+        'loc'    : self.M.shape,
+        'object' : RFobj,
+        'xpos'   : xpos  <== is now also an object
+                        propery (caveat the same opject could be in
+                            different positions in a circuit)
+        """
         }
         self.eqns = []
-        self.f = np.nan # set in rfBase to None
+        self.f = np.nan  # set in rfBase to None
         self.C = {}
         self.T = {}
         self.E = {}                         # E[port] -> eqn number
         self.idxEs = []
         self.invM = None
-        self.S = None # set in rfBase to None
-        
+        self.S = None  # set in rfBase to None
+
         if sNp:
             self.sNp = rfObject(touchtone=sNp)
-        
+
         _debug_ and logident('<')
-    
-    #===========================================================================
-    #
-    # __state__
-    #
+
     def __state__(self, d=None):
         pass
             
