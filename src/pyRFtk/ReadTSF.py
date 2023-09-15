@@ -16,7 +16,9 @@ from .getlines import getlines
 from .config import tLogger, logit, ident
 from .config import fscale
 
-from . import ConvertGeneral, S_from_Z, S_from_Y
+from .ConvertGeneral import ConvertGeneral
+from .S_from_Z import S_from_Z
+from .S_from_Y import S_from_Y
 
 #===============================================================================
 #

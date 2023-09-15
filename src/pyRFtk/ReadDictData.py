@@ -10,7 +10,7 @@ F. Durodie 11-Apr-2014
 """
 
 import ast
-from . import findpath
+from .findpath import findpath
 
 ## -----------------------------------------------------------------------------
 #  R e a d D i c t D a t a
