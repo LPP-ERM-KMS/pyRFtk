@@ -8,3 +8,6 @@ the antenna and a diagram of how it is connected is shown below:
 .. image:: Images/TOMAS_ICRH_Antenna.png
 
 .. image:: Images/TOMAS_ICRH_Circuit.png
+
+
+To implement the antenna, we can make use of it's touchstone file
