@@ -26,15 +26,15 @@ from pyRFtk import plotVSWs, strVSW
 alltests = False
 tests = [
     'DEMO_KoM',
-#    'deembed',
-#    'port-order',
+    'deembed',
+    'port-order',
 #    'rfBase-maxV',
-#    'rfCircuit-basic',
-#    'rfCircuit-junctions',
-#    'rfArc',
-#    'rfBase-basic',
-#    'plotVSWs',
-#    'rfGTL'
+    'rfCircuit-basic',
+    'rfCircuit-junctions',
+    'rfArc',
+    'rfBase-basic',
+    'plotVSWs',
+    #'rfGTL'
 ]
 
 setLogLevel('DEBUG')

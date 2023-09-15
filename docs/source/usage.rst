@@ -2,7 +2,8 @@ Usage
 ==================================
 Installation
 ---------------------------------
-To install the program you'll just have to move to go to the folder "dist" and run 
+To install the program you'll just have to move to the folder "dist" where the
+install file is located and run 
 
 .. code-block:: console
 
@@ -18,7 +19,6 @@ the code is explained line by line.
         import matplotlib.pyplot as plt
 
         from pyRFtk import rfCircuit, rfTRL, rfRLC
-        from pyRFtk.config import setLogLevel
         from pyRFtk import plotVSWs
 
 
@@ -50,7 +50,7 @@ As can be seen in the definition of TRL1, we create a conical TL by specifying a
 at the leftmost side of 0.1 and an inner diameter at the rightmost side of 0.13.
 
 
-**rfRLC** can build a circuit structure as:
+**rfRLC** can build the following circuit structure:
 
 .. image:: Images/RLC.png
 
@@ -78,11 +78,8 @@ port 'T' and the rightmost port 'E'. As a reference point we'll use the length o
 then we'll connect both TRL2 and TRL3 to the same input port 'T' and output port 'E' (note that
 we have specified the ports of TRL3 already in the block itself).
 
-Now we'll add our T-section
-
-
-in which we labeled the source (s) as "E" and the output p as "oc", we place this circuit part
-1.1 from the place where we put our transmission lines.
+Now we'll add our T-section containing the parallel capacitor, we labeled the source (s) as "E" and the output (p) as "oc". Afterwards
+we place this circuit part 1.1m away from the place where we put our transmission lines.
 
 These ports now need to be connected, we first connect all the ports labeled "T" and then
 all the ports labeled "E". We then proceed to leave the circuit open at the righthand side (Y=0 means zero admittance at oc) and place a 10 Ohm impedance at E, terminating the circuit there.
@@ -133,8 +130,8 @@ to print complex matrices in easy to read format, e.g it will give an output *0.
 
    \rho e^{i\theta} = 0.6 e^{i\pi} = -0.6
 
-Multiple ports?
----------------
+Multiple ports and Logging
+--------------------------
 
 .. code-block:: python
         
@@ -176,4 +173,4 @@ Multiple ports?
 
         plt.show()
 
-IDK what the 0.5 means.
+Here we excite two ports: TRL5.5a with a 1V wave and CT3.CT1.TRL2.2b with a 0.5V wave. As can be seen in the code
