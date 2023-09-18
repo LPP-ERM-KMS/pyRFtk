@@ -27,7 +27,7 @@ def Y_from_S(S, Zbase=50.):
     L, S = _check_3D_shape_(S)
     
     I = np.eye(S.shape[1])
-    Z = np.array([np.linalg.inv(I + Sk)  @ (I +- Sk) / Zbase for Sk in S])
+    Z = np.array([np.linalg.inv(I + Sk)  @ (I - Sk) / Zbase for Sk in S])
     
     Z = Z[0,0,0] if L == 0 else Z[:,0,0] if L == 1 else Z[0,:,:] if L==2 else Z 
     
