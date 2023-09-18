@@ -1,66 +1,14 @@
 __updated__ = "2023-03-15 15:45:33"
 
-"""
-Arnold's Laws of Documentation:
-    (1) If it should exist, it doesn't.
-    (2) If it does exist, it's out of date.
-    (3) Only documentation for useless programs transcends the first two laws.
-
-Created on 10 Feb 2021
-
-@author: frederic
-
-this implements a circuit class for manipulating RFbase objects
-
-RFobject must implement following methods/attributes
-    (attribute) Zbase     float
-    (attribute) ports     list of strings
-    (method)    __len__   integer = number of ports (#p)
-    (method)    getS      input:
-                            fs float or list/array of floats, frequencies in Hz 
-                            Zbase float, 
-                            params dict
-                          output:
-                          - list/array of f's -> array of Smatrices [#f,#p,#p]
-                             single f -> single Smatrix [#p,#p]
-                          - the resulting Smatrices are converted to Zbase if 
-                            given else the Smatrix is given in the circuit's
-                            Zbase (default 50 Ohm)
-    (method)    set       *args, **kwargs
-                     
-    
-circuit building methods
-    addblock(name, RFobj, ports, params)
-    connect(*ports)
-    terminate(port, Z=complex | Y=complex | RC=complex)
-
-
-unused ports automatically become external ports
-
-TODO: rename and order external ports as requested
-TODO: rethink on how to set parameters
-TODO: check logic for the status of solved or not
-TODO: use external sNp if available
-
-"""
-from pickle import NONE
-
-if __name__ == '__main__':
-    import sys
-    sys.path.append('../pyRFtk2 test')
-    import pyRFtk2_tests                       # @UnresolvedImport @UnusedImport
-    sys.exit(0)
-
 import numpy as np
 import matplotlib.pyplot as pl
-from copy import deepcopy
 import warnings
 
 from .ConvertGeneral import ConvertGeneral
 from .printMatrices import strM
 from .whoami import whoami
 
-from . import rfBase, rfObject # the name may change ... e.g. rfTSF
+from . import rfBase, rfObject 
 from .config import logit, tLogger, ident, logident
 
 #===============================================================================
@@ -68,6 +16,40 @@ from .config import logit, tLogger, ident, logident
 # r f C i r c u i t
 #
 class rfCircuit(rfBase):
+    """
+    this implements a circuit class for manipulating RFbase objects, it depends on the 
+    :class: 'rfObject' class which must implement following methods/attributes
+        (attribute) Zbase     float
+        (attribute) ports     list of strings
+        (method)    __len__   integer = number of ports (#p)
+        (method)    getS      input:
+                                fs float or list/array of floats, frequencies in Hz 
+                                Zbase float, 
+                                params dict
+                              output:
+                              - list/array of f's -> array of Smatrices [#f,#p,#p]
+                                 single f -> single Smatrix [#p,#p]
+                              - the resulting Smatrices are converted to Zbase if 
+                                given else the Smatrix is given in the circuit's
+                                Zbase (default 50 Ohm)
+        (method)    set       *args, **kwargs
+                         
+        
+    circuit building methods
+        addblock(name, RFobj, ports, params)
+        connect(*ports)
+        terminate(port, Z=complex | Y=complex | RC=complex)
+
+
+    unused ports automatically become external ports
+
+    TODO: rename and order external ports as requested
+    TODO: rethink on how to set parameters
+    TODO: check logic for the status of solved or not
+    TODO: use external sNp if available
+
+    """
+
     #===========================================================================
     #
     # _ _ i n i t _ _
@@ -376,77 +358,77 @@ class rfCircuit(rfBase):
     # d e e m b e d
     #
     def deembed(self, IntPorts={}, ExtPorts={}):
-        """deembed
-            
-            IntPorts: list of size 2 tuples or dict
+        """deembeds ports
+        State of the rfCircuit object: it solves for (Sinternal is not
+        explicitly known)
+        
+        +-------------------------------------------------+
+        |                 Sexternal                       |
+        |                                                 |
+        |    +-------------+                              |
+        |    |  Sinternal  |                              |
+        |    |            ( )----------------------------( )
+        |    |             |               :              |
+        |    |             |               :              |
+        |    |             |               :              |
+        |    |            ( )----------------------------( )
+        |    |             |                              |
+        |    |             |         +---------+          |
+        |    |             |         | Deembed |          |
+        |    |             |         |         |          |
+        |    |            ( )-------( )       ( )--------( )
+        |    |             |    :    |         |     :    |
+        |    |       ip    |    :    | dpi dpe |     :    | ep
+        |    |             |    :    |         |     :    |
+        |    |            ( )-------( )       ( )--------( )
+        |    |             |         |         |          |
+        |    +-------------+         +---------+          |
+        |                                                 |
+        +-------------------------------------------------+
+    
+        known: Sexternal (SE), Deembed (SD)
+        find : Sinternal (SI)
+    
+        IntPorts = {dpi:ip, ...}
+        ExtPorts = {dpe:ep, ...}
+        
+        The result is the rfCircuit object solving for
+        
+        +-------------+ 
+        |  Sinternal  | 
+        |            ( )
+        |             | 
+        |             | 
+        |             | 
+        |            ( )
+        |             | 
+        |             | 
+        |             | 
+        |             | 
+        |            ( )
+        |             | 
+        |       ip    | 
+        |             | 
+        |            ( )
+        |             | 
+        +-------------+ 
+
+
+        :param IntPorts: list of size 2 tuples or dict
                 [ (rfCircuit.port, rfCircuit.port_new), ... ] or
                 { rfCircuit.port:rfCircuit.port_new, ... }
                 
                 these are the "internal" ports of the circuit i.e. these are
                 connected through the RFobj
                 
-            ExtPorts: list of size 2 tuples or dict
+        :param ExtPorts: list of size 2 tuples or dict
                 [ (rfCircuit.port, rfCircuit.port), ... ] or
                 { rfCircuit.port:rfCircuit.port, ... }
                 
                 these are the "external" ports of the circuit i.e. these are
                 connected through the RFobj
                 
-            State of the rfCircuit object: it solves for (Sinternal is not
-            explicitly known)
-            
-            +-------------------------------------------------+
-            |                 Sexternal                       |
-            |                                                 |
-            |    +-------------+                              |
-            |    |  Sinternal  |                              |
-            |    |            ( )----------------------------( )
-            |    |             |               :              |
-            |    |             |               :              |
-            |    |             |               :              |
-            |    |            ( )----------------------------( )
-            |    |             |                              |
-            |    |             |         +---------+          |
-            |    |             |         | Deembed |          |
-            |    |             |         |         |          |
-            |    |            ( )-------( )       ( )--------( )
-            |    |             |    :    |         |     :    |
-            |    |       ip    |    :    | dpi dpe |     :    | ep
-            |    |             |    :    |         |     :    |
-            |    |            ( )-------( )       ( )--------( )
-            |    |             |         |         |          |
-            |    +-------------+         +---------+          |
-            |                                                 |
-            +-------------------------------------------------+
-        
-            known: Sexternal (SE), Deembed (SD)
-            find : Sinternal (SI)
-        
-            IntPorts = {dpi:ip, ...}
-            ExtPorts = {dpe:ep, ...}
-            
-            The result is the rfCircuit object solving for
-            
-            +-------------+ 
-            |  Sinternal  | 
-            |            ( )
-            |             | 
-            |             | 
-            |             | 
-            |            ( )
-            |             | 
-            |             | 
-            |             | 
-            |             | 
-            |            ( )
-            |             | 
-            |       ip    | 
-            |             | 
-            |            ( )
-            |             | 
-            +-------------+ 
-
-        """
+                    """
         
         _debug_ = logit['DEBUG'] 
         _debug_ and tLogger.debug(ident(
@@ -578,23 +560,25 @@ class rfCircuit(rfBase):
     # a d d b l o c k
     #
     def addblock(self, name, RFobj, ports=None, params={}, **kwargs):
-        """addblock
-            inputs:
-                name : str an ID of the added block
-                RFobj : the added rf object:
+
+        """adds a previously defined circuit block to the circuit
+
+        :param name: str an ID of the added block
+        :param RFobj: the added rf object:
                             this object must minimally implement __len__ returning
                                 the number of ports
-                ports : a port mapping : 
+        :param ports: a port mapping : 
                             - can be a list of length the number of ports
                             - of a dict mapping the PF object's portnames to new
                                 names.
                             - or ommitted to generate a generic set of names
-                params : the parameters that will be supplied to the RFobject's
+
+        :param params: the parameters that will be supplied to the RFobject's
                             getS(...) method
-                kwargs:
-                    relpos: the (relative) position of the RFobject
+        :param kwargs: relpos: the (relative) position of the RFobject
                             
         """
+
         _debug_ = logit['DEBUG'] 
         _debug_ and tLogger.debug(ident(
             f'> [circuit.addblock] '
@@ -774,6 +758,8 @@ class rfCircuit(rfBase):
     #
     def getpos(self, node):
         """return the position of the node
+
+        :param node: The node
         """
         relpos, obj = 0., self
         while '.' in node:
@@ -801,8 +787,11 @@ class rfCircuit(rfBase):
     # c o n n e c t
     #
     def connect(self, *ports):
-        """connect
-            inputs are existing as well as not yet existing ports
+
+        """connects the specified ports in the circuit. 
+
+        :params ports: existing as well as not yet existing ports
+
         """
         
         _debug_ = logit['DEBUG'] 
@@ -888,6 +877,14 @@ class rfCircuit(rfBase):
     # t e r m i n a t e
     #
     def terminate(self, port, **kwargs):
+
+        """terminates the given port, can be either to ground by specifying some Z value
+        or leave it open by specifying Y=0
+
+        :param port: The port to terminate
+        :param kwargs: With what to terminate the port (e.g Z=5)
+
+        """
         
         _debug_ = logit['DEBUG'] 
         _log_ = lambda *args: _debug_ and tLogger.debug(ident(*args))
@@ -993,12 +990,10 @@ class rfCircuit(rfBase):
     # e x t S
     #
     def extS(self):
-        """
-        extS returns the S-matrix solution of the current state of the 
-           circuit matrix for the circuit's base impedance (self.Zbase)
-           
-           it is called after e.g. getS(f, Zbase, params) has recursively
-           filled all the circuit's block S-matrices in its matrix.
+        """returns the S-matrix solution of the current state of the 
+        circuit matrix for the circuit's base impedance (self.Zbase)
+        it is called after e.g. getS(f, Zbase, params) has recursively
+        filled all the circuit's block S-matrices in its matrix.
         """
         _debug_ = logit['DEBUG']
         _debug_ and tLogger.debug(ident(
