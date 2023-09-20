@@ -15,9 +15,9 @@ import numpy as np
 degSign = u'\N{DEGREE SIGN}'
 
 if __name__ == '__main__':
-    from pyRFtk2 import rfBase
-    from pyRFtk2.config import logit, logident
-    from pyRFtk2.whoami import whoami
+    from pyRFtk import rfBase
+    from pyRFtk.config import logit, logident
+    from pyRFtk.whoami import whoami
 else:
     from . import rfBase
     from .config import logit, logident

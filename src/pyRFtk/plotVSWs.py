@@ -12,7 +12,7 @@ Created on 14 Oct 2021
 """
 
 import numpy as np
-import matplotlib.pyplot as pl
+import matplotlib.pyplot as plt
 
 from pyRFtk.config import setLogLevel, logit, tLogger, ident
 from pyRFtk.str_dict import str_dict
@@ -38,15 +38,15 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
             raise ValueError(
                 'pyRFtk.commonLib.plotVSWs: only one of "Id" or "num" kwargs allowed')
     
-    if "num" in kwargs or not(len(pl.get_fignums())):
-        tfig, ax = pl.subplots(**figkwargs)
+    if "num" in kwargs or not(len(plt.get_fignums())):
+        tfig, ax = plt.subplots(**figkwargs)
         
     else:
-        tfig = pl.gcf()
+        tfig = plt.gcf()
         if len(tfig.get_axes()):
-            ax = pl.gca()
+            ax = plt.gca()
         else:
-            ax = pl.subplot(1,1,1)
+            ax = plt.subplot(1,1,1)
     
     plotnodes = kwargs.pop('plotnodes', False)
     plotpoints = kwargs.pop('plotpoints', False)
@@ -80,7 +80,7 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
             ))
             if any([x != xs[0] for x in xs]) or any([v != absV[0] for v in absV]):
                 _debug_ and tLogger.debug(ident(f'vsw'))
-                pl.plot(xs, absV, '.-' if plotpoints else '-', label=lbl)
+                plt.plot(xs, absV, '.-' if plotpoints else '-', label=lbl)
             
             # elif len(xs) == 2 and xs[0]==xs[1]:
             #     pl.plot(xs, absV, '.', label=lbl)
@@ -88,18 +88,18 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
             elif plotnodes:
                 _debug_ and tLogger.debug(ident(f'node'))
                 if isinstance(xs[0], (float,int)):
-                    pl.plot(xs, absV, 'd', label=lbl)
+                    plt.plot(xs, absV, 'd', label=lbl)
                     
         _debug_ and tLogger.debug(ident(f'< [plotit]',-1))
 
     plotit(Id, VSWs)
                 
-    pl.figure(tfig.number)
-    pl.legend(loc='best')
-    pl.xlabel('x [m]')
-    pl.ylabel('U [kV]')
-    pl.title(f'{Id}')
-    pl.grid(True)
+    plt.figure(tfig.number)
+    plt.legend(loc='best')
+    plt.xlabel('x [m]')
+    plt.ylabel('U [kV]')
+    plt.title(f'{Id}')
+    plt.grid(True)
     
     #= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
@@ -196,8 +196,8 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
         if event.inaxes == ax:
             annotation.set_visible(False)
             xi, yi = event.xdata, event.ydata
-            xsc = pl.gca().get_xlim()
-            ysc = pl.gca().get_ylim()
+            xsc = plt.gca().get_xlim()
+            ysc = plt.gca().get_ylim()
             ks = (xsc[1]-xsc[0])/(ysc[1]-ysc[0])
             # k0 = xsc[0] - ysc[0] * ks
             Up, ID,tX = findclosest(xi, yi, ks)
@@ -205,7 +205,7 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
                 annotation = ax.annotate(
                     f"{ID}\n{Up:.3f}kV",  xy= (tX,Up), **ankwargs)
                 annotation.set_visible(True)
-                pl.draw()
+                plt.draw()
     
     tfig.canvas.mpl_connect("motion_notify_event", hover)
     
@@ -273,6 +273,6 @@ if __name__ == '__main__':
     VSWs1 = VSWs['<top>']['VTL_1']
     plotVSWs(VSWs1, maxlev=2)
     print(str_dict(VSWs1))
-    pl.show()
+    plt.show()
 
 

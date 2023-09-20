@@ -1,20 +1,4 @@
-"""
-Arnold's Laws of Documentation:
-    (1) If it should exist, it doesn't.
-    (2) If it does exist, it's out of date.
-    (3) Only documentation for useless programs transcends the first two laws.
-
-Created on 16 Feb 2021
-
-@author: frederic
-"""
 __updated__ = "2022-05-16 14:00:49"
-
-if __name__ == '__main__':
-    import sys
-    sys.path.append('../pyRFtk2 test')
-    print('importing test_rfTRL...')
-    import test_rfTRL                                      # @UnresolvedImport
 
 import numpy as np
 from scipy.integrate import odeint
@@ -25,9 +9,6 @@ import copy
 #
 # sub pakacges imports
 #
-
-#TODO: properly integrate .config imports ...
-
 from .config import tLogger, logit, ident
 from .config import _newID
 from .config import rcparams
@@ -49,20 +30,20 @@ from .whoami import whoami
 class rfTRL():
     """this class defines a TL rf object
     
-    ID: 
+    :param ID: 
         an identifier (optional) could be used for logging errors and warnings
     
-    ports:
+    :param ports:
         (default ['1','2']) names the ports on either side of the TL section
     
-    L:
+    :param L:
         (default 0[m]) total length of the TL section
         
-    Zbase:
+    :param Zbase:
         (default 50[Ohm]) reference impedance of the S-matrix representing the
         TL section
         
-    dx:
+    :param dx:
         (default int(72)) dimensional step along the axis of the TL section that
         is used to solve the telegraphist's ODE as well as the requested VI 
         standing waves.
@@ -77,14 +58,14 @@ class rfTRL():
         if a [floats]-like is given end points are added as necessary and the list
         is used as the node points along the TL. TODO: implement this.
           
-    odeparams:
+    :param odeparams:
         (default {'rtol':1E-12, 'atol':1E-12}) 
         
-    xpos:
+    :param xpos:
         (default 0[m]) relative position of the first port of the TL section.
         useful to position VI standing waves on figures.
         
-    sNp: 
+    :param sNp: 
         sNp-object (default=None) TODO: implement
         
     

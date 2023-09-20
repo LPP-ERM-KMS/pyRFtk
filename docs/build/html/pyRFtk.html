@@ -782,9 +782,10 @@ supplied in the tfmt then it overrules Zbase.</p>
 <dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.rfCircuit.</span></span><span class="sig-name descname"><span class="pre">rfCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pyRFtk.rfBase.rfBase" title="pyRFtk.rfBase.rfBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">rfBase</span></code></a></p>
-<p>this implements a circuit class for manipulating RFbase objects</p>
-<dl>
-<dt>RFobject must implement following methods/attributes</dt><dd><p>(attribute) Zbase     float
+<p>this implements a circuit class for manipulating RFbase objects, it depends on the 
+:class: ‘rfObject’ class which must implement following methods/attributes</p>
+<blockquote>
+<div><p>(attribute) Zbase     float
 (attribute) ports     list of strings
 (method)    __len__   integer = number of ports (#p)
 (method)    getS      input:</p>
@@ -806,7 +807,8 @@ Zbase (default 50 Ohm)</p></li>
 </ul>
 </div></blockquote>
 <p>(method)    set       <a href="#id9"><span class="problematic" id="id10">*</span></a>args, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs</p>
-</dd>
+</div></blockquote>
+<dl class="simple">
 <dt>circuit building methods</dt><dd><p>addblock(name, RFobj, ports, params)
 connect(<a href="#id13"><span class="problematic" id="id14">*</span></a>ports)
 terminate(port, Z=complex | Y=complex | RC=complex)</p>
@@ -845,29 +847,31 @@ are evaluated but the nodes in subblocks are not evaluated.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.addblock">
 <span class="sig-name descname"><span class="pre">addblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RFobj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.addblock" title="Link to this definition">¶</a></dt>
-<dd><p>inputs:
-name : str an ID of the added block
-RFobj : the added rf object:</p>
+<dd><p>adds a previously defined circuit block to the circuit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – str an ID of the added block</p></li>
+<li><p><strong>RFobj</strong> – <p>the added rf object:
+this object must minimally implement __len__ returning</p>
 <blockquote>
-<div><dl class="simple">
-<dt>this object must minimally implement __len__ returning</dt><dd><p>the number of ports</p>
-</dd>
-</dl>
+<div><p>the number of ports</p>
 </div></blockquote>
-<dl class="simple">
-<dt>ports<span class="classifier">a port mapping</span><span class="classifier"></span></dt><dd><ul class="simple">
-<li><p>can be a list of length the number of ports</p></li>
-<li><dl class="simple">
-<dt>of a dict mapping the PF object’s portnames to new</dt><dd><p>names.</p>
-</dd>
-</dl>
-</li>
+</p></li>
+<li><p><strong>ports</strong> – <p>a port mapping : 
+- can be a list of length the number of ports
+- of a dict mapping the PF object’s portnames to new</p>
+<blockquote>
+<div><p>names.</p>
+</div></blockquote>
+<ul>
 <li><p>or ommitted to generate a generic set of names</p></li>
 </ul>
-</dd>
-<dt>params<span class="classifier">the parameters that will be supplied to the RFobject’s</span></dt><dd><p>getS(…) method</p>
-</dd>
-<dt>kwargs:</dt><dd><p>relpos: the (relative) position of the RFobject</p>
+</p></li>
+<li><p><strong>params</strong> – the parameters that will be supplied to the RFobject’s
+getS(…) method</p></li>
+<li><p><strong>kwargs</strong> – relpos: the (relative) position of the RFobject</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -875,42 +879,52 @@ RFobj : the added rf object:</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.connect">
 <span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">ports</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.connect" title="Link to this definition">¶</a></dt>
-<dd><p>inputs are existing as well as not yet existing ports</p>
+<dd><p>connects the specified ports in the circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Params ports<span class="colon">:</span></dt>
+<dd class="field-odd"><p>existing as well as not yet existing ports</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.deembed">
 <span class="sig-name descname"><span class="pre">deembed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IntPorts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExtPorts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.deembed" title="Link to this definition">¶</a></dt>
-<dd><dl>
-<dt>IntPorts: list of size 2 tuples or dict</dt><dd><p>[ (rfCircuit.port, rfCircuit.port_new), … ] or
-{ rfCircuit.port:rfCircuit.port_new, … }</p>
-<p>these are the “internal” ports of the circuit i.e. these are
-connected through the RFobj</p>
-</dd>
-<dt>ExtPorts: list of size 2 tuples or dict</dt><dd><p>[ (rfCircuit.port, rfCircuit.port), … ] or
-{ rfCircuit.port:rfCircuit.port, … }</p>
-<p>these are the “external” ports of the circuit i.e. these are
-connected through the RFobj</p>
-</dd>
-</dl>
-<p>State of the rfCircuit object: it solves for (Sinternal is not
+<dd><p>deembeds ports
+State of the rfCircuit object: it solves for (Sinternal is not
 explicitly known)</p>
 <p>known: Sexternal (SE), Deembed (SD)
 find : Sinternal (SI)</p>
 <p>IntPorts = {dpi:ip, …}
 ExtPorts = {dpe:ep, …}</p>
 <p>The result is the rfCircuit object solving for</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>IntPorts</strong> – <p>list of size 2 tuples or dict
+[ (rfCircuit.port, rfCircuit.port_new), … ] or
+{ rfCircuit.port:rfCircuit.port_new, … }</p>
+<p>these are the “internal” ports of the circuit i.e. these are
+connected through the RFobj</p>
+</p></li>
+<li><p><strong>ExtPorts</strong> – <p>list of size 2 tuples or dict
+[ (rfCircuit.port, rfCircuit.port), … ] or
+{ rfCircuit.port:rfCircuit.port, … }</p>
+<p>these are the “external” ports of the circuit i.e. these are
+connected through the RFobj</p>
+</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.extS">
 <span class="sig-name descname"><span class="pre">extS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.extS" title="Link to this definition">¶</a></dt>
-<dd><dl>
-<dt>extS returns the S-matrix solution of the current state of the </dt><dd><p>circuit matrix for the circuit’s base impedance (self.Zbase)</p>
-<p>it is called after e.g. getS(f, Zbase, params) has recursively
+<dd><p>returns the S-matrix solution of the current state of the 
+circuit matrix for the circuit’s base impedance (self.Zbase)
+it is called after e.g. getS(f, Zbase, params) has recursively
 filled all the circuit’s block S-matrices in its matrix.</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -927,6 +941,11 @@ filled all the circuit’s block S-matrices in its matrix.</p>
 <dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.getpos">
 <span class="sig-name descname"><span class="pre">getpos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.getpos" title="Link to this definition">¶</a></dt>
 <dd><p>return the position of the node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>node</strong> – The node</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1003,7 +1022,17 @@ self.Zbase) and flags (defaults to no flags) at frequency f</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.terminate">
 <span class="sig-name descname"><span class="pre">terminate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.terminate" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>terminates the given port, can be either to ground by specifying some Z value
+or leave it open by specifying Y=0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port</strong> – The port to terminate</p></li>
+<li><p><strong>kwargs</strong> – With what to terminate the port (e.g Z=5)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -1264,16 +1293,6 @@ Cs : series capacity [+inf F]</p>
 </section>
 <section id="module-pyRFtk.rfTRL">
 <span id="pyrftk-rftrl-module"></span><h2>pyRFtk.rfTRL module<a class="headerlink" href="#module-pyRFtk.rfTRL" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 16 Feb 2021</p>
-<p>&#64;author: frederic</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyRFtk.rfTRL.rfTRL">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.rfTRL.</span></span><span class="sig-name descname"><span class="pre">rfTRL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfTRL.rfTRL" title="Link to this definition">¶</a></dt>

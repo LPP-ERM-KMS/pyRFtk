@@ -1,7 +1,7 @@
 __updated__ = "2023-03-15 15:45:33"
 
 import numpy as np
-import matplotlib.pyplot as pl
+import matplotlib.pyplot as plt
 import warnings
 
 from .ConvertGeneral import ConvertGeneral
@@ -1154,7 +1154,7 @@ class rfCircuit(rfBase):
         for kw, val in kwargs.items():
             
             obj = self
-            
+                        
             if isinstance(val, (float,int)):
                 if '.' in kw:
                     # composed/chained locator 'obj,obj1. ... .attr'
@@ -1194,14 +1194,15 @@ class rfCircuit(rfBase):
                     f'{whoami(__package__)}: {obj.Id} '  
                 )    
                 
-            try:
-                modified |= getattr(obj, tl) != val 
-                obj.set(**val)
+            #Arthur Mod:
+            #try:
+            #    modified |= getattr(obj, tl) != val 
+            #    obj.set(**val)
                 
-            except AttributeError:
-                raise ValueError(
-                    f'{whoami(__package__)}: {obj.Id} has no set method'  
-                )
+            #except AttributeError:
+            #    raise ValueError(
+            #        f'{whoami(__package__)}: {obj.Id} has no set method'  
+            #    )
 
             # else:
             #     attr = kw[1:]
@@ -1824,7 +1825,7 @@ class rfCircuit(rfBase):
         
         Vmax, where, VSWs = self.maxV(f, E, Zbase=Zbase, Id=Id)
         
-        tfig = pl.figure(f'{Id} VSWs')
+        tfig = plt.figure(f'{Id} VSWs')
         
         def plotit(BLK, VSW):
             if isinstance(VSW, dict):
@@ -1833,16 +1834,16 @@ class rfCircuit(rfBase):
             elif  isinstance(VSW, tuple):
                 xs, absV = VSW
                 if any([x != xs[0] for x in xs]) or any([v != absV[0] for v in absV]):
-                    pl.plot(xs, absV, '.-', label=BLK)
+                    plt.plot(xs, absV, '.-', label=BLK)
 
         plotit(Id, VSWs)
                     
-        pl.figure(tfig.number)
-        pl.legend(loc='best')
-        pl.xlabel('x [m]')
-        pl.ylabel('U [kV]')
-        pl.title(f'{Id} Voltage standing waves')
-        pl.grid(True)
+        plt.figure(tfig.number)
+        plt.legend(loc='best')
+        plt.xlabel('x [m]')
+        plt.ylabel('U [kV]')
+        plt.title(f'{Id} Voltage standing waves')
+        plt.grid(True)
         
         return Vmax, where, VSWs
 
