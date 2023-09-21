@@ -1195,14 +1195,14 @@ class rfCircuit(rfBase):
                 )    
                 
             #Arthur Mod:
-            #try:
-            #    modified |= getattr(obj, tl) != val 
-            #    obj.set(**val)
+            try:
+                modified |= getattr(obj, tl) != val 
+                obj.set(**val)
                 
-            #except AttributeError:
-            #    raise ValueError(
-            #        f'{whoami(__package__)}: {obj.Id} has no set method'  
-            #    )
+            except AttributeError:
+                raise ValueError(
+                    f'{whoami(__package__)}: {obj.Id} has no set method'  
+                )
 
             # else:
             #     attr = kw[1:]
