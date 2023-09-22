@@ -1,10 +1,10 @@
-__updated__ = '2023-03-30 10:36:30'
+__updated__ = '2023-09-21 12:06:35'
 
 import numpy as np
 degSign = u'\N{DEGREE SIGN}'
 
-if __name__ == '__main__':
-    from pyRFtk import rfBase
+if False and __name__ == '__main__':
+    from  pyRFtk import rfBase
     from pyRFtk.config import logit, logident
     from pyRFtk.whoami import whoami
 else:
@@ -18,7 +18,7 @@ from scipy.constants import speed_of_light as c0
 #
 # r f 3 d B H y b r i d
 #
-class rf3dBHybrid(rfBase):
+class rfCoupler(rfBase):
     
     #===========================================================================
     #
@@ -166,8 +166,8 @@ class rf3dBHybrid(rfBase):
 # _ _ m a i n _ _
 #
 if __name__ == '__main__':
-    from Utilities.printMatrices import printMA
-    my3dB = rf3dBHybrid(kcdB=80.5)
+    from .printMatrices import printMA
+    my3dB = rfCoupler(kcdB=80.5)
     print(my3dB.asstr(-1))
     printMA(my3dB.getS(40e6),pfmt='%14.10f %+12.7f' )
 
