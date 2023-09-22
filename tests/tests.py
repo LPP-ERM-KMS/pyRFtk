@@ -8,33 +8,34 @@ Created on 12 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2023-03-08 18:36:48"
+__updated__ = "2023-09-22 13:41:34"
 
 import numpy as np
 import matplotlib.pyplot as pl
 import sys
-import copy
-from scipy.constants import speed_of_light as c0
-from pyRFtk.printMatrices import printMA 
-from pyRFtk.findpath import findpath
+sys.path.insert(0, '../src')
+# import copy
+# from scipy.constants import speed_of_light as c0
 
-from pyRFtk import rfBase, rfCircuit, rfTRL, rfObject, rfGTL, rfRLC, rfArcObj
-from pyRFtk.config import setLogLevel
-from pyRFtk import printM, str_dict
-from pyRFtk import plotVSWs, strVSW
+from pyRFtk.findpath import findpath                                            # @UnresolvedImport
+from pyRFtk import rfBase, rfCircuit, rfTRL, rfGTL, rfRLC, rfArcObj             # @UnresolvedImport
+from pyRFtk.config import setLogLevel                                           # @UnresolvedImport
+from pyRFtk import printMA, printRI                                                      # @UnresolvedImport
+from pyRFtk import plotVSWs, strVSW                                             # @UnresolvedImport
 
 alltests = False
 tests = [
-    'DEMO_KoM',
-    'deembed',
-    'port-order',
-#    'rfBase-maxV',
-    'rfCircuit-basic',
-    'rfCircuit-junctions',
-    'rfArc',
-    'rfBase-basic',
-    'plotVSWs',
-    #'rfGTL'
+    'rfRLC',
+#     'DEMO_KoM',
+#     'deembed',
+#     'port-order',
+#     'rfBase-maxV',
+#     'rfCircuit-basic',
+#     'rfCircuit-junctions',
+#     'rfArc',
+#     'rfBase-basic',
+#     'plotVSWs',
+#     'rfGTL',
 ]
 
 setLogLevel('DEBUG')
@@ -46,6 +47,30 @@ def testhdr(t):
         print('#'*100 +f'\n#\n# t e s t -- {t1}\n#\n')
     return testit
 
+#===============================================================================
+#
+# rfRLC
+#
+if testhdr('rfRLC'):
+    
+    setLogLevel('CRITICAL')
+    fHz = 50e6
+    ct = rfCircuit()
+    ct.addblock('C1s', rfRLC(Cs=10e-12))
+    ct.addblock('C1p', rfRLC(Cp=20e-12))
+    ct.connect('C1s.p', 'C1p.s')
+
+    printRI(ct.getS(55e6))
+    print(ct.asstr(full=-1))
+    
+    setLogLevel('DEBUG')
+    # ct.blocks['C1s']['object'].set(Cs=20e-12)
+    ct.set('C1s.Cs', 20e-12)
+    
+    printRI(ct.getS(55e6))
+    setLogLevel('CRITICAL')
+    print(ct.asstr(full=-1))
+    
 #===============================================================================
 #
 # p o r t - o r d e r

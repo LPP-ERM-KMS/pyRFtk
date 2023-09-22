@@ -42,18 +42,18 @@ Created on 18 Dec 2020
 
 @author: frederic
 """
-__updated__ = "2022-04-12 11:15:18"
+__updated__ = "2023-09-21 12:05:32"
 
 from .config import tLogger, setLogLevel, logit, ident, _newID, logident
 from .rfBase import rfBase
 from .rfObject import rfObject
-from .circuit import circuit # will be obsolete
+# from .circuit import circuit # will be obsolete
 from .rfCircuit import rfCircuit
 from .rfTRL import rfTRL
 from .rfRLC import rfRLC
 from .rfGTL import rfGTL
 from .rfArcObj import rfArcObj
-from .rf3dBHybrid import rf3dBHybrid
+from src.pyRFtk import rfCoupler
 
 from .S_from_Z import S_from_Z
 from .S_from_Y import S_from_Y

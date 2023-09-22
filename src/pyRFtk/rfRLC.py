@@ -10,7 +10,7 @@ Created on 30 Mar 2021
 
 @author: frederic
 """
-__updated__ = "2022-04-22 12:33:15"
+__updated__ = "2023-09-21 15:29:27"
 
 import numpy as np
 import copy
@@ -167,6 +167,9 @@ class rfRLC():
     #
     def set(self, **kwargs):
         
+        _debug_ = logit['DEBUG']
+        _debug_ and logident('>', printargs=True)
+
         modified = False
         for kw, val in kwargs.items():
             if not hasattr(self, kw) or kw not in self.attrs:
@@ -178,6 +181,8 @@ class rfRLC():
         
         if modified:
             self.f, self.S = None, None
+            
+        _debug_ and logident('<')
             
         return modified
     

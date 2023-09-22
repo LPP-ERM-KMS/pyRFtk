@@ -1,4 +1,4 @@
-__updated__ = "2023-03-15 15:45:33"
+__updated__ = "2023-09-22 13:39:21"
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -1119,114 +1119,125 @@ class rfCircuit(rfBase):
             rfCircuitA.set('rfRLC1.Ls', 20e-9)
             rfCircuitA.set('rfCircuitB.rfTRL1', {'L:1.0})
             
+            
+            The purpose of the different formalisms:
+            
+                .set('kw', {attr1: val1, attr2: val2}, ...)
+            or  .set(('kw', {attr1: val1, attr2: val2}), ...)
+            or  .set(kw = {attr1: val1, attr2: val2}, ...)
+            
+            is to be able to set multiple attributes at once.
+            
+            in case a single attribute needs to be set:
+            
+                 .set('kw.attr', val, ...)
+            or   .set(('kw.attr', val), ... )
+            but  .set(kw.attr = val, ... )               will not work !!
+            thus .set(kw = {'attr': val}, ... }
+            
+            The kwarg formulation is more restrictive if one wants to loop
+            over multiple objects where one wants to set the attributes.
+            
+            Possibly the kwarg formalism need to be cancelled ?
+            
         """
+        #TODO: set should be made recursive as well
         
         debug = logit['DEBUG']
         debug and logident(f'>', printargs=True)
         
         modified = False
 
+        # unpack args and add them to kwargs
         if args:
-            # update the kwargs with the args supplied
-            if len(args) == 2:
-                if isinstance(args[0],str):
-                    # set(str1,val1, kw=aval, ...)
-                    kwargs = dict([args], **kwargs)
-                    args = ()
-                    
-                elif (all([isinstance(arg, list) for arg in args]) and
-                      all([isinstance(t_,str) for t_ in args[0]]) and
-                      len(args[0]) == len(args[1]) ):
-                    # set([str1, str2, ...],[val1, val2, ...], kw=aval, ...)
-                    kwargs = dict(zip(args[0],args[1]), **kwargs)
-                    args = ()
-        
-            for arg in args:
-                if isinstance(arg, dict):
-                    #set(..., {kw1:val1, ...}, ... , kw=aval, ...)
-                    kwargs = dict(arg, **kwargs)
-                    
-                elif isinstance(arg, tuple):
-                    #set(..., (kw1, val1), ... , kw=aval, ...)
-                    kwargs = dict({arg[0]:arg[1]},**kwargs)
-        
-        # progess the kwargs
-        for kw, val in kwargs.items():
             
-            obj = self
-                        
-            if isinstance(val, (float,int)):
-                if '.' in kw:
-                    # composed/chained locator 'obj,obj1. ... .attr'
-                    hd, tl = (kw.split('.',1)+[''])[:2]
-                    while tl:
-                        obj = obj.blocks[hd]['object']
-                        hd, tl = (tl.split('.',1)+[''])[:2]
-                    # hd is now the obj's attr
-                    attr = hd
- 
-                elif hasattr(obj, kw) and kw in obj.attrs:
-                # must be an obj's attribure but this can not be
-                    attr = kw
-
+            debug and logident('if args -> True')
+            debug and logident(str(args))
+            
+            largs = list(args)
+            while largs:
+                ak = largs.pop(0)
+                debug and logident(f'  ak = {ak}')
+                
+                if isinstance(ak, tuple) and len(ak) == 2:
+                    kwargs = dict([ak], **kwargs)
+                    
+                elif isinstance(ak,str) and len(largs)>0:
+                    vk = largs.pop(0)
+                    kwargs = dict([(ak,vk)], **kwargs)
+                
                 else:
                     raise ValueError(
-                        f'{whoami(__package__)}: {obj.Id} has no attribute {kw}'  
-                        ' that can be set'
+                        f'{whoami(__package__)}: {self.Id} '
+                        'did not find a tuple of length 2 or a \'kw\' value pair'
+                        ' in supplied args'
                     )
                     
-                try:
-                    modified |= obj.set(**{attr:val})
-                except AttributeError:
-                    raise ValueError(
-                        f'{whoami(__package__)}: {obj.Id} has no set method'  
-                )
-                
-
-            elif isinstance(val, dict):
-                if kw in self.blocks:
-                #single locator (in that case val better be a dict)
-                    tl = kw
-                    obj = self.blocks[kw]['object']
             
-            else:
-                raise ValueError(
-                    f'{whoami(__package__)}: {obj.Id} '  
-                )    
-                
-            #Arthur Mod:
-            #try:
-            #    modified |= getattr(obj, tl) != val 
-            #    obj.set(**val)
-                
-            #except AttributeError:
-            #    raise ValueError(
-            #        f'{whoami(__package__)}: {obj.Id} has no set method'  
-            #    )
+            debug and logident(f'-> kwargs = {kwargs}')
+            
+        # progess the kwargs
+        debug and logident('starting kwargs loop ...')
 
-            # else:
-            #     attr = kw[1:]
-            #     if hasattr(self, attr):
-            #         modified |= self.__getattr__(attr) != val
-            #         self.__setattr__(attr, val)
-            #     else:
-            #         raise ValueError(
-            #             f'{whoami(__package__)}: {self.Id} has no attribute {attr}'
-            #         )
-                    
-        # for blkID, blk in self.blocks.items():
-        #     if hasattr(blk,'set'):
-        #         blk['object'].set(**kwargs.pop(blkID,{}))
-        #     elif blkID in kwargs:
-        #         raise ValueError(
-        #             f'{whoami(__package__)}: tried to set params for {blkID} '
-        #             f'but the object has no \'set\' attribute')
+        processed = []
+        for kw, val in kwargs.items():
+            
+            debug and logident(f'  processing kw={kw},val={val}')  
+            processed.append(kw)
+            
+            if not isinstance(val, dict):
+                # need to check if type val makes sense: expect int, float or complex
                 
+                # in this case the kw ends with the attribute to be modified
+                # so we change the kw = obj.attr, val  to obj, {attr, val}
+                try:
+                    kw, attr = kw.rsplit('.',1)
+                except:
+                    raise ValueError(
+                        f'{whoami(__package__)}: {self.Id} '
+                        f'as the value supplied is not a dict the object locator'
+                        f' \'{kw}\' should terminate with .attr of the object'
+                        ' whose attribute is to be set'
+                    )
+                val = {attr: val}
+                 
+            # kw now points to an object
+            block, rest = (kw.split('.',1) + [''])[:2]
+            obj = self.blocks[block]['object']
+            # recursively call the block's set method
+            try:
+                if rest:
+                    # block is a rfCircuit itself
+                    modified |= obj.set(rest, val)
+                
+                else:
+                    # block is an rf object with a set method: e.g. rfRLC, ...
+                    modified |= obj.set(**val)
+                    
+            except AttributeError:
+                raise ValueError(
+                    f'{whoami(__package__)}: {obj.Id} has no \'set\' attribute'
+                )
+            
+            except:
+                raise
+            
+            attr = [kw for kw in val][0]
+            debug and logident(
+                f'{obj.Id}.{attr} -> {getattr(obj,attr)}'
+            )
+                       
         if modified:
             self.invM = None # mark the circuit as not solved
-        
+            self.f = None
+            self.S = None
+            
+        # removes the processed kwargs 
+        for kw in processed:
+            kwargs.pop(kw)
+               
         if kwargs:
-            print(f'circuit.set: unused kwargs:\n{kwargs}')
+            print(f'{whoami(__package__)}: {self.Id} : unused kwargs:\n{kwargs}')
         
         debug and logident(f'<')
         
