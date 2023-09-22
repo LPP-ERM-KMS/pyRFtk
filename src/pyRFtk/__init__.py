@@ -53,7 +53,7 @@ from .rfTRL import rfTRL
 from .rfRLC import rfRLC
 from .rfGTL import rfGTL
 from .rfArcObj import rfArcObj
-from src.pyRFtk import rfCoupler
+from .rfCoupler import rfCoupler
 
 from .S_from_Z import S_from_Z
 from .S_from_Y import S_from_Y
