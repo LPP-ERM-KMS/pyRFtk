@@ -1,49 +1,3 @@
-"""
-Arnold's Laws of Documentation:
-    (1) If it should exist, it doesn't.
-    (2) If it does exist, it's out of date.
-    (3) Only documentation for useless programs transcends the first two laws.
-
-Created on 10 Feb 2021
-
-@author: frederic
-
-this implements a circuit class for manipulating RFbase objects
-
-RFobject must implement following methods/attributes
-    (attribute) Zbase     float
-    (attribute) ports     list of strings
-    (method)    __len__   integer = number of ports (#p)
-    (method)    getS      input:
-                            fs float or list/array of floats, frequencies in Hz 
-                            Zbase float, 
-                            params dict
-                          output:
-                          - list/array of f's -> array of Smatrices [#f,#p,#p]
-                             single f -> single Smatrix [#p,#p]
-                          - the resulting Smatrices are converted to Zbase if 
-                            given else the Smatrix is given in the circuit's
-                            Zbase (default 50 Ohm)
-    (method)    set       *args, **kwargs
-                     
-    
-circuit building methods
-    addblock(name, RFobj, ports, params)
-    connect(*ports)
-    terminate(port, Z=complex | Y=complex | RC=complex)
-
-
-unused ports automatically become external ports
-
-TODO: rename and order external ports as requested
-TODO: rethink on how to set parameters
-TODO: check logic for the status of solved or not
-TODO: use external sNp if available
-
-"""
-
-__updated__ = "2022-03-22 09:34:07"
-
 if __name__ == '__main__':
     import sys
     sys.path.append('../pyRFtk test')
@@ -68,6 +22,42 @@ from .config import logit, tLogger, ident, _newID, logident
 # c i r c u i t
 #
 class circuit():
+    """
+    .. deprecated::
+        'circuit' has been replaced by 'rfCircuit' but kept here for compatibility with legacy code
+
+    this implements a circuit class for manipulating RFbase objects
+
+    RFobject must implement following methods/attributes
+        (attribute) Zbase     float
+        (attribute) ports     list of strings
+        (method)    __len__   integer = number of ports (#p)
+        (method)    getS      input:
+                                fs float or list/array of floats, frequencies in Hz 
+                                Zbase float, 
+                                params dict
+                              output:
+                              - list/array of f's -> array of Smatrices [#f,#p,#p]
+                                 single f -> single Smatrix [#p,#p]
+                              - the resulting Smatrices are converted to Zbase if 
+                                given else the Smatrix is given in the circuit's
+                                Zbase (default 50 Ohm)
+        (method)    set       *args, **kwargs
+                         
+        
+    circuit building methods
+        addblock(name, RFobj, ports, params)
+        connect(*ports)
+        terminate(port, Z=complex | Y=complex | RC=complex)
+
+
+unused ports automatically become external ports
+"""
+#TODO: rename and order external ports as requested
+#TODO: rethink on how to set parameters
+#TODO: check logic for the status of solved or not
+#TODO: use external sNp if available
+
     #===========================================================================
     #
     # _ _ i n i t _ _

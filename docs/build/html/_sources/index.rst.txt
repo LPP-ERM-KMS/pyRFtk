@@ -1,7 +1,7 @@
 Welcome to pyRFtk's documentation!
 ==================================
-**pyRFtk** is a Python library which can be used to build and analyse RF circuits, it was originally designed
-for ICRH antennae but is now made widely deployable.
+**pyRFtk** is a Python library which can be used to build and analyse RF circuits, with it's various modules and it's
+ability to incorporate touchstone files it is a widely deployable and capable RF circuit solver.
 
 .. note::
    This project is under active development.
@@ -9,8 +9,8 @@ for ICRH antennae but is now made widely deployable.
 Contents
 --------
 .. toctree::
-        usage
-        TOMAS
+        Tutorials
+        Examples
 
 
 Indices and tables

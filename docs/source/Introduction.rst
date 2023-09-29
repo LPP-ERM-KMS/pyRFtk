@@ -1,14 +1,5 @@
-Usage
+Introduction
 ==================================
-Installation
----------------------------------
-To install the program you'll just have to move to the folder "dist" where the
-install file is located and run 
-
-.. code-block:: console
-
-        (.venv) $pip install pyrftk2-2.0.0-py3-none-any.whl
-
 Max voltage i.f.o distance
 --------------------------
 We'll start by looking at a simple circuit, below the code is given and below that
