@@ -24,4 +24,4 @@ the following to your .zshrc:
 
 Dependencies
 ------------
-The software is dependent on numpy and matplotlib
+The software is dependent on numpy, scipy and matplotlib
