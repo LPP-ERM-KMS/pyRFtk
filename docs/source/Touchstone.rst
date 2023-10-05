@@ -1,20 +1,22 @@
 Touchstone files
 ================
 To incorporate touchstone files in a circuit we can make use of the rfObject class.
-We'll showcase the use using the TOMAS ICRH matching circuit, of which a diagram is shown below
+We'll showcase this capability using the TOMAS ICRH matching circuit, of which a diagram is shown below
 
-.. figure:: Images/SimpleCircuit.png
+.. figure:: Images/TomasCircuit.png
+
+We have the touchstone file for the antenna, to create the circuit we 
 
 .. code-block:: python
 
         from pyRFtk import rfCircuit, rfTRL, rfRLC, rfObject, rfCoupler
         from pyRFtk import plotVSWs
 
-        TRLPart1 = rfTRL(L=0.549, OD=0.041, ID=0.017, dx=500)
-        TRLPart2 = rfTRL(L=1.54, OD=0.041, ID=0.017, dx=500)
-        TRLPart3 = rfTRL(L=1.856, OD=0.041, ID=0.017, dx=500)
-        TRLPart4 = rfTRL(L=1.54, OD=0.041, ID=0.017, dx=500)
-        TRLPart5 = rfTRL(L=0.514, OD=0.041, ID=0.017, dx=500)
+        TRLPart1 = rfTRL(L=, OD=0.041, ID=0.017, dx=500)
+        TRLPart2 = rfTRL(L=, OD=0.041, ID=0.017, dx=500)
+        TRLPart3 = rfTRL(L=, OD=0.041, ID=0.017, dx=500)
+        TRLPart4 = rfTRL(L=, OD=0.041, ID=0.017, dx=500)
+        TRLPart5 = rfTRL(L=, OD=0.041, ID=0.017, dx=500)
         #load S matrix of antenna
         Antenna = rfObject(touchstone='tomas_icrh_linear_2017-vacuum.s2p')
         RLCLeft = rfRLC(Cs=CsVal,Cp=CpVal)

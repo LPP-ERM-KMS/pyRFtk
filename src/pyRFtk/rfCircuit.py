@@ -362,57 +362,7 @@ class rfCircuit(rfBase):
         State of the rfCircuit object: it solves for (Sinternal is not
         explicitly known)
         
-        +-------------------------------------------------+
-        |                 Sexternal                       |
-        |                                                 |
-        |    +-------------+                              |
-        |    |  Sinternal  |                              |
-        |    |            ( )----------------------------( )
-        |    |             |               :              |
-        |    |             |               :              |
-        |    |             |               :              |
-        |    |            ( )----------------------------( )
-        |    |             |                              |
-        |    |             |         +---------+          |
-        |    |             |         | Deembed |          |
-        |    |             |         |         |          |
-        |    |            ( )-------( )       ( )--------( )
-        |    |             |    :    |         |     :    |
-        |    |       ip    |    :    | dpi dpe |     :    | ep
-        |    |             |    :    |         |     :    |
-        |    |            ( )-------( )       ( )--------( )
-        |    |             |         |         |          |
-        |    +-------------+         +---------+          |
-        |                                                 |
-        +-------------------------------------------------+
-    
-        known: Sexternal (SE), Deembed (SD)
-        find : Sinternal (SI)
-    
-        IntPorts = {dpi:ip, ...}
-        ExtPorts = {dpe:ep, ...}
         
-        The result is the rfCircuit object solving for
-        
-        +-------------+ 
-        |  Sinternal  | 
-        |            ( )
-        |             | 
-        |             | 
-        |             | 
-        |            ( )
-        |             | 
-        |             | 
-        |             | 
-        |             | 
-        |            ( )
-        |             | 
-        |       ip    | 
-        |             | 
-        |            ( )
-        |             | 
-        +-------------+ 
-
 
         :param IntPorts: list of size 2 tuples or dict
                 [ (rfCircuit.port, rfCircuit.port_new), ... ] or
