@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>S-matrix and combining circuits &#8212; pyRFtk 2.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=514cf933" />
+    
+    <script src="_static/documentation_options.js?v=51b770b3"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyRFtk 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">S-matrix and combining circuits</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="s-matrix-and-combining-circuits">
+<h1>S-matrix and combining circuits<a class="headerlink" href="#s-matrix-and-combining-circuits" title="Link to this heading">¶</a></h1>
+<p>The program is capable of combining circuits and calculating the S matrix for
+given frequencies, an example is given below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyRFtk</span> <span class="kn">import</span> <span class="n">rfCircuit</span><span class="p">,</span> <span class="n">rfTRL</span>
+<span class="kn">from</span> <span class="nn">pyRFtk.printMatrices</span> <span class="kn">import</span> <span class="n">printMA</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">rfCircuit</span><span class="p">()</span>
+<span class="n">A</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TL1&#39;</span><span class="p">,</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">A</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TL2&#39;</span><span class="p">,</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">A</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;TL1.1&#39;</span><span class="p">,</span><span class="s1">&#39;TL2.1&#39;</span><span class="p">,</span><span class="s1">&#39;TA&#39;</span><span class="p">)</span>
+
+<span class="n">B</span> <span class="o">=</span> <span class="n">rfCircuit</span><span class="p">()</span>
+<span class="n">B</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TL1&#39;</span><span class="p">,</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">B</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TL2&#39;</span><span class="p">,</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">B</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;TL1.1&#39;</span><span class="p">,</span><span class="s1">&#39;TL2.1&#39;</span><span class="p">,</span><span class="s1">&#39;TB&#39;</span><span class="p">)</span>
+
+<span class="n">C</span> <span class="o">=</span> <span class="n">rfCircuit</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TL3&#39;</span><span class="p">,</span><span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">C</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;A.TA&#39;</span><span class="p">,</span><span class="s1">&#39;B.TB&#39;</span><span class="p">,</span><span class="s1">&#39;TL3.1&#39;</span><span class="p">)</span>
+
+<span class="n">printMA</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">getS</span><span class="p">(</span><span class="mf">1E6</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Here we create a circuit C consisting of a transmission line of length 0, which has as an input
+(if no port names are given, 1 is the left input and 2 is the right output) of A and B, each of
+which are two 0 lenght coax cables of which the inputs are wired together.</p>
+<p>We calculate the S matrix at 1MHz and print it using printMA, this funciton makes it posible
+to print complex matrices in easy to read format, e.g it will give an output <em>0.6 +180°</em> impying</p>
+<div class="math notranslate nohighlight">
+\[\rho e^{i\theta} = 0.6 e^{i\pi} = -0.6\]</div>
+</section>
+<section id="multiple-ports-and-logging">
+<h1>Multiple ports and Logging<a class="headerlink" href="#multiple-ports-and-logging" title="Link to this heading">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyRFtk</span> <span class="kn">import</span> <span class="n">rfCircuit</span><span class="p">,</span> <span class="n">rfTRL</span><span class="p">,</span> <span class="n">plotVSWs</span>
+<span class="kn">from</span> <span class="nn">pyRFtk.printMatrices</span> <span class="kn">import</span> <span class="n">printMA</span>
+<span class="kn">from</span> <span class="nn">pyRFtk.config</span> <span class="kn">import</span> <span class="n">setLogLevel</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">TRL1</span> <span class="o">=</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;1a&#39;</span><span class="p">,</span><span class="s1">&#39;1b&#39;</span><span class="p">])</span>
+<span class="n">TRL2</span> <span class="o">=</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;2a&#39;</span><span class="p">,</span><span class="s1">&#39;2b&#39;</span><span class="p">])</span>
+
+<span class="n">CT1</span> <span class="o">=</span> <span class="n">rfCircuit</span><span class="p">()</span>
+<span class="n">CT1</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TRL1&#39;</span><span class="p">,</span> <span class="n">TRL1</span><span class="p">,</span> <span class="n">relpos</span><span class="o">=</span> <span class="mf">0.</span> <span class="p">)</span>
+<span class="n">CT1</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TRL2&#39;</span><span class="p">,</span> <span class="n">TRL2</span><span class="p">,</span> <span class="n">relpos</span><span class="o">=</span> <span class="mf">1.1</span> <span class="p">)</span>
+<span class="n">CT1</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;TRL1.1b&#39;</span><span class="p">,</span><span class="s1">&#39;TRL2.2a&#39;</span><span class="p">)</span>
+
+<span class="n">TRL3</span> <span class="o">=</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;3a&#39;</span><span class="p">,</span><span class="s1">&#39;3b&#39;</span><span class="p">])</span>
+<span class="n">TRL4</span> <span class="o">=</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mf">1.4</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;4a&#39;</span><span class="p">,</span><span class="s1">&#39;4b&#39;</span><span class="p">])</span>
+<span class="n">CT2</span> <span class="o">=</span> <span class="n">rfCircuit</span><span class="p">()</span>
+<span class="n">CT2</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TRL3&#39;</span><span class="p">,</span> <span class="n">TRL3</span><span class="p">,</span> <span class="n">relpos</span><span class="o">=</span> <span class="mf">0.</span> <span class="p">)</span>
+<span class="n">CT2</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TRL4&#39;</span><span class="p">,</span> <span class="n">TRL4</span><span class="p">,</span> <span class="n">relpos</span><span class="o">=</span> <span class="mf">1.3</span><span class="p">)</span>
+<span class="n">CT2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;TRL3.3b&#39;</span><span class="p">,</span><span class="s1">&#39;TRL4.4a&#39;</span><span class="p">)</span>
+<span class="n">CT2</span><span class="o">.</span><span class="n">terminate</span><span class="p">(</span><span class="s1">&#39;TRL4.4b&#39;</span><span class="p">,</span> <span class="n">RC</span><span class="o">=</span><span class="mf">0.5</span><span class="n">j</span><span class="p">)</span>
+
+<span class="n">CT3</span> <span class="o">=</span> <span class="n">rfCircuit</span><span class="p">()</span>
+<span class="n">CT3</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;CT1&#39;</span><span class="p">,</span> <span class="n">CT1</span><span class="p">,</span> <span class="n">relpos</span><span class="o">=</span> <span class="mf">0.</span> <span class="p">)</span>
+<span class="n">CT3</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;CT2&#39;</span><span class="p">,</span> <span class="n">CT2</span><span class="p">,</span> <span class="n">relpos</span><span class="o">=</span> <span class="mf">0.</span> <span class="p">)</span>
+<span class="n">CT3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;CT1.TRL1.1a&#39;</span><span class="p">,</span><span class="s1">&#39;CT2.TRL3.3a&#39;</span><span class="p">,</span><span class="s1">&#39;ct1&#39;</span><span class="p">)</span>
+
+<span class="n">CT4</span> <span class="o">=</span> <span class="n">rfCircuit</span><span class="p">(</span><span class="n">Id</span><span class="o">=</span><span class="s1">&#39;Duh&#39;</span><span class="p">)</span>
+<span class="n">CT4</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;TRL5&#39;</span><span class="p">,</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;5a&#39;</span><span class="p">,</span><span class="s1">&#39;5b&#39;</span><span class="p">]),</span> <span class="n">relpos</span><span class="o">=</span> <span class="mf">0.</span> <span class="p">)</span>
+<span class="n">CT4</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;CT3&#39;</span><span class="p">,</span> <span class="n">CT3</span><span class="p">,</span> <span class="n">relpos</span><span class="o">=</span> <span class="mf">2.5</span> <span class="p">)</span>
+<span class="n">CT4</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;TRL5.5b&#39;</span><span class="p">,</span><span class="s1">&#39;CT3.ct1&#39;</span><span class="p">)</span>
+
+<span class="n">setLogLevel</span><span class="p">(</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">)</span>
+<span class="n">maxV</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">VSWs</span> <span class="o">=</span> <span class="n">CT4</span><span class="o">.</span><span class="n">maxV</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="mf">45e6</span><span class="p">,</span> <span class="n">E</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;TRL5.5a&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;CT3.CT1.TRL2.2b&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">})</span>
+<span class="n">setLogLevel</span><span class="p">(</span><span class="s1">&#39;CRITICAL&#39;</span><span class="p">)</span>
+<span class="n">plotVSWs</span><span class="p">(</span><span class="n">VSWs</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here we excite two ports: TRL5.5a with a 1V wave and CT3.CT1.TRL2.2b with a 0.5V wave. As can be seen in the code</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">S-matrix and combining circuits</a></li>
+<li><a class="reference internal" href="#multiple-ports-and-logging">Multiple ports and Logging</a></li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/backup.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyRFtk 2.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">S-matrix and combining circuits</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, Frederic Durodie and Arthur Adriaens.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
+    </div>
+  </body>
+</html>

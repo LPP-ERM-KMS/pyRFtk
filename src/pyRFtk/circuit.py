@@ -23,7 +23,7 @@ from .config import logit, tLogger, ident, _newID, logident
 #
 class circuit():
     """
-    .. deprecated::
+    .. deprecated:: 1.0.0
         'circuit' has been replaced by 'rfCircuit' but kept here for compatibility with legacy code
 
     this implements a circuit class for manipulating RFbase objects

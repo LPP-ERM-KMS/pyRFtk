@@ -42,16 +42,6 @@
 </section>
 <section id="module-pyRFtk.ConvertGeneral">
 <span id="pyrftk-convertgeneral-module"></span><h2>pyRFtk.ConvertGeneral module<a class="headerlink" href="#module-pyRFtk.ConvertGeneral" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 18 Dec 2020</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.ConvertGeneral.ConvertGeneral">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.ConvertGeneral.</span></span><span class="sig-name descname"><span class="pre">ConvertGeneral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Z1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'V'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'V'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.ConvertGeneral.ConvertGeneral" title="Link to this definition">¶</a></dt>
@@ -123,16 +113,6 @@ and return the dict object</p>
 </section>
 <section id="module-pyRFtk.ReadTSF">
 <span id="pyrftk-readtsf-module"></span><h2>pyRFtk.ReadTSF module<a class="headerlink" href="#module-pyRFtk.ReadTSF" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 18 Dec 2020</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.ReadTSF.ReadTSF">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.ReadTSF.</span></span><span class="sig-name descname"><span class="pre">ReadTSF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.ReadTSF.ReadTSF" title="Link to this definition">¶</a></dt>
@@ -152,55 +132,16 @@ and return the dict object</p>
 </section>
 <section id="module-pyRFtk.S_from_VI">
 <span id="pyrftk-s-from-vi-module"></span><h2>pyRFtk.S_from_VI module<a class="headerlink" href="#module-pyRFtk.S_from_VI" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 17 Feb 2021</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.S_from_VI.S_from_VI">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.S_from_VI.</span></span><span class="sig-name descname"><span class="pre">S_from_VI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Z0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.S_from_VI.S_from_VI" title="Link to this definition">¶</a></dt>
-<dd><dl>
-<dt>returns the S on reference imedance Z0 from the VI transformation matrix M :</dt><dd><blockquote>
-<div><blockquote>
-<div></div></blockquote>
-<p>I2    |  [V2]       [V1]  |         I1</p>
-</div></blockquote>
-<dl>
-<dt>—–&gt;—-+  [  ] = M . [  ]  +———&gt;—–</dt><dd><blockquote>
-<div><p>^    |  [I2]       [I1]  |         ^</p>
-</div></blockquote>
-<dl>
-<dt>V2  |    |                   |         | V1</dt><dd><div class="line-block">
-<div class="line">+——————-+         |</div>
-</div>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
+<dd><p>returns the S on reference imedance Z0 from the VI transformation matrix M :</p>
 <p>note S is defined for an oposite sign of I1 shown above (i.e. standard)</p>
 </dd></dl>
 
 </section>
 <section id="module-pyRFtk.S_from_Y">
 <span id="pyrftk-s-from-y-module"></span><h2>pyRFtk.S_from_Y module<a class="headerlink" href="#module-pyRFtk.S_from_Y" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 18 Dec 2020</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.S_from_Y.S_from_Y">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.S_from_Y.</span></span><span class="sig-name descname"><span class="pre">S_from_Y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.S_from_Y.S_from_Y" title="Link to this definition">¶</a></dt>
@@ -212,16 +153,6 @@ admittance matrix Y</p>
 </section>
 <section id="module-pyRFtk.S_from_Z">
 <span id="pyrftk-s-from-z-module"></span><h2>pyRFtk.S_from_Z module<a class="headerlink" href="#module-pyRFtk.S_from_Z" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 18 Dec 2020</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.S_from_Z.S_from_Z">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.S_from_Z.</span></span><span class="sig-name descname"><span class="pre">S_from_Z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.S_from_Z.S_from_Z" title="Link to this definition">¶</a></dt>
@@ -233,16 +164,6 @@ impedance matrix Z</p>
 </section>
 <section id="module-pyRFtk.Y_from_S">
 <span id="pyrftk-y-from-s-module"></span><h2>pyRFtk.Y_from_S module<a class="headerlink" href="#module-pyRFtk.Y_from_S" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 18 Dec 2020</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.Y_from_S.Y_from_S">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.Y_from_S.</span></span><span class="sig-name descname"><span class="pre">Y_from_S</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.Y_from_S.Y_from_S" title="Link to this definition">¶</a></dt>
@@ -254,16 +175,6 @@ admittance matrix Y</p>
 </section>
 <section id="module-pyRFtk.Z_from_S">
 <span id="pyrftk-z-from-s-module"></span><h2>pyRFtk.Z_from_S module<a class="headerlink" href="#module-pyRFtk.Z_from_S" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 18 Dec 2020</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.Z_from_S.Z_from_S">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.Z_from_S.</span></span><span class="sig-name descname"><span class="pre">Z_from_S</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.Z_from_S.Z_from_S" title="Link to this definition">¶</a></dt>
@@ -281,7 +192,7 @@ impedance matrix Z</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <blockquote>
 <div><div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version ‘circuit’: </span>has been replaced by ‘rfCircuit’ but kept here for compatibility with legacy code</p>
+<p><span class="versionmodified deprecated">Deprecated since version 1.0.0: </span>‘circuit’ has been replaced by ‘rfCircuit’ but kept here for compatibility with legacy code</p>
 </div>
 <p>this implements a circuit class for manipulating RFbase objects</p>
 <dl>
@@ -430,16 +341,6 @@ self.Zbase) and flags (defaults to no flags) at frequency f</p>
 </section>
 <section id="module-pyRFtk.codebase">
 <span id="pyrftk-codebase-module"></span><h2>pyRFtk.codebase module<a class="headerlink" href="#module-pyRFtk.codebase" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 10 Nov 2021</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.codebase.list1dir">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.codebase.</span></span><span class="sig-name descname"><span class="pre">list1dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.codebase.list1dir" title="Link to this definition">¶</a></dt>
@@ -456,16 +357,6 @@ self.Zbase) and flags (defaults to no flags) at frequency f</p>
 </section>
 <section id="module-pyRFtk.config">
 <span id="pyrftk-config-module"></span><h2>pyRFtk.config module<a class="headerlink" href="#module-pyRFtk.config" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 20 Dec 2020</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.config.CleanUpLogFile">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.config.</span></span><span class="sig-name descname"><span class="pre">CleanUpLogFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.config.CleanUpLogFile" title="Link to this definition">¶</a></dt>
@@ -499,27 +390,6 @@ self.Zbase) and flags (defaults to no flags) at frequency f</p>
 </section>
 <section id="module-pyRFtk.findpath">
 <span id="pyrftk-findpath-module"></span><h2>pyRFtk.findpath module<a class="headerlink" href="#module-pyRFtk.findpath" title="Link to this heading">¶</a></h2>
-<p>Created on 26 Aug 2015</p>
-<p>&#64;author: <a class="reference external" href="mailto:frederic&#46;durodie&#37;&#52;&#48;gmail&#46;com">frederic<span>&#46;</span>durodie<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
-<p>this version of findpath should find a filepath in a more predictable and
-restricted manner</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Date</p></th>
-<th class="head"><p>Comment</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>2015-Aug-27</p></td>
-<td><p>made userdirs the second argument and set its default to [‘.’]
-this allows to partially keep the former call signature
-e.g. findpath(fpattern,’../../../’)</p></td>
-</tr>
-<tr class="row-odd"><td><p>2015-Aug-26</p></td>
-<td><p>modified from the original findpath</p></td>
-</tr>
-</tbody>
-</table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.findpath.existspath">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.findpath.</span></span><span class="sig-name descname"><span class="pre">existspath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userdirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['.']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envvar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">appdirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missingOK</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.findpath.existspath" title="Link to this definition">¶</a></dt>
@@ -556,16 +426,6 @@ in the order of appearance in the environment variable
 </section>
 <section id="module-pyRFtk.maxfun">
 <span id="pyrftk-maxfun-module"></span><h2>pyRFtk.maxfun module<a class="headerlink" href="#module-pyRFtk.maxfun" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 17 Feb 2021</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.maxfun.maxfun">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.maxfun.</span></span><span class="sig-name descname"><span class="pre">maxfun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.maxfun.maxfun" title="Link to this definition">¶</a></dt>
@@ -592,21 +452,6 @@ in the order of appearance in the environment variable
 </section>
 <section id="module-pyRFtk.printMatrices">
 <span id="pyrftk-printmatrices-module"></span><h2>pyRFtk.printMatrices module<a class="headerlink" href="#module-pyRFtk.printMatrices" title="Link to this heading">¶</a></h2>
-<p>Created on 23 Jul 2015</p>
-<p>&#64;author: <a class="reference external" href="mailto:frederic&#46;durodie&#37;&#52;&#48;telenet&#46;be">frederic<span>&#46;</span>durodie<span>&#64;</span>telenet<span>&#46;</span>be</a></p>
-<p>useful functions for printing matrices in a formatted manner</p>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Date</p></th>
-<th class="head"><p>Comment</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.printMatrices.printDB">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.printMatrices.</span></span><span class="sig-name descname"><span class="pre">printDB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%7.3f%+7.1f°,</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printzeros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.printMatrices.printDB" title="Link to this definition">¶</a></dt>
@@ -646,16 +491,6 @@ in the order of appearance in the environment variable
 </section>
 <section id="module-pyRFtk.resolveTLparams">
 <span id="pyrftk-resolvetlparams-module"></span><h2>pyRFtk.resolveTLparams module<a class="headerlink" href="#module-pyRFtk.resolveTLparams" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 23 Feb 2021</p>
-<p>&#64;author: frederic</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyRFtk.resolveTLparams.TLresolver">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.resolveTLparams.</span></span><span class="sig-name descname"><span class="pre">TLresolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.resolveTLparams.TLresolver" title="Link to this definition">¶</a></dt>
@@ -1103,17 +938,6 @@ or leave it open by specifying Y=0</p>
 </section>
 <section id="module-pyRFtk.rfObject">
 <span id="pyrftk-rfobject-module"></span><h2>pyRFtk.rfObject module<a class="headerlink" href="#module-pyRFtk.rfObject" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 18 Dec 2020</p>
-<p>&#64;author: frederic</p>
-<p>This is a template for a rfObject: but it may be obsoleted …</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.rfObject.</span></span><span class="sig-name descname"><span class="pre">rfObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject" title="Link to this definition">¶</a></dt>
@@ -1213,16 +1037,6 @@ Zbase or a 2-tuple (L, Z) or a dict which is passed as kwargs to rfTRL.</p>
 </section>
 <section id="module-pyRFtk.rfRLC">
 <span id="pyrftk-rfrlc-module"></span><h2>pyRFtk.rfRLC module<a class="headerlink" href="#module-pyRFtk.rfRLC" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 30 Mar 2021</p>
-<p>&#64;author: frederic</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyRFtk.rfRLC.rfRLC">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.rfRLC.</span></span><span class="sig-name descname"><span class="pre">rfRLC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfRLC.rfRLC" title="Link to this definition">¶</a></dt>
@@ -1470,16 +1284,6 @@ V1=self.U[-1], I1= self.I[-1].</p>
 </section>
 <section id="module-pyRFtk.str_dict">
 <span id="pyrftk-str-dict-module"></span><h2>pyRFtk.str_dict module<a class="headerlink" href="#module-pyRFtk.str_dict" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 14 Dec 2021</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.str_dict.str_dict">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.str_dict.</span></span><span class="sig-name descname"><span class="pre">str_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.str_dict.str_dict" title="Link to this definition">¶</a></dt>
@@ -1501,16 +1305,6 @@ V1=self.U[-1], I1= self.I[-1].</p>
 </section>
 <section id="module-pyRFtk.whoami">
 <span id="pyrftk-whoami-module"></span><h2>pyRFtk.whoami module<a class="headerlink" href="#module-pyRFtk.whoami" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 4 Nov 2021</p>
-<p>&#64;author: frederic</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyRFtk.whoami.whoami">
 <span class="sig-prename descclassname"><span class="pre">pyRFtk.whoami.</span></span><span class="sig-name descname"><span class="pre">whoami</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.whoami.whoami" title="Link to this definition">¶</a></dt>
@@ -1519,16 +1313,6 @@ V1=self.U[-1], I1= self.I[-1].</p>
 </section>
 <section id="module-pyRFtk">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pyRFtk" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>Arnold’s Laws of Documentation:</dt><dd><ol class="arabic simple">
-<li><p>If it should exist, it doesn’t.</p></li>
-<li><p>If it does exist, it’s out of date.</p></li>
-<li><p>Only documentation for useless programs transcends the first two laws.</p></li>
-</ol>
-</dd>
-</dl>
-<p>Created on 18 Dec 2020</p>
-<p>&#64;author: frederic</p>
 </section>
 </section>
 
