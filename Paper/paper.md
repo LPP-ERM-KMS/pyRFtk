@@ -43,7 +43,15 @@ since 19?? and has appeared in numerous papers [@??]
 
 # Mathematics
 
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
+The program solves the telegrapher's equations, i.e assuming that the conductors are composed of an infinite series of 
+two-port elementary components. 
+
+The telegrapher's equations in the time domain are :
+
+$$\frac{\partial}{\partial x} V(x,t) = -L \frac{\partial}{\partial t} I(x,t) - R I(x,t)$$
+$$\frac{\partial}{\partial x} I(x,t) = -C \frac{\partial}{\partial t} V(x,t) - G V(x,t)$$
+
+Which can be combined
 
 Double dollars make self-standing equations:
 
