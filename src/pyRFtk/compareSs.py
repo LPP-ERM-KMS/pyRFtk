@@ -1,16 +1,4 @@
 __updated__ = '2021-10-14 10:02:38'
-
-"""
-Arnold's Laws of Documentation:
-    (1) If it should exist, it doesn't.
-    (2) If it does exist, it's out of date.
-    (3) Only documentation for useless programs transcends the first two laws.
-
-Created on 7 Oct 2021
-
-@author: frederic
-"""
-
 import numpy as np
 import matplotlib.pyplot as pl
 
