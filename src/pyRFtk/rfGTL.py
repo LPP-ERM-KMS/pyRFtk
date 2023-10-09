@@ -1,15 +1,5 @@
 __updated__ = '2022-05-17 12:57:05'
 
-"""
-Arnold's Laws of Documentation:
-    (1) If it should exist, it doesn't.
-    (2) If it does exist, it's out of date.
-    (3) Only documentation for useless programs transcends the first two laws.
-
-Created on 6 Oct 2021
-
-@author: frederic
-"""
 if __name__ == '__main__':
     import sys
     print('please run test_rfGTL...')

@@ -1,11 +1,5 @@
 __updated__ = '2020-03-24 08:10:11'
 
-"""
-Created on 24 Mar 2020
-
-@author: frederic
-"""
-
 import time
 
 _ticT0_ = 0.

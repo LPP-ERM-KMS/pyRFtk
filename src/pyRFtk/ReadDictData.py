@@ -1,14 +1,3 @@
-"""
-ReadDictData
-
-read a text file which is in fact a dict with comments
--> strip the comments and return the dict
-
-F. Durodie 11-Apr-2014
-
-2015-Aug-26 made the call signature compatible to the new findpath
-"""
-
 import ast
 from .findpath import findpath
 

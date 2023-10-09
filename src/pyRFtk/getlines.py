@@ -1,19 +1,14 @@
 __updated__ = '2021-05-03 14:11:21'
 
-"""
-Created on 27 Apr 2020
-
-@author: frederic
-
-Given a source return an iterator function returning the next line of text in the
-source.
-
-The source can be a multiline string, a string path to a file or a file descriptor
-such as returned when opening a file.
-"""
 
 def getlines(src):
+    """
+    Given a source return an iterator function returning the next line of text in the
+    source.
 
+    The source can be a multiline string, a string path to a file or a file descriptor
+    such as returned when opening a file.
+    """
     def path_next():
         with open(src,'r') as f:
             for aline in f.readlines():
