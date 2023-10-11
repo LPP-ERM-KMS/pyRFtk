@@ -22,6 +22,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">pyRFtk 2.0.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyRFtk package</a></li> 
       </ul>
@@ -37,95 +40,1276 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
 </section>
-<section id="pyrftk-convertgeneral-module">
-<h2>pyRFtk.ConvertGeneral module<a class="headerlink" href="#pyrftk-convertgeneral-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.ConvertGeneral">
+<span id="pyrftk-convertgeneral-module"></span><h2>pyRFtk.ConvertGeneral module<a class="headerlink" href="#module-pyRFtk.ConvertGeneral" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.ConvertGeneral.ConvertGeneral">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.ConvertGeneral.</span></span><span class="sig-name descname"><span class="pre">ConvertGeneral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Z1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'V'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'V'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.ConvertGeneral.ConvertGeneral" title="Link to this definition">¶</a></dt>
+<dd><p>CovertGeneral(Z2, S1, Z1, type1=”V”¸ type2=”V”)</p>
+<p>Converts (an array of N frequencies of) scattering matrice(s) of type1 and
+port impedance(s) Z1 to type2 and port impedance(s) Z2</p>
+<dl class="simple">
+<dt>Z1, Z2<span class="classifier">port impedance(s)</span></dt><dd><dl class="simple">
+<dt>scalar<span class="classifier"></span></dt><dd><p>all port impedances are the same for all ports and frequencies</p>
+</dd>
+<dt>1D-list/array<span class="classifier"></span></dt><dd><p>length must correspond to the number of ports; ports have different
+impedances but it is the same for all frequencies</p>
+</dd>
+<dt>2D-list/array :</dt><dd><p>the shape corresponds to (nF, nP)</p>
+</dd>
+</dl>
+</dd>
+<dt>S1 input S-matri-x/ces</dt><dd><dl class="simple">
+<dt>shape: </dt><dd><p>scalar -&gt; nFreqs = 1, nPorts=1 -&gt; (1,1,1)
+1D-list -&gt; nFreqs=#, nPorts=1  -&gt; (#,1,1)
+2D-list -&gt; nFreqs=1, nPorts=#  -&gt; (1,#,#)
+3D-list -&gt; nFreqs=*, nPorts=#  -&gt; (<a href="#id1"><span class="problematic" id="id2">*</span></a>,#,#)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>type1, type2 : S-matrix types</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“P”<span class="classifier">power wave Zk.imag==0</span></dt><dd><p>ak=(Vk+Zk.Ik)/(2.Zk**0.5) 
+bk=(Vk-Zk.Ik)/(2.Zk**0.5)</p>
+</dd>
+<dt>“V”<span class="classifier">voltage waveZk.imag==0</span></dt><dd><p>ak=(Vk+Zk.Ik)/2, 
+bk=(Vk-Zk.Ik)/2</p>
+</dd>
+<dt>“G”<span class="classifier">generalized s-matrix [Orfanidis] waveZk.imag!=0</span></dt><dd><p>ak=(Vk+Zk.Ik)/(2.Zk.real**0.5) 
+bk=(Vk-Zk.Ik)/(2.Zk.real**0.5)</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt>S2<span class="classifier">converted S-matri-x/ces</span></dt><dd><p>return value has the shape of S1</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="pyrftk-readdictdata-module">
-<h2>pyRFtk.ReadDictData module<a class="headerlink" href="#pyrftk-readdictdata-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.ReadDictData">
+<span id="pyrftk-readdictdata-module"></span><h2>pyRFtk.ReadDictData module<a class="headerlink" href="#module-pyRFtk.ReadDictData" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.ReadDictData.ReadDictData">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.ReadDictData.</span></span><span class="sig-name descname"><span class="pre">ReadDictData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userdirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['.']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envvar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">appdirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missingOK</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.ReadDictData.ReadDictData" title="Link to this definition">¶</a></dt>
+<dd><p>read a text file representing a model (.mod4PJ, .model, .ciamod, …)
+and return the dict object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.ReadDictData.ReadDictString">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.ReadDictData.</span></span><span class="sig-name descname"><span class="pre">ReadDictString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.ReadDictData.ReadDictString" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="pyrftk-readtsf-module">
-<h2>pyRFtk.ReadTSF module<a class="headerlink" href="#pyrftk-readtsf-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.ReadTSF">
+<span id="pyrftk-readtsf-module"></span><h2>pyRFtk.ReadTSF module<a class="headerlink" href="#module-pyRFtk.ReadTSF" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.ReadTSF.ReadTSF">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.ReadTSF.</span></span><span class="sig-name descname"><span class="pre">ReadTSF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.ReadTSF.ReadTSF" title="Link to this definition">¶</a></dt>
+<dd><p>read_tsf</p>
+<p>read a touchstone file version 1</p>
+<dl class="simple">
+<dt>special comments:</dt><dd><p>!PORTS      str, str, … , str
+!PART       (TOP|BOTTOM)?(LEFT|RIGHT)?
+!SHAPE      tuple of int
+!NUMBERING  (UP|DOWN)?
+!REM
+!MARKERS    list of frequencies</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
-<section id="pyrftk-s-from-vi-module">
-<h2>pyRFtk.S_from_VI module<a class="headerlink" href="#pyrftk-s-from-vi-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.S_from_VI">
+<span id="pyrftk-s-from-vi-module"></span><h2>pyRFtk.S_from_VI module<a class="headerlink" href="#module-pyRFtk.S_from_VI" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.S_from_VI.S_from_VI">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.S_from_VI.</span></span><span class="sig-name descname"><span class="pre">S_from_VI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Z0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.S_from_VI.S_from_VI" title="Link to this definition">¶</a></dt>
+<dd><p>returns the S on reference imedance Z0 from the VI transformation matrix M :</p>
+<p>note S is defined for an oposite sign of I1 shown above (i.e. standard)</p>
+</dd></dl>
+
 </section>
-<section id="pyrftk-s-from-y-module">
-<h2>pyRFtk.S_from_Y module<a class="headerlink" href="#pyrftk-s-from-y-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.S_from_Y">
+<span id="pyrftk-s-from-y-module"></span><h2>pyRFtk.S_from_Y module<a class="headerlink" href="#module-pyRFtk.S_from_Y" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.S_from_Y.S_from_Y">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.S_from_Y.</span></span><span class="sig-name descname"><span class="pre">S_from_Y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.S_from_Y.S_from_Y" title="Link to this definition">¶</a></dt>
+<dd><p>returns the scattering matrix S defined on Zbase [Ohm] from an 
+admittance matrix Y</p>
+<p>always returns an numpy.ndarray unless the Z is a scalar</p>
+</dd></dl>
+
 </section>
-<section id="pyrftk-s-from-z-module">
-<h2>pyRFtk.S_from_Z module<a class="headerlink" href="#pyrftk-s-from-z-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.S_from_Z">
+<span id="pyrftk-s-from-z-module"></span><h2>pyRFtk.S_from_Z module<a class="headerlink" href="#module-pyRFtk.S_from_Z" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.S_from_Z.S_from_Z">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.S_from_Z.</span></span><span class="sig-name descname"><span class="pre">S_from_Z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.S_from_Z.S_from_Z" title="Link to this definition">¶</a></dt>
+<dd><p>returns the scattering matrix S defined on Zbase [Ohm] from an 
+impedance matrix Z</p>
+<p>always returns an numpy.ndarray unless the Z is a scalar</p>
+</dd></dl>
+
 </section>
-<section id="pyrftk-y-from-s-module">
-<h2>pyRFtk.Y_from_S module<a class="headerlink" href="#pyrftk-y-from-s-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.Y_from_S">
+<span id="pyrftk-y-from-s-module"></span><h2>pyRFtk.Y_from_S module<a class="headerlink" href="#module-pyRFtk.Y_from_S" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.Y_from_S.Y_from_S">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.Y_from_S.</span></span><span class="sig-name descname"><span class="pre">Y_from_S</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.Y_from_S.Y_from_S" title="Link to this definition">¶</a></dt>
+<dd><p>returns the scattering matrix S defined on Zbase [Ohm] from an 
+admittance matrix Y</p>
+<p>always returns an numpy.ndarray unless the Z is a scalar</p>
+</dd></dl>
+
 </section>
-<section id="pyrftk-z-from-s-module">
-<h2>pyRFtk.Z_from_S module<a class="headerlink" href="#pyrftk-z-from-s-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.Z_from_S">
+<span id="pyrftk-z-from-s-module"></span><h2>pyRFtk.Z_from_S module<a class="headerlink" href="#module-pyRFtk.Z_from_S" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.Z_from_S.Z_from_S">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.Z_from_S.</span></span><span class="sig-name descname"><span class="pre">Z_from_S</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.Z_from_S.Z_from_S" title="Link to this definition">¶</a></dt>
+<dd><p>returns the scattering matrix S defined on Zbase [Ohm] from an 
+impedance matrix Z</p>
+<p>always returns an numpy.ndarray unless the Z is a scalar</p>
+</dd></dl>
+
 </section>
-<section id="pyrftk-circuit-module">
-<h2>pyRFtk.circuit module<a class="headerlink" href="#pyrftk-circuit-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.circuit">
+<span id="pyrftk-circuit-module"></span><h2>pyRFtk.circuit module<a class="headerlink" href="#module-pyRFtk.circuit" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.circuit.</span></span><span class="sig-name descname"><span class="pre">circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<blockquote>
+<div><div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.0.0: </span>‘circuit’ has been replaced by ‘rfCircuit’ but kept here for compatibility with legacy code</p>
+</div>
+<p>this implements a circuit class for manipulating RFbase objects</p>
+<dl>
+<dt>RFobject must implement following methods/attributes</dt><dd><p>(attribute) Zbase     float
+(attribute) ports     list of strings
+(method)    __len__   integer = number of ports (#p)
+(method)    getS      input:</p>
+<blockquote>
+<div><blockquote>
+<div><p>fs float or list/array of floats, frequencies in Hz 
+Zbase float, 
+params dict</p>
+</div></blockquote>
+<p>output:
+- list/array of f’s -&gt; array of Smatrices [#f,#p,#p]</p>
+<blockquote>
+<div><p>single f -&gt; single Smatrix [#p,#p]</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>the resulting Smatrices are converted to Zbase if 
+given else the Smatrix is given in the circuit’s
+Zbase (default 50 Ohm)</p></li>
+</ul>
+</div></blockquote>
+<p>(method)    set       <a href="#id3"><span class="problematic" id="id4">*</span></a>args, <a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs</p>
+</dd>
+<dt>circuit building methods</dt><dd><p>addblock(name, RFobj, ports, params)
+connect(<a href="#id7"><span class="problematic" id="id8">*</span></a>ports)
+terminate(port, Z=complex | Y=complex | RC=complex)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>unused ports automatically become external ports</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.Get_internalSmatrix">
+<span class="sig-name descname"><span class="pre">Get_internalSmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.Get_internalSmatrix" title="Link to this definition">¶</a></dt>
+<dd><p>given a set of (internal) nodes try and find a corresponding Smatrix</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.Solution">
+<span class="sig-name descname"><span class="pre">Solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f.</span> <span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase=self.Zbase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags={}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.Solution" title="Link to this definition">¶</a></dt>
+<dd><p>returns a dict of (node, (V, I, Vf, Vr)) pairs for a excitation E at
+the fequency f [Hz] where node is the node’s name, V its voltage, I 
+the current flowing into the node, Vf the forward voltage wave into 
+the node and Vr the voltage wave reflected from the node.</p>
+<p>E and the returned voltage wave quantities are expressed for a
+reference impedance Zbase which defaults to the circuit’s one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.addblock">
+<span class="sig-name descname"><span class="pre">addblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RFobj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.addblock" title="Link to this definition">¶</a></dt>
+<dd><p>inputs:
+name : str an ID of the added block
+RFobj : the added rf object:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>this object must minimally implement __len__ returning</dt><dd><p>the number of ports</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt>ports<span class="classifier">a port mapping</span><span class="classifier"></span></dt><dd><ul class="simple">
+<li><p>can be a list of length the number of ports</p></li>
+<li><dl class="simple">
+<dt>of a dict mapping the PF object’s portnames to new</dt><dd><p>names.</p>
+</dd>
+</dl>
+</li>
+<li><p>or ommitted to generate a generic set of names</p></li>
+</ul>
+</dd>
+<dt>params<span class="classifier">the parameters that will be supplied to the RFobject’s</span></dt><dd><p>getS(…) method</p>
+</dd>
+<dt>kwargs:</dt><dd><dl class="simple">
+<dt>xpos: the (relative) position of the RFobject’s ports</dt><dd><ul class="simple">
+<li><p>can be a scalar</p></li>
+<li><p>a list of lenght the number of ports</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">ports</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.connect" title="Link to this definition">¶</a></dt>
+<dd><p>inputs are existing as well as not yet existing ports</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.copy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.extS">
+<span class="sig-name descname"><span class="pre">extS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.extS" title="Link to this definition">¶</a></dt>
+<dd><dl>
+<dt>extS returns the S-matrix solution of the current state of the </dt><dd><p>circuit matrix for the circuit’s base impedance (self.Zbase)</p>
+<p>it is called after e.g. getS(f, Zbase, params) has recursively
+filled all the circuit’s block S-matrices in its matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.getS">
+<span class="sig-name descname"><span class="pre">getS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.getS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.listBlocks">
+<span class="sig-name descname"><span class="pre">listBlocks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.listBlocks" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.maxV">
+<span class="sig-name descname"><span class="pre">maxV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.maxV" title="Link to this definition">¶</a></dt>
+<dd><p>kwargs : future extesnsion ?
+xpos: list-like position of ports</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.set" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.solve" title="Link to this definition">¶</a></dt>
+<dd><p>solves the circuit for the excitation given in Zbase (defaults to
+self.Zbase) and flags (defaults to no flags) at frequency f</p>
+<p>returns the solution at all nodes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.circuit.circuit.terminate">
+<span class="sig-name descname"><span class="pre">terminate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.circuit.circuit.terminate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="pyrftk-codebase-module">
-<h2>pyRFtk.codebase module<a class="headerlink" href="#pyrftk-codebase-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.codebase">
+<span id="pyrftk-codebase-module"></span><h2>pyRFtk.codebase module<a class="headerlink" href="#module-pyRFtk.codebase" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.codebase.list1dir">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.codebase.</span></span><span class="sig-name descname"><span class="pre">list1dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.codebase.list1dir" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="pyrftk-comparess-module">
-<h2>pyRFtk.compareSs module<a class="headerlink" href="#pyrftk-comparess-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.compareSs">
+<span id="pyrftk-comparess-module"></span><h2>pyRFtk.compareSs module<a class="headerlink" href="#module-pyRFtk.compareSs" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.compareSs.compareSs">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.compareSs.</span></span><span class="sig-name descname"><span class="pre">compareSs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lbls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">figkwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.compareSs.compareSs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="pyrftk-config-module">
-<h2>pyRFtk.config module<a class="headerlink" href="#pyrftk-config-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.config">
+<span id="pyrftk-config-module"></span><h2>pyRFtk.config module<a class="headerlink" href="#module-pyRFtk.config" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.config.CleanUpLogFile">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.config.</span></span><span class="sig-name descname"><span class="pre">CleanUpLogFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.config.CleanUpLogFile" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.config.fscale">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.config.</span></span><span class="sig-name descname"><span class="pre">fscale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Hz'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.config.fscale" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.config.get_class_that_defined_method">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.config.</span></span><span class="sig-name descname"><span class="pre">get_class_that_defined_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.config.get_class_that_defined_method" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.config.ident">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.config.</span></span><span class="sig-name descname"><span class="pre">ident</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.config.ident" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.config.logident">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.config.</span></span><span class="sig-name descname"><span class="pre">logident</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stacklev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.config.logident" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.config.setLogLevel">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.config.</span></span><span class="sig-name descname"><span class="pre">setLogLevel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.config.setLogLevel" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="pyrftk-findpath-module">
-<h2>pyRFtk.findpath module<a class="headerlink" href="#pyrftk-findpath-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.findpath">
+<span id="pyrftk-findpath-module"></span><h2>pyRFtk.findpath module<a class="headerlink" href="#module-pyRFtk.findpath" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.findpath.existspath">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.findpath.</span></span><span class="sig-name descname"><span class="pre">existspath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userdirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['.']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envvar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">appdirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missingOK</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.findpath.existspath" title="Link to this definition">¶</a></dt>
+<dd><p>same as findpath but does not raise an exception : just return an empty
+string</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.findpath.findpath">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.findpath.</span></span><span class="sig-name descname"><span class="pre">findpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userdirs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">appdirs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missingOK</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.findpath.findpath" title="Link to this definition">¶</a></dt>
+<dd><p>fpattern : the file’s basename to search for</p>
+<dl class="simple">
+<dt>envvar<span class="classifier">if an environment variable is set with a</span><span class="classifier">separated set of </span></dt><dd><p>directories then these directories will be searched first
+in the order of appearance in the environment variable
+(default : ‘’)</p>
+</dd>
+<dt>usersdirs<span class="classifier">list of directories searched next in order of appearance</span></dt><dd><p>(default [‘.’])</p>
+</dd>
+<dt>appdirs<span class="classifier">list of directories searched finally in order of appearance</span></dt><dd><p>(default [])</p>
+</dd>
+</dl>
+<p>missingOK : do not raise IOError when a directory does not exist</p>
+<p>verbose : print debugging messages</p>
+</dd></dl>
+
 </section>
-<section id="pyrftk-getlines-module">
-<h2>pyRFtk.getlines module<a class="headerlink" href="#pyrftk-getlines-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.getlines">
+<span id="pyrftk-getlines-module"></span><h2>pyRFtk.getlines module<a class="headerlink" href="#module-pyRFtk.getlines" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.getlines.getlines">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.getlines.</span></span><span class="sig-name descname"><span class="pre">getlines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.getlines.getlines" title="Link to this definition">¶</a></dt>
+<dd><p>Given a source return an iterator function returning the next line of text in the
+source.</p>
+<p>The source can be a multiline string, a string path to a file or a file descriptor
+such as returned when opening a file.</p>
+</dd></dl>
+
 </section>
-<section id="pyrftk-maxfun-module">
-<h2>pyRFtk.maxfun module<a class="headerlink" href="#pyrftk-maxfun-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.maxfun">
+<span id="pyrftk-maxfun-module"></span><h2>pyRFtk.maxfun module<a class="headerlink" href="#module-pyRFtk.maxfun" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.maxfun.maxfun">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.maxfun.</span></span><span class="sig-name descname"><span class="pre">maxfun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.maxfun.maxfun" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="pyrftk-plotvsws-module">
-<h2>pyRFtk.plotVSWs module<a class="headerlink" href="#pyrftk-plotvsws-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.plotVSWs">
+<span id="pyrftk-plotvsws-module"></span><h2>pyRFtk.plotVSWs module<a class="headerlink" href="#module-pyRFtk.plotVSWs" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.plotVSWs.plotVSWs">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.plotVSWs.</span></span><span class="sig-name descname"><span class="pre">plotVSWs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">VSWs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxlev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.plotVSWs.plotVSWs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.plotVSWs.scaleVSW">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.plotVSWs.</span></span><span class="sig-name descname"><span class="pre">scaleVSW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">VSW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.plotVSWs.scaleVSW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.plotVSWs.strVSW">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.plotVSWs.</span></span><span class="sig-name descname"><span class="pre">strVSW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">VSW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.plotVSWs.strVSW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="pyrftk-printmatrices-module">
-<h2>pyRFtk.printMatrices module<a class="headerlink" href="#pyrftk-printmatrices-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.printMatrices">
+<span id="pyrftk-printmatrices-module"></span><h2>pyRFtk.printMatrices module<a class="headerlink" href="#module-pyRFtk.printMatrices" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.printMatrices.printDB">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.printMatrices.</span></span><span class="sig-name descname"><span class="pre">printDB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%7.3f%+7.1f°,</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printzeros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.printMatrices.printDB" title="Link to this definition">¶</a></dt>
+<dd><p>pretty print a complex matrix</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.printMatrices.printM">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.printMatrices.</span></span><span class="sig-name descname"><span class="pre">printM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfmt='%7.3f%+7.3fj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfun=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printzeros='0'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.printMatrices.printM" title="Link to this definition">¶</a></dt>
+<dd><p>pretty str a complex matrix to print or write to a file</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.printMatrices.printMA">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.printMatrices.</span></span><span class="sig-name descname"><span class="pre">printMA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%8.5f</span> <span class="pre">%+7.2f°,</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printzeros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.printMatrices.printMA" title="Link to this definition">¶</a></dt>
+<dd><p>pretty print a complex matrix</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.printMatrices.printR">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.printMatrices.</span></span><span class="sig-name descname"><span class="pre">printR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%7.3f,</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printzeros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.printMatrices.printR" title="Link to this definition">¶</a></dt>
+<dd><p>pretty print (the real part) of a (possibly complex) matrix</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.printMatrices.printRI">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.printMatrices.</span></span><span class="sig-name descname"><span class="pre">printRI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%7.3f%+7.3fj,</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printzeros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.printMatrices.printRI" title="Link to this definition">¶</a></dt>
+<dd><p>pretty print a complex matrix</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.printMatrices.strM">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.printMatrices.</span></span><span class="sig-name descname"><span class="pre">strM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfmt='%7.3f%+7.3fj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfun=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printzeros='0'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.printMatrices.strM" title="Link to this definition">¶</a></dt>
+<dd><p>pretty ‘str’ a complex matrix</p>
+</dd></dl>
+
 </section>
-<section id="pyrftk-resolvetlparams-module">
-<h2>pyRFtk.resolveTLparams module<a class="headerlink" href="#pyrftk-resolvetlparams-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.resolveTLparams">
+<span id="pyrftk-resolvetlparams-module"></span><h2>pyRFtk.resolveTLparams module<a class="headerlink" href="#module-pyRFtk.resolveTLparams" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyRFtk.resolveTLparams.TLresolver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.resolveTLparams.</span></span><span class="sig-name descname"><span class="pre">TLresolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.resolveTLparams.TLresolver" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
 </section>
 <section id="pyrftk-rf3dbhybrid-module">
 <h2>pyRFtk.rf3dBHybrid module<a class="headerlink" href="#pyrftk-rf3dbhybrid-module" title="Link to this heading">¶</a></h2>
 </section>
-<section id="pyrftk-rfarcobj-module">
-<h2>pyRFtk.rfArcObj module<a class="headerlink" href="#pyrftk-rfarcobj-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.rfArcObj">
+<span id="pyrftk-rfarcobj-module"></span><h2>pyRFtk.rfArcObj module<a class="headerlink" href="#module-pyRFtk.rfArcObj" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyRFtk.rfArcObj.rfArcObj">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.rfArcObj.</span></span><span class="sig-name descname"><span class="pre">rfArcObj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfArcObj.rfArcObj" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyRFtk.rfBase.rfBase" title="pyRFtk.rfBase.rfBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">rfBase</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfArcObj.rfArcObj.get1S">
+<span class="sig-name descname"><span class="pre">get1S</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfArcObj.rfArcObj.get1S" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="pyrftk-rfbase-module">
-<h2>pyRFtk.rfBase module<a class="headerlink" href="#pyrftk-rfbase-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.rfBase">
+<span id="pyrftk-rfbase-module"></span><h2>pyRFtk.rfBase module<a class="headerlink" href="#module-pyRFtk.rfBase" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.rfBase.add_debug_code">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.rfBase.</span></span><span class="sig-name descname"><span class="pre">add_debug_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfBase.add_debug_code" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyRFtk.rfBase.rfBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.rfBase.</span></span><span class="sig-name descname"><span class="pre">rfBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfBase.rfBase" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>rfBase is the parent class of all RF objects</p>
+<p>__init__ implements the setting of Id, Zbase, portnames
+copy, __copy__, __deepcopy__
+__getstate__, __setstate__
+__str__
+__len__
+get1S, getS
+tsf2str, write_tsf
+maxV</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfBase.rfBase.asstr">
+<span class="sig-name descname"><span class="pre">asstr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfBase.rfBase.asstr" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfBase.rfBase.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfBase.rfBase.copy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfBase.rfBase.get1S">
+<span class="sig-name descname"><span class="pre">get1S</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfBase.rfBase.get1S" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfBase.rfBase.getS">
+<span class="sig-name descname"><span class="pre">getS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfBase.rfBase.getS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfBase.rfBase.maxV">
+<span class="sig-name descname"><span class="pre">maxV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfBase.rfBase.maxV" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfBase.rfBase.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfBase.rfBase.set" title="Link to this definition">¶</a></dt>
+<dd><p>set attributes of the object if present</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfBase.rfBase.tsf2str">
+<span class="sig-name descname"><span class="pre">tsf2str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfBase.rfBase.tsf2str" title="Link to this definition">¶</a></dt>
+<dd><p>return a multiline string which is the touchstone v1 representation 
+of the rfBase object’s data.</p>
+<dl class="simple">
+<dt>kwargs:</dt><dd><dl class="simple">
+<dt>fs:    [Hz]  (default self.fs) frequencies to collect in the</dt><dd><p>touchstone</p>
+</dd>
+<dt>Zbase: [Ohm] (default self.Zbase) get the S-matrix data on </dt><dd><p>reference impedance Zbase</p>
+</dd>
+<dt>tfmt<span class="classifier">[]    (default f’#MHZ S MA R {self.Zbase}’) the touchstone </span></dt><dd><p>file format</p>
+</dd>
+<dt>comments: [] (default self.Id) a multiline comment string added</dt><dd><p>at the top of the file</p>
+</dd>
+</dl>
+</dd>
+<dt>Note: Zbase is only used when R is not supplied in tfmt to define</dt><dd><p>the reference impedance Zref for the touchstone. If Zref is
+supplied in the tfmt then it overrules Zbase.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfBase.rfBase.write_tsf">
+<span class="sig-name descname"><span class="pre">write_tsf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tsbasename</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfBase.rfBase.write_tsf" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="pyrftk-rfcircuit-module">
-<h2>pyRFtk.rfCircuit module<a class="headerlink" href="#pyrftk-rfcircuit-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.rfCircuit">
+<span id="pyrftk-rfcircuit-module"></span><h2>pyRFtk.rfCircuit module<a class="headerlink" href="#module-pyRFtk.rfCircuit" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.rfCircuit.</span></span><span class="sig-name descname"><span class="pre">rfCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyRFtk.rfBase.rfBase" title="pyRFtk.rfBase.rfBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">rfBase</span></code></a></p>
+<p>this implements a circuit class for manipulating RFbase objects, it depends on the 
+:class: ‘rfObject’ class which must implement following methods/attributes</p>
+<blockquote>
+<div><p>(attribute) Zbase     float
+(attribute) ports     list of strings
+(method)    __len__   integer = number of ports (#p)
+(method)    getS      input:</p>
+<blockquote>
+<div><blockquote>
+<div><p>fs float or list/array of floats, frequencies in Hz 
+Zbase float, 
+params dict</p>
+</div></blockquote>
+<p>output:
+- list/array of f’s -&gt; array of Smatrices [#f,#p,#p]</p>
+<blockquote>
+<div><p>single f -&gt; single Smatrix [#p,#p]</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>the resulting Smatrices are converted to Zbase if 
+given else the Smatrix is given in the circuit’s
+Zbase (default 50 Ohm)</p></li>
+</ul>
+</div></blockquote>
+<p>(method)    set       <a href="#id9"><span class="problematic" id="id10">*</span></a>args, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs</p>
+</div></blockquote>
+<dl class="simple">
+<dt>circuit building methods</dt><dd><p>addblock(name, RFobj, ports, params)
+connect(<a href="#id13"><span class="problematic" id="id14">*</span></a>ports)
+terminate(port, Z=complex | Y=complex | RC=complex)</p>
+</dd>
+</dl>
+<p>unused ports automatically become external ports</p>
+<p>TODO: rename and order external ports as requested
+TODO: rethink on how to set parameters
+TODO: check logic for the status of solved or not
+TODO: use external sNp if available</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.Get_internalSmatrix">
+<span class="sig-name descname"><span class="pre">Get_internalSmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.Get_internalSmatrix" title="Link to this definition">¶</a></dt>
+<dd><p>given a set of (internal) nodes try and find a corresponding Smatrix</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.Solution">
+<span class="sig-name descname"><span class="pre">Solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f.</span> <span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase=self.Zbase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags={}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.Solution" title="Link to this definition">¶</a></dt>
+<dd><p>returns a dict of (node, (V, I, Vf, Vr)) pairs for a excitation E at
+the fequency f [Hz] where node is the node’s name, V its voltage, I 
+the current flowing into the node, Vf the forward voltage wave into 
+the node and Vr the voltage wave reflected from the node.</p>
+<p>E and the returned voltage wave quantities are expressed for a
+reference impedance Zbase which defaults to the circuit’s one.</p>
+<p>nodes: None, [ nodes ]</p>
+<blockquote>
+<div><p>If the requested nodes input is None all nodes are evaluated 
+recursively in the whole circuit.</p>
+<p>If nodes is [] then anyway the nodes at the level if the object 
+are evaluated but the nodes in subblocks are not evaluated.</p>
+<p>So there may be more nodes evaluated than requested.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.addblock">
+<span class="sig-name descname"><span class="pre">addblock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RFobj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.addblock" title="Link to this definition">¶</a></dt>
+<dd><p>adds a previously defined circuit block to the circuit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – str an ID of the added block</p></li>
+<li><p><strong>RFobj</strong> – <p>the added rf object:
+this object must minimally implement __len__ returning</p>
+<blockquote>
+<div><p>the number of ports</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>ports</strong> – <p>a port mapping : 
+- can be a list of length the number of ports
+- of a dict mapping the PF object’s portnames to new</p>
+<blockquote>
+<div><p>names.</p>
+</div></blockquote>
+<ul>
+<li><p>or ommitted to generate a generic set of names</p></li>
+</ul>
+</p></li>
+<li><p><strong>params</strong> – the parameters that will be supplied to the RFobject’s
+getS(…) method</p></li>
+<li><p><strong>kwargs</strong> – relpos: the (relative) position of the RFobject</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">ports</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.connect" title="Link to this definition">¶</a></dt>
+<dd><p>connects the specified ports in the circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Params ports<span class="colon">:</span></dt>
+<dd class="field-odd"><p>existing as well as not yet existing ports</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.deembed">
+<span class="sig-name descname"><span class="pre">deembed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IntPorts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ExtPorts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.deembed" title="Link to this definition">¶</a></dt>
+<dd><p>deembeds ports
+State of the rfCircuit object: it solves for (Sinternal is not
+explicitly known)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>IntPorts</strong> – <p>list of size 2 tuples or dict
+[ (rfCircuit.port, rfCircuit.port_new), … ] or
+{ rfCircuit.port:rfCircuit.port_new, … }</p>
+<p>these are the “internal” ports of the circuit i.e. these are
+connected through the RFobj</p>
+</p></li>
+<li><p><strong>ExtPorts</strong> – <p>list of size 2 tuples or dict
+[ (rfCircuit.port, rfCircuit.port), … ] or
+{ rfCircuit.port:rfCircuit.port, … }</p>
+<p>these are the “external” ports of the circuit i.e. these are
+connected through the RFobj</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.extS">
+<span class="sig-name descname"><span class="pre">extS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.extS" title="Link to this definition">¶</a></dt>
+<dd><p>returns the S-matrix solution of the current state of the 
+circuit matrix for the circuit’s base impedance (self.Zbase)
+it is called after e.g. getS(f, Zbase, params) has recursively
+filled all the circuit’s block S-matrices in its matrix.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.findObj">
+<span class="sig-name descname"><span class="pre">findObj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.findObj" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.getS">
+<span class="sig-name descname"><span class="pre">getS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.getS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.getpos">
+<span class="sig-name descname"><span class="pre">getpos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.getpos" title="Link to this definition">¶</a></dt>
+<dd><p>return the position of the node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>node</strong> – The node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.listBlocks">
+<span class="sig-name descname"><span class="pre">listBlocks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.listBlocks" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.maxV">
+<span class="sig-name descname"><span class="pre">maxV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.maxV" title="Link to this definition">¶</a></dt>
+<dd><p>kwargs : future extension ?</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.resolve_xpos">
+<span class="sig-name descname"><span class="pre">resolve_xpos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.resolve_xpos" title="Link to this definition">¶</a></dt>
+<dd><p>tries to build and xpos based on the underlying blocks’ information</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.set" title="Link to this definition">¶</a></dt>
+<dd><dl>
+<dt>kwargs: dict of </dt><dd><dl class="simple">
+<dt>(“blkID”, sdict) </dt><dd><p>where sdict is a similar dict that goes further into
+the chain of nested rf objects</p>
+</dd>
+<dt>(“&gt;attr”, value)</dt><dd><p>where attr is an rf object’s attribute that gets the
+value</p>
+</dd>
+</dl>
+</dd>
+<dt>e.g.</dt><dd><p>rfCircuitA
+|
++- rfRLC1
+|  |
+|  +- Ls
+|
++- rfCircuitB</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl>
+<dt>+- rfTRL1</dt><dd><div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>+- L</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>rfCircuitA.set(rfRLC1= {“Ls”:20e-9},</dt><dd><p>rfCircuitB= {“rfTRL1”: {“L”:1.0}}</p>
+</dd>
+</dl>
+<p>or</p>
+<dl class="simple">
+<dt>rfCircuitA.set({‘rfRLC1.Ls’:20e-9, </dt><dd><p>‘rfCircuitB.rfTRL1.L’:1.0’})</p>
+</dd>
+</dl>
+<p>or</p>
+<p>rfCircuitA.set(‘rfRLC1.Ls’, 20e-9)
+rfCircuitA.set(‘rfCircuitB.rfTRL1’, {‘L:1.0})</p>
+<p>The purpose of the different formalisms:</p>
+<blockquote>
+<div><p>.set(‘kw’, {attr1: val1, attr2: val2}, …)</p>
+</div></blockquote>
+<p>or  .set((‘kw’, {attr1: val1, attr2: val2}), …)
+or  .set(kw = {attr1: val1, attr2: val2}, …)</p>
+<p>is to be able to set multiple attributes at once.</p>
+<p>in case a single attribute needs to be set:</p>
+<blockquote>
+<div><p>.set(‘kw.attr’, val, …)</p>
+</div></blockquote>
+<p>or   .set((‘kw.attr’, val), … )
+but  .set(kw.attr = val, … )               will not work !!
+thus .set(kw = {‘attr’: val}, … }</p>
+<p>The kwarg formulation is more restrictive if one wants to loop
+over multiple objects where one wants to set the attributes.</p>
+<p>Possibly the kwarg formalism need to be cancelled ?</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.solve" title="Link to this definition">¶</a></dt>
+<dd><p>solves the circuit for the excitation given in Zbase (defaults to
+self.Zbase) and flags (defaults to no flags) at frequency f</p>
+<p>sets the solution at all waves in self.sol</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfCircuit.rfCircuit.terminate">
+<span class="sig-name descname"><span class="pre">terminate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfCircuit.rfCircuit.terminate" title="Link to this definition">¶</a></dt>
+<dd><p>terminates the given port, can be either to ground by specifying some Z value
+or leave it open by specifying Y=0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port</strong> – The port to terminate</p></li>
+<li><p><strong>kwargs</strong> – With what to terminate the port (e.g Z=5)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="pyrftk-rfgtl-module">
-<h2>pyRFtk.rfGTL module<a class="headerlink" href="#pyrftk-rfgtl-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.rfGTL">
+<span id="pyrftk-rfgtl-module"></span><h2>pyRFtk.rfGTL module<a class="headerlink" href="#module-pyRFtk.rfGTL" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.rfGTL.processGTL">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.rfGTL.</span></span><span class="sig-name descname"><span class="pre">processGTL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fMHz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">GTL_data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfGTL.processGTL" title="Link to this definition">¶</a></dt>
+<dd><p>a GTL data structure is as follows:</p>
+<dl>
+<dt>{‘Portnames’: ordered list of port names (if a sNp touchstone file  is </dt><dd><blockquote>
+<div><p>provided the order must match),</p>
+</div></blockquote>
+<p>‘sNp’      : optional touchstone file, # <strong>* future extension *</strong></p>
+<dl class="simple">
+<dt>‘relpos’<span class="classifier">{‘p1’:position, … } where the p1 are some or all of the </span></dt><dd><p>portnames,</p>
+</dd>
+</dl>
+<p>‘variables’: { dict of substitutions },</p>
+<p>‘defaults’ : { dict of default AddBlockGTL kwargs }, # <strong>* future extension *</strong></p>
+<dl>
+<dt>‘GTL<span class="classifier">{</span></dt><dd><p>‘TLid1’: { # AddBlockGTL kwargs General TL section 1</p>
+<blockquote>
+<div><p>length: float</p>
+<dl class="simple">
+<dt>Portnames: [ list of 2 portnames ], # portname = </dt><dd><p>#     str | (str, dict) | dict
+# dict = CT.Terminate kwargs</p>
+</dd>
+</dl>
+<p>relpos: float # optional: position of 1st port</p>
+<p>… General_TL kwargs of the TL properties …</p>
+</div></blockquote>
+<p>}, # TLid1</p>
+<p>…</p>
+<p>‘TLidN’: { AddBlockGTL kwargs General TL section N</p>
+<blockquote>
+<div><p>… TLid 1 …</p>
+</div></blockquote>
+<p>}, # TLidN</p>
+</dd>
+</dl>
+<p>}, # GTL</p>
+</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyRFtk.rfGTL.rfGTL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.rfGTL.</span></span><span class="sig-name descname"><span class="pre">rfGTL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path2model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objkey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfGTL.rfGTL" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit" title="pyRFtk.rfCircuit.rfCircuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">rfCircuit</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfGTL.rfGTL.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfGTL.rfGTL.copy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfGTL.rfGTL.getS">
+<span class="sig-name descname"><span class="pre">getS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfGTL.rfGTL.getS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfGTL.rfGTL.getSgtl">
+<span class="sig-name descname"><span class="pre">getSgtl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfGTL.rfGTL.getSgtl" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="pyrftk-rfobject-module">
-<h2>pyRFtk.rfObject module<a class="headerlink" href="#pyrftk-rfobject-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.rfObject">
+<span id="pyrftk-rfobject-module"></span><h2>pyRFtk.rfObject module<a class="headerlink" href="#module-pyRFtk.rfObject" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.rfObject.</span></span><span class="sig-name descname"><span class="pre">rfObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The purpose of rfObject is to create a frequency vs. S-matrix “glorified” LUT</p>
+<p>The creation of the rfObject can be done in several manners:</p>
+<ol class="arabic">
+<li><p>the simplest is to load a touchstone file e.g. produced by Ansys/HFSS and
+the likes</p>
+<p>myObject = rfObject(touchstone=&lt;path_to_touchstone&gt;)</p>
+</li>
+<li><p>another method is the fill the table manually</p>
+<p>portnames = &lt;list of ports&gt;
+myObject = rfObject(ports = portnames]</p>
+<dl class="simple">
+<dt>for fHz in fHzs:</dt><dd><p>S = &lt;calculate S&gt;
+myObject.setS(fHz, S)</p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>Once an rfObject is created the 2 main methods of use are:</p>
+<p>rfObject.getS(fHz, Zbase=None)</p>
+<p>and</p>
+<p>excitation = {port1:a1, … }
+Vamx, rfObject.maxV(fHz, excitation)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject.S_from_Y">
+<span class="sig-name descname"><span class="pre">S_from_Y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject.S_from_Y" title="Link to this definition">¶</a></dt>
+<dd><p>returns the scattering matrix S defined on Zbase [Ohm] from an 
+impedance matrix Z</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject.S_from_Z">
+<span class="sig-name descname"><span class="pre">S_from_Z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject.S_from_Z" title="Link to this definition">¶</a></dt>
+<dd><p>returns the scattering matrix S defined on Zbase [Ohm] from an 
+impedance matrix Z</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject.convert2newZbase">
+<span class="sig-name descname"><span class="pre">convert2newZbase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newZbase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject.convert2newZbase" title="Link to this definition">¶</a></dt>
+<dd><p>convert_Zbase</p>
+<p>converts the rfObject’s Ss and Zbase to newZbase</p>
+<p>newZbase: target reference impedance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject.copy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject.deembed">
+<span class="sig-name descname"><span class="pre">deembed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ports</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject.deembed" title="Link to this definition">¶</a></dt>
+<dd><p>deembeds the ports with a simple lossless TL of length L and characteristic
+impedance Z</p>
+<p>ports is a dict containing the ports to be deembeded: the value is either 
+a scalar (int, float) giving L assuming the default Z being the object’s
+Zbase or a 2-tuple (L, Z) or a dict which is passed as kwargs to rfTRL.</p>
+<p>Positive L means the deembeding is into the port</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject.getS">
+<span class="sig-name descname"><span class="pre">getS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject.getS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject.maxV">
+<span class="sig-name descname"><span class="pre">maxV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;rfObject&gt;'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject.maxV" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject.process_kwargs">
+<span class="sig-name descname"><span class="pre">process_kwargs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject.process_kwargs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject.read_tsf">
+<span class="sig-name descname"><span class="pre">read_tsf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject.read_tsf" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject.setS">
+<span class="sig-name descname"><span class="pre">setS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Portnames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject.setS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfObject.rfObject.sortports">
+<span class="sig-name descname"><span class="pre">sortports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order=&lt;slot</span> <span class="pre">wrapper</span> <span class="pre">'__lt__'</span> <span class="pre">of</span> <span class="pre">'str'</span> <span class="pre">objects&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfObject.rfObject.sortports" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="pyrftk-rfrlc-module">
-<h2>pyRFtk.rfRLC module<a class="headerlink" href="#pyrftk-rfrlc-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.rfRLC">
+<span id="pyrftk-rfrlc-module"></span><h2>pyRFtk.rfRLC module<a class="headerlink" href="#module-pyRFtk.rfRLC" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyRFtk.rfRLC.rfRLC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.rfRLC.</span></span><span class="sig-name descname"><span class="pre">rfRLC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfRLC.rfRLC" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<ol class="loweralpha" start="19">
+<li><dl>
+<dt>– Cs – Ls – Rs –+– (p)</dt><dd><blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div></blockquote>
+<p>Cp  Lp  Rp
+|   |   |
++—+—+</p>
+<blockquote>
+<div><blockquote>
+<div><div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div></blockquote>
+<p>Gnd</p>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+</ol>
+<dl>
+<dt>kwargs:</dt><dd><p>Zbase : reference impedance [50 Ohm]
+ports : port names [[‘s’,’p’]]
+Rp : parallel resistance [+inf Ohm]
+Lp : parallel inductance [+inf H]
+Cp : parallel capacity [0 F]
+Rs : series resistance [0 Ohm]
+Ls : series inductance [0 H]
+Cs : series capacity [+inf F]</p>
+<p>thus the default is :  (s) – (p)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfRLC.rfRLC.asstr">
+<span class="sig-name descname"><span class="pre">asstr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfRLC.rfRLC.asstr" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfRLC.rfRLC.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfRLC.rfRLC.copy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfRLC.rfRLC.getS">
+<span class="sig-name descname"><span class="pre">getS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfRLC.rfRLC.getS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfRLC.rfRLC.maxV">
+<span class="sig-name descname"><span class="pre">maxV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfRLC.rfRLC.maxV" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfRLC.rfRLC.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfRLC.rfRLC.set" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="pyrftk-rftrl-module">
-<h2>pyRFtk.rfTRL module<a class="headerlink" href="#pyrftk-rftrl-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.rfTRL">
+<span id="pyrftk-rftrl-module"></span><h2>pyRFtk.rfTRL module<a class="headerlink" href="#module-pyRFtk.rfTRL" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyRFtk.rfTRL.rfTRL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyRFtk.rfTRL.</span></span><span class="sig-name descname"><span class="pre">rfTRL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfTRL.rfTRL" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>this class defines a TL rf object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ID</strong> – an identifier (optional) could be used for logging errors and warnings</p></li>
+<li><p><strong>ports</strong> – (default [‘1’,’2’]) names the ports on either side of the TL section</p></li>
+<li><p><strong>L</strong> – (default 0[m]) total length of the TL section</p></li>
+<li><p><strong>Zbase</strong> – (default 50[Ohm]) reference impedance of the S-matrix representing the
+TL section</p></li>
+<li><p><strong>dx</strong> – <p>(default int(72)) dimensional step along the axis of the TL section that
+is used to solve the telegraphist’s ODE as well as the requested VI 
+standing waves.</p>
+<p>If an int-like is given the intitial step is estimated as a 1/Nth of the
+wavelength along the transmission line.</p>
+<p>If a float-like is given it is taken as the dimensional step size. This 
+initial estimate is refined so that an integer number of steps fits the 
+TL section’s length.</p>
+<p>if a [floats]-like is given end points are added as necessary and the list
+is used as the node points along the TL. TODO: implement this.</p>
+</p></li>
+<li><p><strong>odeparams</strong> – (default {‘rtol’:1E-12, ‘atol’:1E-12})</p></li>
+<li><p><strong>xpos</strong> – (default 0[m]) relative position of the first port of the TL section.
+useful to position VI standing waves on figures.</p></li>
+<li><p><strong>sNp</strong> – sNp-object (default=None) TODO: implement</p></li>
+</ul>
+</dd>
+</dl>
+<p>TL parameters can be given as:</p>
+<dl class="simple">
+<dt>float-like</dt><dd><p>just a constant value along the length of the TL section</p>
+</dd>
+<dt>[floats]-like</dt><dd><p>the TL section is split in len([floats])-1 segments that have a
+piece-wise linear varying value of the paramter (note: continuous).
+A list of 1 long is treated as a float-like</p>
+</dd>
+<dt>[[floats],[floats]]-like</dt><dd><p>the node positions are given in the first [floats] and their values in
+the second [floats]. The node positions do not need to start or end on
+the TL boundaries: the values are linarly interpolated or extrapolated
+to the nearest as the case may be.</p>
+</dd>
+</dl>
+<p>In case any of the supplied parameters are not constant the solving for the
+TL’s S-matrix and VI standing waves will invoke an ODE solver to solve the
+telegraphist’s equation. Otherwise the (constant) complex characteristic
+impedance and propagation constant is (derived form the supplied parameters
+and) used to explicitly solve the telegraphist’s equation.</p>
+<p>Global TL properties:</p>
+<blockquote>
+<div><p>Z0TL: [Ohm] characteristic impedance of the TL</p>
+<p>LTL: [H/m] line inductance of the TL
+CTL: [F/m] line capacitance of the TL</p>
+<dl class="simple">
+<dt>rTL: [Ohm/m] line resistance of the TL</dt><dd><p>rTLO: [[Ohm/m] line resistance of the outer conductor of the TL
+rTLI: [Ohm/m] line resistance of the inner conductor of the TL</p>
+</dd>
+</dl>
+<p>gTL: [Mho/m] medium conductance of the TL</p>
+<p>A: [1/m] attenuation constant
+AdB: [dB/m] attenuation constant in dB/m</p>
+</div></blockquote>
+<p>Conductor properties:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>rho: [Ohm.m] specific resistivity of the conductors</dt><dd><p>rhoO: [Ohm.m] specific resistivity of the outer conductor
+rhoI: [Ohm.m] specific resistivity of the inner conductor</p>
+</dd>
+</dl>
+<p>murO: [mu0] outer conductor’s permeability
+murI: [mu0] inner conductor’s permeability</p>
+</div></blockquote>
+<p>Medium properies:</p>
+<blockquote>
+<div><p>sigma: [Mho/m] specific conductivity of the medium
+tand: [1] medium dielectric loss tangent</p>
+<p>epsr: [epsilon0] medium’s relative permitivity
+mur: [mu0] medium’s relative permeability</p>
+<p>etar: [eta0] medium’s relative impedance</p>
+<p>vr: [c0] medium’s relative wave velocity</p>
+</div></blockquote>
+<p>Geometric properties:</p>
+<blockquote>
+<div><p>OD: [m] outer diameter of a circular coaxial TL
+ID: [m] inner diameter of a circular coaxial TL</p>
+<p>qTL: [1/m] rTL = (w rho mur mu0 / 2)**0.5 * qTL
+qTLO: [1/m] rTLO= (w rhoO murO mu0 / 2)**0.5 * qTLO
+qTLI: [1/m] rTLI = (w rhoI murI mu0 / 2)**0.5 * qTLI</p>
+</div></blockquote>
+<p>Implemented methods:</p>
+<dl>
+<dt>__init__(<a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs):</dt><dd><p>performs the initial build of the TL section’s properties</p>
+</dd>
+<dt>__str__:</dt><dd><p>returns a nicely formated string describing the defined TL section</p>
+</dd>
+<dt>__len__:</dt><dd><p>(mandatory for RF objects) returns the number of ports</p>
+</dd>
+<dt>set(<a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs):</dt><dd><p>(mandatory for RF objects) modifies some of the properties of the TL 
+section</p>
+<p>currently implemented:</p>
+<blockquote>
+<div><p>L for a constant TL section
+TODO: expand on the parameters and remove constant condition</p>
+</div></blockquote>
+</dd>
+<dt>solveVI(f-&gt;float, [V0 -&gt; np.complex, I0-&gt; np.complex]): -&gt; np.array</dt><dd><p>solves the telegraphist’s equation either explicitly for constant TL 
+sections or through an ODE solver otherwise.
+returns depending on the input parameters (see method)</p>
+</dd>
+<dt>getS(fs, Zbase=None, params={})</dt><dd><p>returns the S-matrix/ces for the requested frequency/ies [Hz] for the
+reference impedance Zbase (or the object’s reference impedance if not
+supplied). Prior to the evaluation the params-dict is passed to the
+object’s set method as <a href="#id19"><span class="problematic" id="id20">**</span></a>params.</p>
+</dd>
+<dt>VISWs(f, E, Zbase=None)</dt><dd><p>returns xs, (</p>
+</dd>
+</dl>
+<p>maxV(f, E, Zbase=None)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfTRL.rfTRL.VISWs">
+<span class="sig-name descname"><span class="pre">VISWs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfTRL.rfTRL.VISWs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfTRL.rfTRL.asstr">
+<span class="sig-name descname"><span class="pre">asstr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfTRL.rfTRL.asstr" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfTRL.rfTRL.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfTRL.rfTRL.copy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfTRL.rfTRL.getS">
+<span class="sig-name descname"><span class="pre">getS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfTRL.rfTRL.getS" title="Link to this definition">¶</a></dt>
+<dd><p>returns an (array of) S-matrice(s) at the frequency(ies)fs</p>
+<p>Returns a single S-matrix for a float-like frequency fs [Hz] or a 1D
+array of S-matrices for a [floats]-like fs.</p>
+<p>The returned S-matrice(s) is(are) defined at the object’s reference 
+impedance or at the supplied reference impedance Zbase.</p>
+<p>The object’s set function self.set(<a href="#id21"><span class="problematic" id="id22">**</span></a>kwargs) is called with <a href="#id23"><span class="problematic" id="id24">**</span></a>params
+prior to the evaluation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfTRL.rfTRL.maxV">
+<span class="sig-name descname"><span class="pre">maxV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Zbase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;top&gt;'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfTRL.rfTRL.maxV" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfTRL.rfTRL.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfTRL.rfTRL.set" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyRFtk.rfTRL.rfTRL.solveVI">
+<span class="sig-name descname"><span class="pre">solveVI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">I0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.rfTRL.rfTRL.solveVI" title="Link to this definition">¶</a></dt>
+<dd><p>Solves the telegraphist’s equation</p>
+<p>The telegraphist’s equation is solved for frequency f[Hz] either explicitly
+for a TL section with constant TL parameters or using scipy.integrate.odeint
+otherwise.</p>
+<p>The node points along the TL are defined through the atribute ‘dx’.</p>
+<dl class="simple">
+<dt>TODO: for an int-like ‘dx’ and a non-constant TL section the estimation</dt><dd><p>of the node points is not correctly implemented.</p>
+</dd>
+<dt>Note: in the telegrapher’s equation the currents are flowing out of the</dt><dd><p>‘sink’ port (V0,I0) and into the ‘source’ port (would be 
+V1=self.U[-1], I1= self.I[-1].</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="pyrftk-str-dict-module">
-<h2>pyRFtk.str_dict module<a class="headerlink" href="#pyrftk-str-dict-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.str_dict">
+<span id="pyrftk-str-dict-module"></span><h2>pyRFtk.str_dict module<a class="headerlink" href="#module-pyRFtk.str_dict" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.str_dict.str_dict">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.str_dict.</span></span><span class="sig-name descname"><span class="pre">str_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.str_dict.str_dict" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="pyrftk-tictoc-module">
-<h2>pyRFtk.tictoc module<a class="headerlink" href="#pyrftk-tictoc-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.tictoc">
+<span id="pyrftk-tictoc-module"></span><h2>pyRFtk.tictoc module<a class="headerlink" href="#module-pyRFtk.tictoc" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.tictoc.tic">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.tictoc.</span></span><span class="sig-name descname"><span class="pre">tic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.tictoc.tic" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.tictoc.toc">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.tictoc.</span></span><span class="sig-name descname"><span class="pre">toc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.tictoc.toc" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="pyrftk-whoami-module">
-<h2>pyRFtk.whoami module<a class="headerlink" href="#pyrftk-whoami-module" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk.whoami">
+<span id="pyrftk-whoami-module"></span><h2>pyRFtk.whoami module<a class="headerlink" href="#module-pyRFtk.whoami" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyRFtk.whoami.whoami">
+<span class="sig-prename descclassname"><span class="pre">pyRFtk.whoami.</span></span><span class="sig-name descname"><span class="pre">whoami</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyRFtk.whoami.whoami" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="module-pyRFtk">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pyRFtk" title="Link to this heading">¶</a></h2>
 </section>
 </section>
 
@@ -141,36 +1325,215 @@
     <ul>
 <li><a class="reference internal" href="#">pyRFtk package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#pyrftk-convertgeneral-module">pyRFtk.ConvertGeneral module</a></li>
-<li><a class="reference internal" href="#pyrftk-readdictdata-module">pyRFtk.ReadDictData module</a></li>
-<li><a class="reference internal" href="#pyrftk-readtsf-module">pyRFtk.ReadTSF module</a></li>
-<li><a class="reference internal" href="#pyrftk-s-from-vi-module">pyRFtk.S_from_VI module</a></li>
-<li><a class="reference internal" href="#pyrftk-s-from-y-module">pyRFtk.S_from_Y module</a></li>
-<li><a class="reference internal" href="#pyrftk-s-from-z-module">pyRFtk.S_from_Z module</a></li>
-<li><a class="reference internal" href="#pyrftk-y-from-s-module">pyRFtk.Y_from_S module</a></li>
-<li><a class="reference internal" href="#pyrftk-z-from-s-module">pyRFtk.Z_from_S module</a></li>
-<li><a class="reference internal" href="#pyrftk-circuit-module">pyRFtk.circuit module</a></li>
-<li><a class="reference internal" href="#pyrftk-codebase-module">pyRFtk.codebase module</a></li>
-<li><a class="reference internal" href="#pyrftk-comparess-module">pyRFtk.compareSs module</a></li>
-<li><a class="reference internal" href="#pyrftk-config-module">pyRFtk.config module</a></li>
-<li><a class="reference internal" href="#pyrftk-findpath-module">pyRFtk.findpath module</a></li>
-<li><a class="reference internal" href="#pyrftk-getlines-module">pyRFtk.getlines module</a></li>
-<li><a class="reference internal" href="#pyrftk-maxfun-module">pyRFtk.maxfun module</a></li>
-<li><a class="reference internal" href="#pyrftk-plotvsws-module">pyRFtk.plotVSWs module</a></li>
-<li><a class="reference internal" href="#pyrftk-printmatrices-module">pyRFtk.printMatrices module</a></li>
-<li><a class="reference internal" href="#pyrftk-resolvetlparams-module">pyRFtk.resolveTLparams module</a></li>
+<li><a class="reference internal" href="#module-pyRFtk.ConvertGeneral">pyRFtk.ConvertGeneral module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.ConvertGeneral.ConvertGeneral"><code class="docutils literal notranslate"><span class="pre">ConvertGeneral()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.ReadDictData">pyRFtk.ReadDictData module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.ReadDictData.ReadDictData"><code class="docutils literal notranslate"><span class="pre">ReadDictData()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.ReadDictData.ReadDictString"><code class="docutils literal notranslate"><span class="pre">ReadDictString()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.ReadTSF">pyRFtk.ReadTSF module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.ReadTSF.ReadTSF"><code class="docutils literal notranslate"><span class="pre">ReadTSF()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.S_from_VI">pyRFtk.S_from_VI module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.S_from_VI.S_from_VI"><code class="docutils literal notranslate"><span class="pre">S_from_VI()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.S_from_Y">pyRFtk.S_from_Y module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.S_from_Y.S_from_Y"><code class="docutils literal notranslate"><span class="pre">S_from_Y()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.S_from_Z">pyRFtk.S_from_Z module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.S_from_Z.S_from_Z"><code class="docutils literal notranslate"><span class="pre">S_from_Z()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.Y_from_S">pyRFtk.Y_from_S module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.Y_from_S.Y_from_S"><code class="docutils literal notranslate"><span class="pre">Y_from_S()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.Z_from_S">pyRFtk.Z_from_S module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.Z_from_S.Z_from_S"><code class="docutils literal notranslate"><span class="pre">Z_from_S()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.circuit">pyRFtk.circuit module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit"><code class="docutils literal notranslate"><span class="pre">circuit</span></code></a><ul>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.Get_internalSmatrix"><code class="docutils literal notranslate"><span class="pre">circuit.Get_internalSmatrix()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.Solution"><code class="docutils literal notranslate"><span class="pre">circuit.Solution()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.addblock"><code class="docutils literal notranslate"><span class="pre">circuit.addblock()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.connect"><code class="docutils literal notranslate"><span class="pre">circuit.connect()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.copy"><code class="docutils literal notranslate"><span class="pre">circuit.copy()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.extS"><code class="docutils literal notranslate"><span class="pre">circuit.extS()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.getS"><code class="docutils literal notranslate"><span class="pre">circuit.getS()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.listBlocks"><code class="docutils literal notranslate"><span class="pre">circuit.listBlocks()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.maxV"><code class="docutils literal notranslate"><span class="pre">circuit.maxV()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.set"><code class="docutils literal notranslate"><span class="pre">circuit.set()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.solve"><code class="docutils literal notranslate"><span class="pre">circuit.solve()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.circuit.circuit.terminate"><code class="docutils literal notranslate"><span class="pre">circuit.terminate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.codebase">pyRFtk.codebase module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.codebase.list1dir"><code class="docutils literal notranslate"><span class="pre">list1dir()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.compareSs">pyRFtk.compareSs module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.compareSs.compareSs"><code class="docutils literal notranslate"><span class="pre">compareSs()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.config">pyRFtk.config module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.config.CleanUpLogFile"><code class="docutils literal notranslate"><span class="pre">CleanUpLogFile()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.config.fscale"><code class="docutils literal notranslate"><span class="pre">fscale()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.config.get_class_that_defined_method"><code class="docutils literal notranslate"><span class="pre">get_class_that_defined_method()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.config.ident"><code class="docutils literal notranslate"><span class="pre">ident()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.config.logident"><code class="docutils literal notranslate"><span class="pre">logident()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.config.setLogLevel"><code class="docutils literal notranslate"><span class="pre">setLogLevel()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.findpath">pyRFtk.findpath module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.findpath.existspath"><code class="docutils literal notranslate"><span class="pre">existspath()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.findpath.findpath"><code class="docutils literal notranslate"><span class="pre">findpath()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.getlines">pyRFtk.getlines module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.getlines.getlines"><code class="docutils literal notranslate"><span class="pre">getlines()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.maxfun">pyRFtk.maxfun module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.maxfun.maxfun"><code class="docutils literal notranslate"><span class="pre">maxfun()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.plotVSWs">pyRFtk.plotVSWs module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.plotVSWs.plotVSWs"><code class="docutils literal notranslate"><span class="pre">plotVSWs()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.plotVSWs.scaleVSW"><code class="docutils literal notranslate"><span class="pre">scaleVSW()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.plotVSWs.strVSW"><code class="docutils literal notranslate"><span class="pre">strVSW()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.printMatrices">pyRFtk.printMatrices module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.printMatrices.printDB"><code class="docutils literal notranslate"><span class="pre">printDB()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.printMatrices.printM"><code class="docutils literal notranslate"><span class="pre">printM()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.printMatrices.printMA"><code class="docutils literal notranslate"><span class="pre">printMA()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.printMatrices.printR"><code class="docutils literal notranslate"><span class="pre">printR()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.printMatrices.printRI"><code class="docutils literal notranslate"><span class="pre">printRI()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.printMatrices.strM"><code class="docutils literal notranslate"><span class="pre">strM()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.resolveTLparams">pyRFtk.resolveTLparams module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.resolveTLparams.TLresolver"><code class="docutils literal notranslate"><span class="pre">TLresolver</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#pyrftk-rf3dbhybrid-module">pyRFtk.rf3dBHybrid module</a></li>
-<li><a class="reference internal" href="#pyrftk-rfarcobj-module">pyRFtk.rfArcObj module</a></li>
-<li><a class="reference internal" href="#pyrftk-rfbase-module">pyRFtk.rfBase module</a></li>
-<li><a class="reference internal" href="#pyrftk-rfcircuit-module">pyRFtk.rfCircuit module</a></li>
-<li><a class="reference internal" href="#pyrftk-rfgtl-module">pyRFtk.rfGTL module</a></li>
-<li><a class="reference internal" href="#pyrftk-rfobject-module">pyRFtk.rfObject module</a></li>
-<li><a class="reference internal" href="#pyrftk-rfrlc-module">pyRFtk.rfRLC module</a></li>
-<li><a class="reference internal" href="#pyrftk-rftrl-module">pyRFtk.rfTRL module</a></li>
-<li><a class="reference internal" href="#pyrftk-str-dict-module">pyRFtk.str_dict module</a></li>
-<li><a class="reference internal" href="#pyrftk-tictoc-module">pyRFtk.tictoc module</a></li>
-<li><a class="reference internal" href="#pyrftk-whoami-module">pyRFtk.whoami module</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-pyRFtk.rfArcObj">pyRFtk.rfArcObj module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfArcObj.rfArcObj"><code class="docutils literal notranslate"><span class="pre">rfArcObj</span></code></a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfArcObj.rfArcObj.get1S"><code class="docutils literal notranslate"><span class="pre">rfArcObj.get1S()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.rfBase">pyRFtk.rfBase module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfBase.add_debug_code"><code class="docutils literal notranslate"><span class="pre">add_debug_code()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfBase.rfBase"><code class="docutils literal notranslate"><span class="pre">rfBase</span></code></a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfBase.rfBase.asstr"><code class="docutils literal notranslate"><span class="pre">rfBase.asstr()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfBase.rfBase.copy"><code class="docutils literal notranslate"><span class="pre">rfBase.copy()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfBase.rfBase.get1S"><code class="docutils literal notranslate"><span class="pre">rfBase.get1S()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfBase.rfBase.getS"><code class="docutils literal notranslate"><span class="pre">rfBase.getS()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfBase.rfBase.maxV"><code class="docutils literal notranslate"><span class="pre">rfBase.maxV()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfBase.rfBase.set"><code class="docutils literal notranslate"><span class="pre">rfBase.set()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfBase.rfBase.tsf2str"><code class="docutils literal notranslate"><span class="pre">rfBase.tsf2str()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfBase.rfBase.write_tsf"><code class="docutils literal notranslate"><span class="pre">rfBase.write_tsf()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.rfCircuit">pyRFtk.rfCircuit module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit"><code class="docutils literal notranslate"><span class="pre">rfCircuit</span></code></a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.Get_internalSmatrix"><code class="docutils literal notranslate"><span class="pre">rfCircuit.Get_internalSmatrix()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.Solution"><code class="docutils literal notranslate"><span class="pre">rfCircuit.Solution()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.addblock"><code class="docutils literal notranslate"><span class="pre">rfCircuit.addblock()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.connect"><code class="docutils literal notranslate"><span class="pre">rfCircuit.connect()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.deembed"><code class="docutils literal notranslate"><span class="pre">rfCircuit.deembed()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.extS"><code class="docutils literal notranslate"><span class="pre">rfCircuit.extS()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.findObj"><code class="docutils literal notranslate"><span class="pre">rfCircuit.findObj()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.getS"><code class="docutils literal notranslate"><span class="pre">rfCircuit.getS()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.getpos"><code class="docutils literal notranslate"><span class="pre">rfCircuit.getpos()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.listBlocks"><code class="docutils literal notranslate"><span class="pre">rfCircuit.listBlocks()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.maxV"><code class="docutils literal notranslate"><span class="pre">rfCircuit.maxV()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.resolve_xpos"><code class="docutils literal notranslate"><span class="pre">rfCircuit.resolve_xpos()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.set"><code class="docutils literal notranslate"><span class="pre">rfCircuit.set()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.solve"><code class="docutils literal notranslate"><span class="pre">rfCircuit.solve()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfCircuit.rfCircuit.terminate"><code class="docutils literal notranslate"><span class="pre">rfCircuit.terminate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.rfGTL">pyRFtk.rfGTL module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfGTL.processGTL"><code class="docutils literal notranslate"><span class="pre">processGTL()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfGTL.rfGTL"><code class="docutils literal notranslate"><span class="pre">rfGTL</span></code></a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfGTL.rfGTL.copy"><code class="docutils literal notranslate"><span class="pre">rfGTL.copy()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfGTL.rfGTL.getS"><code class="docutils literal notranslate"><span class="pre">rfGTL.getS()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfGTL.rfGTL.getSgtl"><code class="docutils literal notranslate"><span class="pre">rfGTL.getSgtl()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.rfObject">pyRFtk.rfObject module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject"><code class="docutils literal notranslate"><span class="pre">rfObject</span></code></a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject.S_from_Y"><code class="docutils literal notranslate"><span class="pre">rfObject.S_from_Y()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject.S_from_Z"><code class="docutils literal notranslate"><span class="pre">rfObject.S_from_Z()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject.convert2newZbase"><code class="docutils literal notranslate"><span class="pre">rfObject.convert2newZbase()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject.copy"><code class="docutils literal notranslate"><span class="pre">rfObject.copy()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject.deembed"><code class="docutils literal notranslate"><span class="pre">rfObject.deembed()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject.getS"><code class="docutils literal notranslate"><span class="pre">rfObject.getS()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject.maxV"><code class="docutils literal notranslate"><span class="pre">rfObject.maxV()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject.process_kwargs"><code class="docutils literal notranslate"><span class="pre">rfObject.process_kwargs()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject.read_tsf"><code class="docutils literal notranslate"><span class="pre">rfObject.read_tsf()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject.setS"><code class="docutils literal notranslate"><span class="pre">rfObject.setS()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfObject.rfObject.sortports"><code class="docutils literal notranslate"><span class="pre">rfObject.sortports()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.rfRLC">pyRFtk.rfRLC module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfRLC.rfRLC"><code class="docutils literal notranslate"><span class="pre">rfRLC</span></code></a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfRLC.rfRLC.asstr"><code class="docutils literal notranslate"><span class="pre">rfRLC.asstr()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfRLC.rfRLC.copy"><code class="docutils literal notranslate"><span class="pre">rfRLC.copy()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfRLC.rfRLC.getS"><code class="docutils literal notranslate"><span class="pre">rfRLC.getS()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfRLC.rfRLC.maxV"><code class="docutils literal notranslate"><span class="pre">rfRLC.maxV()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfRLC.rfRLC.set"><code class="docutils literal notranslate"><span class="pre">rfRLC.set()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.rfTRL">pyRFtk.rfTRL module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfTRL.rfTRL"><code class="docutils literal notranslate"><span class="pre">rfTRL</span></code></a><ul>
+<li><a class="reference internal" href="#pyRFtk.rfTRL.rfTRL.VISWs"><code class="docutils literal notranslate"><span class="pre">rfTRL.VISWs()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfTRL.rfTRL.asstr"><code class="docutils literal notranslate"><span class="pre">rfTRL.asstr()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfTRL.rfTRL.copy"><code class="docutils literal notranslate"><span class="pre">rfTRL.copy()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfTRL.rfTRL.getS"><code class="docutils literal notranslate"><span class="pre">rfTRL.getS()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfTRL.rfTRL.maxV"><code class="docutils literal notranslate"><span class="pre">rfTRL.maxV()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfTRL.rfTRL.set"><code class="docutils literal notranslate"><span class="pre">rfTRL.set()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.rfTRL.rfTRL.solveVI"><code class="docutils literal notranslate"><span class="pre">rfTRL.solveVI()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.str_dict">pyRFtk.str_dict module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.str_dict.str_dict"><code class="docutils literal notranslate"><span class="pre">str_dict()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.tictoc">pyRFtk.tictoc module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.tictoc.tic"><code class="docutils literal notranslate"><span class="pre">tic()</span></code></a></li>
+<li><a class="reference internal" href="#pyRFtk.tictoc.toc"><code class="docutils literal notranslate"><span class="pre">toc()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk.whoami">pyRFtk.whoami module</a><ul>
+<li><a class="reference internal" href="#pyRFtk.whoami.whoami"><code class="docutils literal notranslate"><span class="pre">whoami()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyRFtk">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -203,13 +1566,16 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">pyRFtk 2.0.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pyRFtk package</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2023, Frederic Durodie and Arthur Adriaens.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

@@ -97,7 +97,26 @@ ExtPorts = {dpe:ep, …}</p>
 <span class="o">+-------------+</span>
 </pre></div>
 </div>
-<p>As an example we’ll use the TOMAS ICRH system again,</p>
+<p>As an example we’ll use the TOMAS ICRH system again,
+the strap of the antenna has been measured together
+with two pieces of TL, we can deembed it as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A2Ca1_L</span> <span class="o">=</span> <span class="mf">0.1715</span>
+<span class="n">A2Ca1_Z</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">T2Cs1_L</span> <span class="o">=</span> <span class="mf">0.121</span>
+<span class="n">T2Cs1_Z</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="n">tsStrap</span> <span class="o">=</span> <span class="s1">&#39;Antenna/Tomas-Ref_geo-R=200-Diel_eps=0500.s2p&#39;</span>
+
+
+<span class="n">strap</span> <span class="o">=</span> <span class="n">rfObject</span><span class="p">(</span><span class="n">touchstone</span><span class="o">=</span><span class="n">tsStrap</span><span class="p">,</span> <span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;cap&#39;</span><span class="p">,</span><span class="s1">&#39;t&#39;</span><span class="p">])</span>
+
+<span class="k">if</span> <span class="n">strap</span><span class="o">.</span><span class="n">fs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.</span><span class="p">:</span>
+    <span class="n">strap</span><span class="o">.</span><span class="n">fs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-3</span> <span class="c1"># avoid divisions by 0 at 0 Hz in deembed</span>
+
+<span class="n">strap</span><span class="o">.</span><span class="n">deembed</span><span class="p">({</span><span class="s1">&#39;cap&#39;</span><span class="p">:(</span><span class="n">A2Ca1_L</span><span class="p">,</span> <span class="n">A2Ca1_Z</span><span class="p">),</span>
+                    <span class="s1">&#39;t&#39;</span>  <span class="p">:(</span><span class="n">T2Cs1_L</span><span class="p">,</span> <span class="n">T2Cs1_Z</span><span class="p">)})</span>
+</pre></div>
+</div>
 </section>
 
 

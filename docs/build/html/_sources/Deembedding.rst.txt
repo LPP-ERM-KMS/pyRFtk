@@ -67,4 +67,24 @@ We may use the 'deembed' function in the rfCircuit object to solve for
     +-------------+ 
 
 
-As an example we'll use the TOMAS ICRH system again,
+As an example we'll use the TOMAS ICRH system again, 
+the strap of the antenna has been measured together
+with two pieces of TL, we can deembed it as follows:
+
+.. code-block:: 
+
+    A2Ca1_L = 0.1715
+    A2Ca1_Z = 50
+    T2Cs1_L = 0.121
+    T2Cs1_Z = 50
+
+    tsStrap = 'Antenna/Tomas-Ref_geo-R=200-Diel_eps=0500.s2p'
+
+
+    strap = rfObject(touchstone=tsStrap, ports=['cap','t'])
+
+    if strap.fs[0] == 0.:
+        strap.fs[0] = 1e-3 # avoid divisions by 0 at 0 Hz in deembed
+
+    strap.deembed({'cap':(A2Ca1_L, A2Ca1_Z), 
+                        't'  :(T2Cs1_L, T2Cs1_Z)})
