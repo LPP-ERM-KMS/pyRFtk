@@ -44,7 +44,7 @@ create the circuit:
         ct.addblock('RLoss',rfRLC(Rs=1),ports=['in','out'])
         ct.addblock('PreMatch',CaRight,ports=['H','I'])
 
-        ct.connect('StoV3.A','Source')
+        ct.connect('StoV3.S','Source')
         ct.connect('V3toV2.V3','StoV3.V3')
         ct.connect('V3toV2.V2','V2toV1.V2')
         ct.connect('V2toV1.V1','V1toV0.V1')
