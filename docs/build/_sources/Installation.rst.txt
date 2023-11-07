@@ -2,21 +2,11 @@ Installation
 ==================================
 Pip
 ---
-The program has a pre-build version which can be installed using pip, as this program is not yet made available in the python database,
-to install the program you'll have to first clone the repository:
+The program has a pre-build version which can be installed using pip: 
 
 .. code-block::
 
-        git clone https://github.com/LPP-ERM-KMS/pyRFtk.git
-
-Then navigate to the folder "dist" where the
-install file is located, and run
-
-.. code-block::
-
-        (.venv) $pip install pyrftk2-2.0.0-py3-none-any.whl
-
-which installs the program
+        pip install pyRFtk
 
 Source
 ------
