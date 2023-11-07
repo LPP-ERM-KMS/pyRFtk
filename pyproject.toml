@@ -3,16 +3,16 @@ requires = ["hatchling","numpy","matplotlib","logging"]
 build-backend = "hatchling.build"
 [project]
 name = "pyRFtk"
-version = "2.0.1"
+version = "2.0.0"
 authors = [
   { name="Frederic Durodie", email="frederic.durodie@rma.ac.be" },
   { name="Arthur Adriaens", email="arthur.adriaens@mil.be" },
 ]
 description = "Design tool for RF antennae networks"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 classifiers = [
-    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
     "Operating System :: OS Independent",
 ]
 [project.urls]
