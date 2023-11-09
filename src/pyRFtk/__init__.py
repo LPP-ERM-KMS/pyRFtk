@@ -42,7 +42,7 @@ Created on 18 Dec 2020
 
 @author: frederic
 """
-__updated__ = "2023-09-21 12:05:32"
+__updated__ = "2023-09-22 15:55:47"
 
 from .config import tLogger, setLogLevel, logit, ident, _newID, logident
 from .rfBase import rfBase
@@ -53,7 +53,7 @@ from .rfTRL import rfTRL
 from .rfRLC import rfRLC
 from .rfGTL import rfGTL
 from .rfArcObj import rfArcObj
-from src.pyRFtk import rfCoupler
+from .rfCoupler import rfCoupler
 
 from .S_from_Z import S_from_Z
 from .S_from_Y import S_from_Y

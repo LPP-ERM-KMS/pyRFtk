@@ -11,7 +11,7 @@ Created on 18 Dec 2020
 This is a template for a rfObject: but it may be obsoleted ...
 
 """
-__updated__ = "2023-02-21 08:53:47"
+__updated__ = "2023-11-08 11:19:50"
 
 if __name__ == '__main__':
     import sys
@@ -142,6 +142,8 @@ class rfObject():
             self.read_tsf(self.touchstone, **Tkwargs)
         
         self.interpOK = False
+        
+        self.f, self.S = None, None
                 
     #===========================================================================
     #
@@ -236,6 +238,12 @@ class rfObject():
         #FIXME: adhere to format compatible with rfTRL, rfRLC, circuit, ...
         s =  self.__repr__() + '\n'
         s += '# %d frequencies\n' % len(self.fs)
+        
+        if self.S is not None:
+            s += f'|\n+ last evaluation at {self.f:_.1f} Hz: \n'
+            for sk in str(self.S).split('\n'): 
+                s += '|   ' + sk + '\n'
+                
         return s
     
     #===========================================================================
@@ -469,11 +477,15 @@ class rfObject():
                     tS if Zbase == self.Zbase
                     else ConvertGeneral(Zbase, tS, self.Zbase)
                 )
+            self.f, self.S = f, Ss[-1]
+            
         else:
             tS = get1S(fs)
             Ss = (tS if Zbase == self.Zbase 
                   else ConvertGeneral(Zbase, tS, self.Zbase))
         
+            self.f, self.S = fs, Ss
+            
         debug and tLogger.debug(ident('< [rfObject.getS]',-1))
         return np.array(Ss)
     

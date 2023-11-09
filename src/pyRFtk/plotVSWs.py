@@ -1,4 +1,4 @@
-__updated__ = '2022-10-27 10:36:29'
+__updated__ = '2023-11-08 13:25:07'
 
 """
 Arnold's Laws of Documentation:
@@ -15,7 +15,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from pyRFtk.config import setLogLevel, logit, tLogger, ident
-from pyRFtk.str_dict import str_dict
 
 #===============================================================================
 #
@@ -266,6 +265,7 @@ def strVSW(VSW, indent=0):
 if __name__ == '__main__':
     import pickle
     from pprint import pprint
+    # from . import str_dict
     
     with open('../../pyRFtk test/Launcher_VSWs.bin','rb') as f:
         VSWs = pickle.load(f)

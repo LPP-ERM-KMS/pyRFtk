@@ -1,4 +1,4 @@
-__updated__ = "2023-09-22 13:39:21"
+__updated__ = "2023-11-09 10:00:05"
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -803,6 +803,8 @@ class rfCircuit(rfBase):
 
         # create possibly missing nodes
         newports = [p for p in ports if ('->'+p) not in self.waves]
+        _debug_ and tLogger.debug(ident(f'new ports: {", ".join(newports)}', 0))
+        
         if len(newports) > 1:
             raise ValueError(
                 f'{whoami(__package__)}: cannot have more than one new port'  
@@ -813,6 +815,7 @@ class rfCircuit(rfBase):
             )
             
         oldports = [p for p in ports if ('->'+p) in self.waves]
+        _debug_ and tLogger.debug(ident(f'old ports: {", ".join(oldports)}', 0))
         
         for p in newports:
             self.waves.append('->'+p)
@@ -821,6 +824,9 @@ class rfCircuit(rfBase):
             # here we need to make assumptions on the position of the new port
             # -> we take the position of the first port in the list
             self.xpos.append(self.getpos(oldports[0]))
+            
+        _debug_ and tLogger.debug(ident(f'self.ports = {", ".join(self.ports)}', 0))
+        
         
         # do we need to reverse '->' and '<-' for new ports
         idxAs, idxBs = [], []
@@ -837,7 +843,10 @@ class rfCircuit(rfBase):
                 _kp = self.ports.index(_p)
                 self.ports.pop(_kp)
                 self.xpos.pop(_kp)
-        
+                _debug_ and tLogger.debug(ident(f'deleted port {_p}', 0))
+                
+        _debug_ and tLogger.debug(ident(f'self.ports -> {", ".join(self.ports)}', 0))
+                
         # now we need to expand M for the new variables
         self.M = np.hstack((
             self.M, np.zeros((self.M.shape[0],2*len(newports)))
@@ -867,6 +876,8 @@ class rfCircuit(rfBase):
             
             for SJrc, idxB in zip(SJr,idxBs):
                 self.M[-1, idxB] = SJrc
+                
+        self.invM, self.S = None, None
 
         _debug_ and tLogger.debug(ident(
             f'< [circuit.connect]', -1
@@ -949,7 +960,12 @@ class rfCircuit(rfBase):
             self.invM = None
             self.S = None
                         
-        elif port in self.C:
+        elif False and (port in self.C):
+            
+            # 2023/11/08 : (FDe) disabled this branch with "False and ..."
+            # trying to terminate a port newly created would erroneously cause
+            # a port already connected error
+                                            
             _debug_ and tLogger.debug(ident(f'port already connected !'))
             raise ValueError(
                 f'{whoami(__package__)}: port {port} already conneccted' 
@@ -963,6 +979,7 @@ class rfCircuit(rfBase):
                 _kp = self.ports.index(port)
                 self.ports.pop(_kp)
                 self.xpos.pop(_kp)
+                
             except IndexError:
                 raise ValueError(
                     f'{whoami(__package__)}: port {port} already in use'  
@@ -980,6 +997,8 @@ class rfCircuit(rfBase):
             self.eqns.append(f'T: {port}')
             
             self.T[port] = idxA, idxB, self.M.shape[0] - 1
+            
+            self.invM, self.S = None, None
 
         _debug_ and tLogger.debug(ident(
             f'< [circuit.terminate]', -1

@@ -1,4 +1,4 @@
-__updated__ = '2022-04-18 08:27:39'
+__updated__ = '2023-11-07 16:56:18'
 
 """
 Arnold's Laws of Documentation:
@@ -225,7 +225,7 @@ class rfBase():
         """set attributes of the object if present
         """
         modified = False
-        for kw, val in kwargs:
+        for kw, val in kwargs.items():
             try:
                 if kw in self.attrs:
                     if hasattr(self, kw):
