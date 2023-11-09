@@ -1,15 +1,5 @@
 __updated__ = '2023-11-07 16:56:18'
 
-"""
-Arnold's Laws of Documentation:
-    (1) If it should exist, it doesn't.
-    (2) If it does exist, it's out of date.
-    (3) Only documentation for useless programs transcends the first two laws.
-
-Created on 13 Feb 2022
-
-@author: frederic
-"""
 if __name__ == '__main__':
     import sys
     print('running the test module "../pyRFtk2 test/pyRFtk2_tests.py"')

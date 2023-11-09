@@ -1,22 +1,12 @@
-"""
-Created on 26 Aug 2015
-
-@author: frederic.durodie@gmail.com
-
-this version of findpath should find a filepath in a more predictable and
-restricted manner
-
-+-------------+----------------------------------------------------------------+
-| Date        | Comment                                                        |
-+=============+================================================================+
-| 2015-Aug-27 | made userdirs the second argument and set its default to ['.'] |
-|             | this allows to partially keep the former call signature        |
-|             | e.g. findpath(fpattern,'../../../')                            |
-+-------------+----------------------------------------------------------------+
-| 2015-Aug-26 | modified from the original findpath                            |
-+-------------+----------------------------------------------------------------+
-
-"""
+#+-------------+----------------------------------------------------------------+
+#| Date        | Comment                                                        |
+#+=============+================================================================+
+#| 2015-Aug-27 | made userdirs the second argument and set its default to ['.'] |
+#|             | this allows to partially keep the former call signature        |
+#|             | e.g. findpath(fpattern,'../../../')                            |
+#+-------------+----------------------------------------------------------------+
+#| 2015-Aug-26 | modified from the original findpath                            |
+#+-------------+----------------------------------------------------------------+
 
 from glob import glob
 import os

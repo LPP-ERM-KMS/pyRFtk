@@ -10,10 +10,10 @@ authors = [
 ]
 description = "Design tool for RF antennae networks"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 classifiers = [
-    "Programming Language :: Python :: 3",
+    "Programming Language :: Python",
     "Operating System :: OS Independent",
 ]
 [project.urls]
-"Homepage" = "https://gitlab.com/justfred/pyrftk/-/tree/current?ref_type=heads"
+"Homepage" = "https://lpp-erm-kms.github.io/pyrftk/"

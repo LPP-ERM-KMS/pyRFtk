@@ -1,16 +1,5 @@
 __updated__ = '2023-11-08 11:26:40'
 
-"""
-Arnold's Laws of Documentation:
-    (1) If it should exist, it doesn't.
-    (2) If it does exist, it's out of date.
-    (3) Only documentation for useless programs transcends the first two laws.
-
-Created on 11 Apr 2022
-
-@author: frederic
-"""
-
 import numpy as np
 degSign = u'\N{DEGREE SIGN}'
 

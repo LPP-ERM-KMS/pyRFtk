@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Touchstone files &#8212; pyRFtk 2.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=514cf933" />
+    
+    <script src="_static/documentation_options.js?v=51b770b3"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Deembedding" href="Deembedding.html" />
+    <link rel="prev" title="Introduction" href="Introduction.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Deembedding.html" title="Deembedding"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Introduction.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyRFtk 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="Tutorials.html" accesskey="U">Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Touchstone files</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="touchstone-files">
+<h1>Touchstone files<a class="headerlink" href="#touchstone-files" title="Link to this heading">¶</a></h1>
+<p>To incorporate touchstone files in a circuit we can make use of the rfObject class.
+We’ll showcase this capability using the TOMAS ICRH matching circuit, of which a diagram is shown below</p>
+<figure class="align-default">
+<img alt="_images/TomasCircuit.png" src="_images/TomasCircuit.png" />
+</figure>
+<p>I.e the RF power source goes to a differential coupler, the output then goes through a coaxial cable
+containing 4 voltage probes. After this the signal goes through a capacitor L-section or the “matching box”.
+Then it goes through the antenna and finally to the “pre-matching capacitor” Ca.</p>
+<p>We have the touchstone file for the antenna, called “tomas_icrh_linear_2017-vacuum.s2p”, using this we can construct the following code to
+create the circuit:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">Circuit</span><span class="p">(</span><span class="n">CaVal</span><span class="o">=</span><span class="mi">150</span><span class="o">*</span><span class="mf">1e-12</span><span class="p">,</span><span class="n">CpVal</span><span class="o">=</span><span class="mf">47.94</span><span class="o">*</span><span class="mf">1e-12</span><span class="p">,</span><span class="n">CsVal</span><span class="o">=</span><span class="mi">133</span><span class="o">*</span><span class="mf">1e-12</span><span class="p">):</span>
+
+     <span class="kn">from</span> <span class="nn">pyRFtk</span> <span class="kn">import</span> <span class="n">rfCircuit</span><span class="p">,</span> <span class="n">rfTRL</span><span class="p">,</span> <span class="n">rfRLC</span><span class="p">,</span> <span class="n">rfObject</span><span class="p">,</span> <span class="n">rfCoupler</span>
+
+     <span class="n">TRLStoV3</span> <span class="o">=</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mf">0.235</span><span class="p">,</span> <span class="n">OD</span><span class="o">=</span><span class="mf">0.041</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="mf">0.017</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+     <span class="n">TRLV3toV2</span> <span class="o">=</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mf">0.66</span><span class="p">,</span> <span class="n">OD</span><span class="o">=</span><span class="mf">0.041</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="mf">0.017</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+     <span class="n">TRLV2toV1</span> <span class="o">=</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mf">0.795</span><span class="p">,</span> <span class="n">OD</span><span class="o">=</span><span class="mf">0.041</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="mf">0.017</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+     <span class="n">TRLV1toV0</span> <span class="o">=</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mf">0.66</span><span class="p">,</span> <span class="n">OD</span><span class="o">=</span><span class="mf">0.041</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="mf">0.017</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+     <span class="n">TRLV0toM</span> <span class="o">=</span> <span class="n">rfTRL</span><span class="p">(</span><span class="n">L</span><span class="o">=</span><span class="mf">0.235</span><span class="p">,</span> <span class="n">OD</span><span class="o">=</span><span class="mf">0.041</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="mf">0.017</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+     <span class="c1">#load S matrix of antenna</span>
+     <span class="n">Antenna</span> <span class="o">=</span> <span class="n">rfObject</span><span class="p">(</span><span class="n">touchstone</span><span class="o">=</span><span class="s1">&#39;tomas_icrh_linear_2017-vacuum.s2p&#39;</span><span class="p">)</span>
+     <span class="n">RLCLeft</span> <span class="o">=</span> <span class="n">rfRLC</span><span class="p">(</span><span class="n">Cs</span><span class="o">=</span><span class="n">CsVal</span><span class="p">,</span><span class="n">Cp</span><span class="o">=</span><span class="n">CpVal</span><span class="p">)</span>
+     <span class="n">CaRight</span> <span class="o">=</span> <span class="n">rfRLC</span><span class="p">(</span><span class="n">Cs</span><span class="o">=</span><span class="n">CaVal</span><span class="p">)</span>
+
+     <span class="n">ct</span> <span class="o">=</span> <span class="n">rfCircuit</span><span class="p">(</span><span class="n">Id</span><span class="o">=</span><span class="s2">&quot;TOMAS_ICRH&quot;</span><span class="p">)</span>
+
+     <span class="n">ct</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;StoV3&#39;</span><span class="p">,</span><span class="n">TRLStoV3</span><span class="p">,</span><span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;S&#39;</span><span class="p">,</span><span class="s1">&#39;V3&#39;</span><span class="p">],</span><span class="n">relpos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;V3toV2&#39;</span><span class="p">,</span><span class="n">TRLV3toV2</span><span class="p">,</span><span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V3&#39;</span><span class="p">,</span><span class="s1">&#39;V2&#39;</span><span class="p">],</span><span class="n">relpos</span><span class="o">=</span><span class="n">TRLStoV3</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;V2toV1&#39;</span><span class="p">,</span><span class="n">TRLV2toV1</span><span class="p">,</span><span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V2&#39;</span><span class="p">,</span><span class="s1">&#39;V1&#39;</span><span class="p">],</span><span class="n">relpos</span><span class="o">=</span><span class="n">TRLStoV3</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="n">TRLV3toV2</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;V1toV0&#39;</span><span class="p">,</span><span class="n">TRLV1toV0</span><span class="p">,</span><span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V1&#39;</span><span class="p">,</span><span class="s1">&#39;V0&#39;</span><span class="p">],</span><span class="n">relpos</span><span class="o">=</span><span class="n">TRLStoV3</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="n">TRLV3toV2</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="n">TRLV2toV1</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;V0toM&#39;</span><span class="p">,</span><span class="n">TRLV0toM</span><span class="p">,</span><span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V0&#39;</span><span class="p">,</span><span class="s1">&#39;M&#39;</span><span class="p">],</span><span class="n">relpos</span><span class="o">=</span><span class="n">TRLStoV3</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="n">TRLV3toV2</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="n">TRLV2toV1</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="n">TRLV1toV0</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+
+     <span class="n">EndOfLine</span> <span class="o">=</span><span class="n">TRLStoV3</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="n">TRLV3toV2</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="n">TRLV2toV1</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="n">TRLV1toV0</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="n">TRLV0toM</span><span class="o">.</span><span class="n">L</span>
+
+     <span class="n">ct</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;Matching&#39;</span><span class="p">,</span><span class="n">RLCLeft</span><span class="p">,</span><span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;F&#39;</span><span class="p">,</span><span class="s1">&#39;G&#39;</span><span class="p">])</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;Antenna&#39;</span><span class="p">,</span><span class="n">Antenna</span><span class="p">,</span><span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;G&#39;</span><span class="p">,</span><span class="s1">&#39;H&#39;</span><span class="p">])</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;RLoss&#39;</span><span class="p">,</span><span class="n">rfRLC</span><span class="p">(</span><span class="n">Rs</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;in&#39;</span><span class="p">,</span><span class="s1">&#39;out&#39;</span><span class="p">])</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">addblock</span><span class="p">(</span><span class="s1">&#39;PreMatch&#39;</span><span class="p">,</span><span class="n">CaRight</span><span class="p">,</span><span class="n">ports</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;H&#39;</span><span class="p">,</span><span class="s1">&#39;I&#39;</span><span class="p">])</span>
+
+     <span class="n">ct</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;StoV3.A&#39;</span><span class="p">,</span><span class="s1">&#39;Source&#39;</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;V3toV2.V3&#39;</span><span class="p">,</span><span class="s1">&#39;StoV3.V3&#39;</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;V3toV2.V2&#39;</span><span class="p">,</span><span class="s1">&#39;V2toV1.V2&#39;</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;V2toV1.V1&#39;</span><span class="p">,</span><span class="s1">&#39;V1toV0.V1&#39;</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;V1toV0.V0&#39;</span><span class="p">,</span><span class="s1">&#39;V0toM.V0&#39;</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;V0toM.M&#39;</span><span class="p">,</span><span class="s1">&#39;Matching.F&#39;</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;Matching.G&#39;</span><span class="p">,</span><span class="s1">&#39;RLoss.in&#39;</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;RLoss.out&#39;</span><span class="p">,</span><span class="s1">&#39;Antenna.G&#39;</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;Antenna.H&#39;</span><span class="p">,</span><span class="s1">&#39;PreMatch.H&#39;</span><span class="p">)</span>
+     <span class="n">ct</span><span class="o">.</span><span class="n">terminate</span><span class="p">(</span><span class="s1">&#39;PreMatch.I&#39;</span><span class="p">,</span><span class="n">Z</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1">#Grounding</span>
+
+     <span class="k">return</span> <span class="n">ct</span>
+</pre></div>
+</div>
+<p>We added the “RLoss” resistor as to simulate the effect of a plasma.
+Let’s say we want to know what voltages would be measured at the nodes V0-3 if we apply 5kW
+at the source at 25MHz, to find this it’s as simple as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ct</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">()</span>
+<span class="n">f</span> <span class="o">=</span> <span class="mi">25</span><span class="o">*</span><span class="mf">1e6</span>
+<span class="n">Solution</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Solution</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">E</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Source&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mi">50</span><span class="o">*</span><span class="mi">5</span><span class="o">*</span><span class="mf">1E3</span><span class="p">)},</span> <span class="n">nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;V0toV1&#39;</span><span class="p">,</span><span class="s1">&#39;V2toV3&#39;</span><span class="p">])</span>
+<span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">V</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Solution</span><span class="p">[</span><span class="s1">&#39;V0toV1.V0&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">V</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Solution</span><span class="p">[</span><span class="s1">&#39;V0toV1.V1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">V</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Solution</span><span class="p">[</span><span class="s1">&#39;V2toV3.V2&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">V</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Solution</span><span class="p">[</span><span class="s1">&#39;V2toV3.V3&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Where the argument “E” indicates what we excite and “nodes” where we measure.
+Note that the first element of</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Solution</span><span class="p">[</span><span class="s1">&#39;V0toV1.V0&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>was requested, this is because the elements are as follows: V,I,Vf,Vr; This also explains
+why we omitted the differential coupler in the definition of the circuit: Vf and Vr can directly
+be obtained at the node.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="Introduction.html"
+                          title="previous chapter">Introduction</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="Deembedding.html"
+                          title="next chapter">Deembedding</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Touchstone.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Deembedding.html" title="Deembedding"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Introduction.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyRFtk 2.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="Tutorials.html" >Tutorials</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Touchstone files</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2023, Frederic Durodie and Arthur Adriaens.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

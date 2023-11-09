@@ -1,13 +1,3 @@
-"""
-Arnold's Laws of Documentation:
-    (1) If it should exist, it doesn't.
-    (2) If it does exist, it's out of date.
-    (3) Only documentation for useless programs transcends the first two laws.
-
-Created on 4 Nov 2021
-
-@author: frederic
-"""
 __updated__ = "2021-12-08 14:28:13"
 
 import sys
