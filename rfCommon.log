@@ -1,0 +1,67 @@
+DEBUG    - config.py            setLogLevel     [   39]: Change loglevel from CRITICAL to DEBUG
+DEBUG    - rfCircuit.py         __init__        [   60]: [  0] > __init__ 
+DEBUG    - rfBase.py            __init__        [   70]: [  1] | > __init__ 
+DEBUG    - rfBase.py            __init__        [  114]: [  2] | | self.fs=[]
+DEBUG    - rfBase.py            __init__        [  138]: [  1] | < __init__
+DEBUG    - rfCircuit.py         __init__        [  110]: [  0] < __init__
+DEBUG    - rfCircuit.py         addblock        [  533]: [  0] > [circuit.addblock] name= TL1, RFobj= rfTRL_1, ports= None, params={}, kwargs= {}
+DEBUG    - rfCircuit.py         addblock        [  698]: [  0] < [circuit.addblock] (inserted a new block)
+DEBUG    - rfCircuit.py         addblock        [  533]: [  0] > [circuit.addblock] name= TL2, RFobj= rfTRL_1, ports= None, params={}, kwargs= {}
+DEBUG    - rfCircuit.py         addblock        [  698]: [  0] < [circuit.addblock] (inserted a new block)
+DEBUG    - rfCircuit.py         connect         [  748]: [  0] > [circuit.connect] ports= ('TL1.1', 'TL2.1', '1')
+DEBUG    - rfCircuit.py         connect         [  821]: [  0] < [circuit.connect]
+DEBUG    - rfCircuit.py         connect         [  748]: [  0] > [circuit.connect] ports= ('TL1.2', 'TL2.2', '2')
+DEBUG    - rfCircuit.py         connect         [  821]: [  0] < [circuit.connect]
+DEBUG    - rfCircuit.py         getS            [ 1203]: [  0] > [circuit.getS] fs= 10000000.0, Zbase= None, params= {}, flags= {}
+DEBUG    - rfCircuit.py         get1S           [ 1228]: [  1] | not using sNp: no sNp
+DEBUG    - rfCircuit.py         get1S           [ 1235]: [  1] | getting S for TL1
+DEBUG    - rfCircuit.py         get1S           [ 1235]: [  1] | getting S for TL2
+DEBUG    - rfCircuit.py         extS            [  949]: [  1] | > [circuit.extS] 
+DEBUG    - rfCircuit.py         extS            [  955]: [  2] | | M is not square (10, 12)
+DEBUG    - rfCircuit.py         extS            [  993]: [  2] | | Portnames= ['1', '2']
+DEBUG    - rfCircuit.py         extS            [  994]: [  2] | | ports=     ['1', '2']
+DEBUG    - rfCircuit.py         extS            [ 1021]: [  2] | | S:
+DEBUG    - rfCircuit.py         extS            [ 1028]: [  2] | |   [2,2]
+DEBUG    - rfCircuit.py         extS            [ 1028]: [  2] | |    0.15417 -104.89°,  0.98804  -14.89°, 
+DEBUG    - rfCircuit.py         extS            [ 1028]: [  2] | |    0.98804  -14.89°,  0.15417 -104.89°, 
+DEBUG    - rfCircuit.py         extS            [ 1030]: [  1] | < [circuit.extS]
+DEBUG    - rfCircuit.py         getS            [ 1282]: [  1] | Ss: 1 matrix
+DEBUG    - rfCircuit.py         getS            [ 1286]: [  1] | f= 10000000.0 Hz
+DEBUG    - rfCircuit.py         getS            [ 1293]: [  1] |   [2,2]
+DEBUG    - rfCircuit.py         getS            [ 1293]: [  1] |    0.15417 -104.89°,  0.98804  -14.89°, 
+DEBUG    - rfCircuit.py         getS            [ 1293]: [  1] |    0.98804  -14.89°,  0.15417 -104.89°, 
+DEBUG    - rfCircuit.py         getS            [ 1295]: [  0] < [circuit.getS]
+DEBUG    - rfCircuit.py         <lambda>        [  840]: [  0] > [circuit.terminate] port= "1", kwargs= {'Z': 0}
+DEBUG    - rfCircuit.py         terminate       [  883]: [  1] | port was an external port
+DEBUG    - rfCircuit.py         <lambda>        [  840]: [  1] | "1" -> idxA: 8, idxB: 9
+DEBUG    - rfCircuit.py         terminate       [  885]: [  1] | self.E["1"] = 10
+DEBUG    - rfCircuit.py         terminate       [  888]: [  1] | self.M[8] -> (1+0j)
+DEBUG    - rfCircuit.py         terminate       [  934]: [  0] < [circuit.terminate]
+DEBUG    - rfCircuit.py         getS            [ 1203]: [  0] > [circuit.getS] fs= 10000000.0, Zbase= None, params= {}, flags= {}
+DEBUG    - rfCircuit.py         get1S           [ 1228]: [  1] | not using sNp: no sNp
+DEBUG    - rfCircuit.py         get1S           [ 1235]: [  1] | getting S for TL1
+DEBUG    - rfCircuit.py         get1S           [ 1235]: [  1] | getting S for TL2
+DEBUG    - rfCircuit.py         extS            [  949]: [  1] | > [circuit.extS] 
+DEBUG    - rfCircuit.py         extS            [  993]: [  2] | | Portnames= ['2']
+DEBUG    - rfCircuit.py         extS            [  994]: [  2] | | ports=     ['2']
+DEBUG    - rfCircuit.py         extS            [ 1021]: [  2] | | S:
+DEBUG    - rfCircuit.py         extS            [ 1028]: [  2] | |   [1,1]
+DEBUG    - rfCircuit.py         extS            [ 1028]: [  2] | |    1.00000 +167.86°, 
+DEBUG    - rfCircuit.py         extS            [ 1030]: [  1] | < [circuit.extS]
+DEBUG    - rfCircuit.py         getS            [ 1282]: [  1] | Ss: 1 matrix
+DEBUG    - rfCircuit.py         getS            [ 1286]: [  1] | f= 10000000.0 Hz
+DEBUG    - rfCircuit.py         getS            [ 1293]: [  1] |   [1,1]
+DEBUG    - rfCircuit.py         getS            [ 1293]: [  1] |    1.00000 +167.86°, 
+DEBUG    - rfCircuit.py         getS            [ 1295]: [  0] < [circuit.getS]
+DEBUG    - rfCircuit.py         getS            [ 1203]: [  0] > [circuit.getS] fs= 10000000.0, Zbase= None, params= {}, flags= {}
+DEBUG    - rfCircuit.py         get1S           [ 1228]: [  1] | not using sNp: no sNp
+DEBUG    - rfCircuit.py         getS            [ 1282]: [  1] | Ss: 1 matrix
+DEBUG    - rfCircuit.py         getS            [ 1286]: [  1] | f= 10000000.0 Hz
+DEBUG    - rfCircuit.py         getS            [ 1293]: [  1] |   [1,1]
+DEBUG    - rfCircuit.py         getS            [ 1293]: [  1] |    1.00000 +167.86°, 
+DEBUG    - rfCircuit.py         getS            [ 1295]: [  0] < [circuit.getS]
+DEBUG    - rfCircuit.py         __init__        [   60]: [  0] > __init__ 
+DEBUG    - rfBase.py            __init__        [   70]: [  1] | > __init__ 
+DEBUG    - rfBase.py            __init__        [  114]: [  2] | | self.fs=[]
+DEBUG    - rfBase.py            __init__        [  138]: [  1] | < __init__
+DEBUG    - rfCircuit.py         __init__        [  110]: [  0] < __init__
