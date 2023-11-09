@@ -8,7 +8,7 @@ Created on 12 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2023-09-22 13:41:34"
+__updated__ = "2023-11-09 11:13:43"
 
 import numpy as np
 import matplotlib.pyplot as pl
@@ -25,7 +25,8 @@ from pyRFtk import plotVSWs, strVSW                                             
 
 alltests = False
 tests = [
-    'rfRLC',
+    'connect_issue',
+#     'rfRLC',
 #     'DEMO_KoM',
 #     'deembed',
 #     'port-order',
@@ -47,6 +48,60 @@ def testhdr(t):
         print('#'*100 +f'\n#\n# t e s t -- {t1}\n#\n')
     return testit
 
+#===============================================================================
+#
+# connect_issue
+#
+if testhdr('connect_issue'):
+    fHz = 10e6
+    
+    setLogLevel('DEBUG')
+    ct = rfCircuit()
+    tl = rfTRL(L=1)
+    ct.addblock('TL1', tl)
+    ct.addblock('TL2', tl)
+    
+    if False and (fHz > 0):
+        # !! cannot yet get the S because this would freeze the circuit after
+        #    which one could not alter connections or add blocks any more
+        print('S for the two TLs separately')
+        printMA(ct.getS(fHz))
+        
+    print(ct.asstr(-1))
+    
+    ct.connect('TL1.1','TL2.1','1')
+    ct.connect('TL1.2','TL2.2','2')
+    if fHz > 0:
+        print('S for the two TLs connected')
+        printMA(ct.getS(fHz))
+    print(ct.asstr(-1))
+
+    ct.terminate('1',Z=0)
+    if fHz > 0:
+        print('S for the two TLs connected and terminated')
+        printMA(ct.getS(fHz))
+    print(ct.asstr(-1))
+    
+    print('S for the two TLs connected and terminated')
+    S = ct.getS(fHz)
+    printMA(S)
+    print(ct.asstr(-1))
+    
+
+    
+    # these are 2 equal length TLs in parallel and thus are equivalent to
+    # a single TL of the same length and half the Z0TL
+    
+    ctc = rfCircuit()
+    ctc.addblock('TLC', rfTRL(L=tl.L, Z0TL=tl.TLP.Z0TL()/2))
+    ctc.terminate('TLC.1', Z=0)
+    SC = ctc.getS(fHz)
+    printMA(SC)
+    
+    printMA(S - SC)
+        
+    
+    
 #===============================================================================
 #
 # rfRLC

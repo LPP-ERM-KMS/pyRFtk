@@ -1,12 +1,12 @@
-__updated__ = '2023-09-21 12:06:35'
+__updated__ = '2023-11-08 11:26:40'
 
 import numpy as np
 degSign = u'\N{DEGREE SIGN}'
 
 if False and __name__ == '__main__':
-    from  pyRFtk import rfBase
-    from pyRFtk.config import logit, logident
-    from pyRFtk.whoami import whoami
+    from  pyRFtk import rfBase                               # @UnresolvedImport
+    from pyRFtk.config import logit, logident                # @UnresolvedImport
+    from pyRFtk.whoami import whoami                         # @UnresolvedImport
 else:
     from . import rfBase
     from .config import logit, logident
@@ -132,7 +132,13 @@ class rfCoupler(rfBase):
             q = "'"
             for p, xpos in zip(self.ports, self.xpos):
                 s += f'| {q+p+q:{lmax+2}s} @ {xpos:7.3f}m '+ '\n'
-            s = s[:-1]
+            # s = s[:-1]
+            
+        if self.S is not None:
+            s += f'|\n+ last evaluation at {self.f:_.1f} Hz: \n'
+            for sk in str(self.S).split('\n'): 
+                s += '|   ' + sk + '\n'
+            
         s += '\n^'
         return s
         
@@ -155,12 +161,14 @@ class rfCoupler(rfBase):
       
         _debug_ and logident('<')
         
-        return np.array(
+        self.f = f
+        self.S = np.array(
             [[0., A, B, 0.],
              [A, 0., 0., B],
              [B, 0., 0., A],
              [0., B, A, 0.]])
-          
+        
+        return self.S
 #===============================================================================
 #
 # _ _ m a i n _ _

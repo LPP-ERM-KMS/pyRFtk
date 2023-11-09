@@ -1,4 +1,4 @@
-__updated__ = "2021-11-04 14:53:51"
+__updated__ = "2023-11-09 11:11:56"
 
 from inspect import signature
 
@@ -255,7 +255,7 @@ class TLresolver():
             # resonable assumptions as we found nothing until now ...
             ('mur', (), 0., _ct_1_),                                         #53
             ('epsr', (), 0., _ct_1_),                                        #54
-            ('Z0TL', (), 0., lambda w, x: self.Zbase),                            #55
+            ('Z0TL', (), 0., lambda w=0, x=0: self.Zbase),                   #55
             #--  -----------------------------------------------------------  --
             # these are a bit iffy but in case there is nothing else ...
             
