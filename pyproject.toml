@@ -10,7 +10,7 @@ authors = [
 ]
 description = "Design tool for RF antennae networks"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.6"
 classifiers = [
     "Programming Language :: Python",
     "Operating System :: OS Independent",
