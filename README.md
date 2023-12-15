@@ -1,4 +1,5 @@
 # pyRFtk
+[![DOI](https://zenodo.org/badge/702980029.svg)](https://zenodo.org/doi/10.5281/zenodo.10391750)
 ![logo](logo.png)
 ## About
 
