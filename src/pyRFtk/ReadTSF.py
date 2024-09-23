@@ -35,7 +35,7 @@ def ReadTSF(src, **kwargs):
     
     #TODO: implement ports, funit
     
-    TZbase = kwargs.pop('Zbase', 50.)
+    TZbase = kwargs.pop('Zbase', None)
     Tfunit = kwargs.get('funit', 'GHz')
     Tports = kwargs.get('ports', 'port-%03d')
     Tcomments = kwargs.get('comments',[])
@@ -114,7 +114,26 @@ def ReadTSF(src, **kwargs):
         elif kw in ['HZ','KHZ','MHZ','GHZ']:
             funit = kw
         elif kw == 'R':
-            Zbase = float(items.pop())
+            Zlist = []
+            while len(items):
+                try:
+                    item = items[-1]
+                    Zlist.append(float(item))
+                except ValueError:
+                    break
+                items.pop()
+                
+            if (NZ := len(Zlist)) == 1:
+                Zbase = Zlist[0]
+                
+            elif NZ > 1:
+                debug and tLogger.debug(ident(f'Zbase [{len(Zlist)}] {", ".join([str(z) for z in Zlist])}'))
+                Zbase = Zlist
+                
+            else:
+                # this should be flagged as an error in the touchstone
+                Zbase = 50. if TZbase is None else TZbase
+                debug and tLogger.debug(ident(f'Zbase not specified in R [ERROR]: set to {Zbase}'))
         else:
             raise ValueError('Unrecognized format specification: %r' % kw)
         
@@ -190,7 +209,7 @@ def ReadTSF(src, **kwargs):
                     lineno += 1
                     aline = comments[lineno]
                     while aline.strip() != '!':
-                        varline = re.findall('!\s*([A-Za-z0-9_]+)\s*=\s*(.+)',
+                        varline = re.findall('!\s*([\$]?[A-Za-z0-9_]+)\s*=\s*(.+)',
                                               aline)
                         if varline:
                             pvars[varline[0][0]] = varline[0][1]
@@ -322,17 +341,25 @@ def ReadTSF(src, **kwargs):
         pass
         
     # if the data type is Z or Y we need to convert to S
+                
+    #FIXME: if TZbase was given then Zbase can be ignored
     if datatype == 'Z':
-        Ss = S_from_Z(Ss, Zbase if Zbase else TZbase)
+        # Ss = S_from_Z(Ss, Zbase if Zbase else TZbase)
+        Ss = S_from_Z(Ss,  TZbase if TZbase else 50.)
         
     elif datatype == 'Y':
-        Ss = S_from_Y(Ss, Zbase if Zbase else TZbase)
-    
+        # Ss = S_from_Y(Ss, Zbase if Zbase else TZbase)
+        Ss = S_from_Y(Ss, TZbase if TZbase else 50.)
+        
     else: # datatype == 'S':
     
         if Zbase is not None:
-            if Zbase != TZbase:
-                Ss = ConvertGeneral(TZbase, Ss, Zbase, 'V', 'V')
+            if not hasattr(Zbase,'__iter__'):
+                if Zbase != TZbase:
+                    Ss = ConvertGeneral(TZbase, Ss, Zbase, 'V', 'V')
+                
+                else:
+                    Ss = ConvertGeneral(TZbase, Ss, Zbase, 'P', 'V')
     
         else: # Zbase is None:
             if len(Zcs[0]) == N:
@@ -340,7 +367,8 @@ def ReadTSF(src, **kwargs):
             else:
                 logit['ERROR'] and tLogger.error(f'len(Zcs)[{len(Zcs)}] != N[{N}]')
                 logit['ERROR'] and tLogger.error(f'Zcs={Zcs}')
-            
+        
+                
     # set the portnames
     
     if 'ports' in kwargs:
@@ -387,7 +415,7 @@ def ReadTSF(src, **kwargs):
         "markers"   : markers,
         "Zc"        : Zcs,
         "Gm"        : Gms,
-        "variables" : None,
+        "variables" : pvars,
         "datafmt"   : datafmt,
     }
 
