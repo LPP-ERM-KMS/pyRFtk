@@ -358,8 +358,8 @@ def ReadTSF(src, **kwargs):
                 if Zbase != TZbase:
                     Ss = ConvertGeneral(TZbase, Ss, Zbase, 'V', 'V')
                 
-                else:
-                    Ss = ConvertGeneral(TZbase, Ss, Zbase, 'P', 'V')
+            else:
+                Ss = ConvertGeneral(TZbase, Ss, Zbase, 'P', 'V')
     
         else: # Zbase is None:
             if len(Zcs[0]) == N:
