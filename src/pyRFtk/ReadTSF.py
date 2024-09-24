@@ -343,13 +343,14 @@ def ReadTSF(src, **kwargs):
     # if the data type is Z or Y we need to convert to S
                 
     #FIXME: if TZbase was given then Zbase can be ignored
+    Zbase = 50. if datatype in 'ZY' and Zbase is None else Zbase
     if datatype == 'Z':
         # Ss = S_from_Z(Ss, Zbase if Zbase else TZbase)
-        Ss = S_from_Z(Ss,  TZbase if TZbase else 50.)
+        Ss = S_from_Z(Ss,  TZbase if TZbase else Zbase)
         
     elif datatype == 'Y':
         # Ss = S_from_Y(Ss, Zbase if Zbase else TZbase)
-        Ss = S_from_Y(Ss, TZbase if TZbase else 50.)
+        Ss = S_from_Y(Ss, TZbase if TZbase else Zbase)
         
     else: # datatype == 'S':
     
