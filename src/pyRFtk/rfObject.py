@@ -573,6 +573,7 @@ class rfObject():
         self.shape = r['shape']
         self.Zcs = np.array(r['Zc'])
         self.Gms = np.array(r['Gm'])
+        self.variables = r['variables']
         self.xpos = [0.] * len(self)
         
     #===========================================================================

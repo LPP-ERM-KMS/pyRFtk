@@ -195,7 +195,7 @@ rcparams = {
     'funit'  : 'Hz',     # 'Hz' | 'kHz' | 'MHz' | 'GHz' # keep to Hz for the moment
     'fs'     : (35e6, 60e6, 251),
     'interp' : 'MA',     # 'MA' | 'RI' | 'dB'
-    'interpkws' : {'kind': 3, 
+    'interpkws' : {'kind': 1, 
                    'fill_value':'extrapolate'
                   },
 }
