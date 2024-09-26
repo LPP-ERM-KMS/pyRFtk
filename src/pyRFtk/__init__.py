@@ -1,4 +1,6 @@
-__updated__ = "2023-09-22 15:55:47"
+__updated__ = "2024-08-29 09:55:04"
+
+print('using local copy of pyRFtk')
 
 from .config import tLogger, setLogLevel, logit, ident, _newID, logident
 from .rfBase import rfBase
@@ -19,6 +21,7 @@ from .Y_from_S import Y_from_S
 
 from .ConvertGeneral import ConvertGeneral
 from .ReadTSF import ReadTSF
+from .WriteTSF import WriteTSF
 from .maxfun import maxfun
 from .resolveTLparams import TLresolver
 from .plotVSWs import plotVSWs, scaleVSW, strVSW
