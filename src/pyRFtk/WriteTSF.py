@@ -4,6 +4,8 @@ import numpy as np
 import re
 import time
 
+
+
 #===============================================================================
 #
 # W r i t e T S F 
@@ -12,7 +14,7 @@ import time
 
 def WriteTSF(object, path2tsf=None,
            fs=[], 
-           tsf_format='GHZ S DB R 50', 
+           tsf_format='MHZ S DB R 50', 
            num_format=None,
            comments = ''):
     
@@ -88,7 +90,7 @@ def WriteTSF(object, path2tsf=None,
     
     if num_format is None:
         if fmt in ['DB','MA']:
-            num_format = ('8.4f', '10.7f', '+6.1f')
+            num_format = ('9.5f', '15.12f', '+8.4f')
         else:
             num_format = ('8.4f', '10.7f', '10.7f')
     
@@ -115,9 +117,12 @@ def WriteTSF(object, path2tsf=None,
                         s += ' !    row %d' % (kr+1)
                     s += '\n'+' '*10
                     
-            s += '\n'
-            if kr != nports-1:
-                s += ' '*10
+            if nports > 2:
+                s += '\n'
+                if kr != nports-1:
+                    s += ' '*9
+
+        s += '\n'      
                 
         
     if path2tsf:
@@ -133,10 +138,37 @@ def WriteTSF(object, path2tsf=None,
 # _ _ m a i n _ _
 #
 #===============================================================================
+
 if __name__ == '__main__':
-    from scipy.io import loadmat
     
-    R = loadmat('/home/frederic/workspace/TWA/S22_TWA.npy')
-    print(R)
+    import os
+    import matplotlib.pyplot as pl 
     
+    import sys
+    sys.path.insert(0, '/home/frederic/git/pyrftk/src/pyRFtk')
+    
+    from pyRFtk import rfObject
+    
+    path2data = '/home/frederic/git/twa-on-west/data/high'
+    
+    fs = np.load(os.path.join(path2data,'f_lst.npy'))
+    R = np.load(os.path.join(path2data,'S22_TWA.npy'))
+    
+    Q = rfObject(Zbase=30)
+    Q.setS(f=fs, S=R, Portnames=['in','out'])
+    
+    WriteTSF(Q, tsf := os.path.join(path2data,f'test.s{len(Q)}p'),fs=np.linspace(45e6,65e6,201))
+    
+    T = rfObject(touchstone=tsf)
+    print(T)
+    
+    Sq = Q.getS(fs,Zbase=30)
+    St = T.getS(fs,Zbase=30)
+    print(St.shape)
+    for i in range(len(Q)):
+        for j in range(len(Q)):
+            pl.plot(fs, np.abs(Sq[:,i,j]-St[:,i,j]), label=f'Sq$_{{{i}{j}}}$')
+    
+    pl.show()
+    print(Q)
     
