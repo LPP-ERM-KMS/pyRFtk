@@ -2,6 +2,10 @@ __updated__ = "2023-09-12 10:02:08"
 
 import numpy as np
 import re
+import os
+from warnings import warn
+_warn_skips = (os.path.dirname(__file__),)
+
 from .getlines import getlines 
 from .config import tLogger, logit, ident
 from .config import fscale
@@ -339,6 +343,36 @@ def ReadTSF(src, **kwargs):
         Ss = 10**(Ss.real/20.) * np.exp(1j * Ss.imag * np.pi / 180.)
     else: # datafmt == 'RI':
         pass
+    
+    ## do some checking
+    if nZcs := Zcs.shape[1]:
+        # Zcs (and probably gammas) were present in the file
+        if Zbase is not None:
+            # there was also a R ... in the format
+            if (nZbase := len(Zbase) if hasattr(Zbase, '__iter__') else 1) != nZcs :
+                warn(f'\nInconsistent length of the Zcs ({nZcs}) comments and the '
+                     f'format supplied reference impedance R ({nZbase})',
+                     stacklevel=4)
+            else:
+                # numbers match ... but do the values
+                if nZbase == 1:
+                    errfs = np.max(np.abs([(Zbase - Zcs_k)/Zbase for Zcs_k in Zcs[:,0]]))
+                else:
+                    errfs = np.max(np.abs([
+                        [(Zbase_l - Zcs_kl)/Zbase_l for Zbase_l, Zcs_kl in zip(Zbase, Zcs_k)]
+                         for Zcs_k in Zcs
+                        ]))
+                    
+                if (tol := 1e-3) < errfs:
+                    warn(
+                        f'\nInconsistent values for the reference impedances from Zcs comments'
+                        f' and the one supplied in the format parameter R (rel. err. = {errfs:0.2g} > {tol:0.2g})',
+                        stacklevel=4)
+                    
+            if nZbase == 1 and nZcs != 1:
+                err = []
+    
+            
         
     # if the data type is Z or Y we need to convert to S
                 
@@ -354,20 +388,18 @@ def ReadTSF(src, **kwargs):
         
     else: # datatype == 'S':
     
-        if Zbase is not None:
-            if not hasattr(Zbase,'__iter__'):
-                if Zbase != TZbase:
-                    Ss = ConvertGeneral(TZbase, Ss, Zbase, 'V', 'V')
+        if nZcs:  # prefer the Zcs data over the format line R data
+            Ss = ConvertGeneral(TZbase if TZbase else 50., Ss, Zcs, 'P', 'V')
                 
-            else:
-                Ss = ConvertGeneral(TZbase, Ss, Zbase, 'P', 'V')
+        elif Zbase is not None and (nZbase == 1 or nZbase == Ss.shape[1]):
+            Ss = ConvertGeneral(TZbase if TZbase else 50., Ss, Zbase, 'P', 'V')
     
-        else: # Zbase is None:
-            if len(Zcs[0]) == N:
-                Ss = ConvertGeneral(TZbase, Ss, Zcs, 'P', 'V')
-            else:
-                logit['ERROR'] and tLogger.error(f'len(Zcs)[{len(Zcs)}] != N[{N}]')
-                logit['ERROR'] and tLogger.error(f'Zcs={Zcs}')
+        elif Zbase is None: # No Zcs and Zbase is None:
+            Ss = ConvertGeneral(TZbase if TZbase else 50., Ss, Zcs, 'P', 'V')
+        
+        else:
+            logit['ERROR'] and tLogger.error(f'len(Zcs)[{len(Zcs)}] != N[{N}]')
+            logit['ERROR'] and tLogger.error(f'Zcs={Zcs}')
         
                 
     # set the portnames
