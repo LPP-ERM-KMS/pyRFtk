@@ -1,6 +1,6 @@
 # pyRFtk
 [![DOI](https://zenodo.org/badge/702980029.svg)](https://zenodo.org/doi/10.5281/zenodo.10391750)
-![logo](https://github.com/LPP-ERM-KMS/pyRFtk/blob/master/logo.png)
+![logo](https://github.com/LPP-ERM-KMS/pyRFtk/blob/master/logo/logo.svg)
 ## About
 
 pyRFtk is a Python library able to build and analyse RF circuits, originally designed for ICRH antennae but now widely deployable.
