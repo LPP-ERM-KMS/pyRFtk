@@ -1,13 +1,13 @@
 # pyRFtk
 [![DOI](https://zenodo.org/badge/702980029.svg)](https://zenodo.org/doi/10.5281/zenodo.10391750)
-![logo](logo.png)
+![logo](https://github.com/LPP-ERM-KMS/pyRFtk/blob/master/logo.png)
 ## About
 
 pyRFtk is a Python library able to build and analyse RF circuits, originally designed for ICRH antennae but now widely deployable.
 you can:
 - Incorporate touchstone files to create your own elements
-- See the maximum current throughout your circuit
-- Compute the S-matrix
+- See the currents throughout your circuit
+- Compute S-matrices
 - Detect Arcs
 - Deembed systems
 - ...
