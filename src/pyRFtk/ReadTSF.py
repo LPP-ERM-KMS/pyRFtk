@@ -1,4 +1,4 @@
-__updated__ = "2023-09-12 10:02:08"
+__updated__ = "2024-12-20 14:21:08"
 
 import numpy as np
 import re
@@ -187,7 +187,7 @@ def ReadTSF(src, **kwargs):
     pvars = {}
     GENERAL_MIXED = False
     source = re.findall(
-        '(?i)! Touchstone file exported from HFSS (\d{4}\.\d+\.\d+)',
+        r'(?i)! Touchstone file exported from HFSS (\d{4}\.\d+\.\d+)',
         comments[0])
     debug and tLogger.debug(ident(f'source = {source}'))
     
@@ -213,7 +213,7 @@ def ReadTSF(src, **kwargs):
                     lineno += 1
                     aline = comments[lineno]
                     while aline.strip() != '!':
-                        varline = re.findall('!\s*([\$]?[A-Za-z0-9_]+)\s*=\s*(.+)',
+                        varline = re.findall(r'!\s*([\$]?[A-Za-z0-9_]+)\s*=\s*(.+)',
                                               aline)
                         if varline:
                             pvars[varline[0][0]] = varline[0][1]
@@ -239,8 +239,8 @@ def ReadTSF(src, **kwargs):
     
     re_compile = True # check if compiling regexes is faster ... not really
     if re_compile:
-        reGline = re.compile('(?i)\s*(?:Gamma)\s+!?(.+)')
-        reZline = re.compile('(?i)\s*(?:Port Impedance)(.+)')
+        reGline = re.compile(r'(?i)\s*(?:Gamma)\s+!?(.+)')
+        reZline = re.compile(r'(?i)\s*(?:Port Impedance)(.+)')
     
     for aline in comments[got_marker:]:
         # check for gamma or port impedance lines
@@ -256,8 +256,8 @@ def ReadTSF(src, **kwargs):
             Gline = reGline.search(rest)
             Zline = reZline.search(rest)
         else:
-            Gline = re.findall('(?i)\s*(Gamma)\s+!?(.+)',rest)
-            Zline = re.findall('(?i)\s*(Port Impedance)(.+)',rest)
+            Gline = re.findall(r'(?i)\s*(Gamma)\s+!?(.+)',rest)
+            Zline = re.findall(r'(?i)\s*(Port Impedance)(.+)',rest)
         
         
         if Gline or (lastline == 'gamma' and not Zline):
