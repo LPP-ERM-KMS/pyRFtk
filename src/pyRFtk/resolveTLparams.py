@@ -371,7 +371,7 @@ class TLresolver():
                         #   these are assumption-like settings for mur and epsr
                         #   when failing to find anything that solves with the
                         #   current set of found kw's
-                        f0 = 1E6 if self.f0 in [np.NaN,None] else self.f0
+                        f0 = 1E6 if self.f0 in [np.nan,None] else self.f0
                         x0 = 0
                         tol = 1e-7
                         got, new = getattr(self,kw)(f0,x0), fun(f0,x0)
@@ -401,7 +401,7 @@ class TLresolver():
     def __str__(self, full=True):
         l1 = max([len(self.kwset[kw]["source"]) for kw in self.order])
         s = ''
-        f0 = self.f0 if self.f0 not in [np.NaN, None] else 1E6
+        f0 = self.f0 if self.f0 not in [np.nan, None] else 1E6
         s += f'parameters / values at {f0/1e6:.3f} MHz, x=0, w = 2pi f\n'
         for kw in self.order:
             sig = signature(getattr(self, kw)).parameters
