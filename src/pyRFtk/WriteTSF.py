@@ -1,4 +1,4 @@
-__updated__ = "2024-08-29 15:46:08"
+__updated__ = "2024-12-20 14:21:10"
 
 import numpy as np
 import re
@@ -50,7 +50,7 @@ def WriteTSF(object, path2tsf=None,
     try:
         zref = float(
                 re.findall(
-                    '^.*?R\s*([-+]?(?:\d*[\.])?\d+(?:[eE][-+]?\d+)?).*?$',
+                    r'^.*?R\s*([-+]?(?:\d*[\.])?\d+(?:[eE][-+]?\d+)?).*?$',
                     tsf_format
                 )[0]
                )
