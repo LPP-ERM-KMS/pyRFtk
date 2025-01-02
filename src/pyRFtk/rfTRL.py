@@ -191,7 +191,7 @@ class rfTRL():
         self.odeparams = kwargs.pop('odeparams',{'rtol':1E-12, 'atol':1E-12})
         self.sNp = kwargs.pop('sNp', None)
         self.constant = True
-        self.f = np.NaN
+        self.f = np.nan
         self.S = None
         self.attrs = ['L']
         
@@ -319,7 +319,7 @@ class rfTRL():
         else:
             s += f'| ODE integration parameters: {self.odeparams} \n'
         
-        self.TLP.f0 = self.f if self.f != np.NaN else None
+        self.TLP.f0 = self.f if self.f != np.nan else None
         for _s in self.TLP.__str__(full).split('\n'):
             s += f'| {_s}\n'
     
