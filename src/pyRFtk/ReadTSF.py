@@ -1,4 +1,4 @@
-__updated__ = "2024-12-20 14:21:08"
+__updated__ = "2025-01-21 15:58:36"
 
 import numpy as np
 import re
@@ -94,6 +94,7 @@ def ReadTSF(src, **kwargs):
                         )
                         
                 if not got_marker:
+                    # we effectively started reading the numerical data
                     comments.append('*** DATA MARKER ***')
                     got_marker = len(comments)
 
@@ -107,7 +108,7 @@ def ReadTSF(src, **kwargs):
     
     # analyse the format string: 
     #  for unnormalized data (R missing) Zbase is set to None
-    items = tformat[1:].upper().split()[::-1]
+    items = tformat[1:].upper().split()[::-1] # note we reverse the order here
     datatype, datafmt, funit, Zbase = 'S', 'MA', 'GHZ', None 
     while len(items):
         kw = items.pop()
@@ -131,17 +132,19 @@ def ReadTSF(src, **kwargs):
                 Zbase = Zlist[0]
                 
             elif NZ > 1:
-                debug and tLogger.debug(ident(f'Zbase [{len(Zlist)}] {", ".join([str(z) for z in Zlist])}'))
+                debug and tLogger.debug(
+                    ident(f'Zbase [{len(Zlist)}] {", ".join([str(z) for z in Zlist])}'))
                 Zbase = Zlist
                 
             else:
                 # this should be flagged as an error in the touchstone
                 Zbase = 50. if TZbase is None else TZbase
-                debug and tLogger.debug(ident(f'Zbase not specified in R [ERROR]: set to {Zbase}'))
+                debug and tLogger.debug(
+                    ident(f'Zbase not specified in R [ERROR]: set to {Zbase}'))
         else:
             raise ValueError('Unrecognized format specification: %r' % kw)
         
-    # detect special comments
+    # process special comments
     ports = None
     part = None
     numbering = None
@@ -345,7 +348,8 @@ def ReadTSF(src, **kwargs):
         pass
     
     ## do some checking
-    if nZcs := Zcs.shape[1]:
+    nZcs, nZbase = 0, 0
+    if len(Zcs) and (nZcs := Zcs.shape[1]):
         # Zcs (and probably gammas) were present in the file
         if Zbase is not None:
             # there was also a R ... in the format
