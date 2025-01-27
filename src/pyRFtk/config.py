@@ -1,4 +1,4 @@
-__updated__ = "2023-04-20 08:40:02"
+__updated__ = "2025-01-16 08:40:30"
 
 import time
 import string
@@ -7,6 +7,8 @@ import logging
 import inspect
 
 import os
+import sys
+import traceback
 import atexit
 
 LOGFILE = 'rfCommon.log'
@@ -53,6 +55,8 @@ def setLogLevel(level):
 #=-----------------------------------------------------------------------------#
 
 setLogLevel(logging.CRITICAL)
+sys_excepthook = sys.excepthook
+# print(f'sys.excepthook = {sys_excepthook}')
 
 def CleanUpLogFile():
     try:
@@ -65,7 +69,18 @@ def CleanUpLogFile():
     except FileNotFoundError:
         pass
 
+def CleanUpLogFile1(type, value, tb):
+    print('calling pyRFtk.CleanUpLogFile after program crash')
+    CleanUpLogFile()
+    traceback_details = "\n".join(traceback.extract_tb(tb).format())
+
+    msg = f"caller: {type}: {value}\n{traceback_details}"
+    print(msg)
+    sys.excepthook = sys_excepthook
+    
+    
 atexit.register(CleanUpLogFile)
+sys.excepthook = CleanUpLogFile1
 
 #=-----------------------------------------------------------------------------#
 
