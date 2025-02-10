@@ -101,7 +101,7 @@ def plotVSWs(VSWs, maxlev=4, Id = None,  **kwargs):
         
         #= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
         
-        def find(BLK, VSW, curdist2=np.Inf, curBLK='', curUp=yp, curX=xp):
+        def find(BLK, VSW, curdist2=np.inf, curBLK='', curUp=yp, curX=xp):
             _debug_ and tLogger.debug(ident(
                 f'> [find] BLK= {BLK}, '
                 f'VSW= {[_ for _ in VSW] if isinstance(VSW, dict) else type(VSW)}, '
