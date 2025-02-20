@@ -11,6 +11,15 @@ you can:
 - Detect Arcs
 - Deembed systems
 - ...
+  
+## Installation
+pyRFtk is available as a pip package:
+
+```sh
+pip install pyRFtk
+```
+
+Or using your favorite distribution platform
 
 ## Authors
 The code was developed by RF-engineer Frederic Durodie and later
