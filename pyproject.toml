@@ -17,3 +17,5 @@ classifiers = [
 ]
 [project.urls]
 "Homepage" = "https://lpp-erm-kms.github.io/pyrftk/"
+[tool.hatch.build]
+exclude = ["docs", "tests", "examples"]
