@@ -24,3 +24,6 @@ Or using your favorite distribution platform
 ## Authors
 The code was developed by RF-engineer Frederic Durodie and later
 on refactored, packaged and documented by Arthur Adriaens
+
+## Example usage
+This code was extensively used for the paper [An automatic matching system for the ICRF antenna at TOMAS: Development and experimental proof](https://doi.org/10.1016/j.fusengdes.2025.114840), the code for which may be found in the examples folder.
