@@ -9,7 +9,8 @@ I.e the RF power source goes to a differential coupler, the output then goes thr
 containing 4 voltage probes. After this the signal goes through a capacitor L-section or the "matching box".
 Then it goes through the antenna and finally to the "pre-matching capacitor" Ca.
 
-We have the touchstone file for the antenna, called "tomas_icrh_linear_2017-vacuum.s2p", using this we can construct the following code to 
+We have the touchstone :download:`file <Files/tomas_icrh_linear_2017-vacuum.s2p>`
+for the antenna, called "tomas_icrh_linear_2017-vacuum.s2p", using this we can construct the following code to 
 create the circuit:
 
 .. code-block:: python
@@ -43,7 +44,7 @@ create the circuit:
         ct.addblock('RLoss',rfRLC(Rs=1),ports=['in','out'])
         ct.addblock('PreMatch',CaRight,ports=['H','I'])
 
-        ct.connect('StoV3.A','Source')
+        ct.connect('StoV3.S','Source')
         ct.connect('V3toV2.V3','StoV3.V3')
         ct.connect('V3toV2.V2','V2toV1.V2')
         ct.connect('V2toV1.V1','V1toV0.V1')

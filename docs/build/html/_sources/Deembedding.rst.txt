@@ -68,8 +68,9 @@ We may use the 'deembed' function in the rfCircuit object to solve for
 
 
 As an example we'll use the TOMAS ICRH system again, 
-the strap of the antenna has been measured together
-with two pieces of TL, we can deembed it as follows:
+the strap of the antenna has been 
+:download:`measured <Files/Tomas-Ref_geo-R=200-Diel_eps=0500.s2p>`
+together with two pieces of TL, we can deembed it as follows:
 
 .. code-block:: 
 
@@ -78,7 +79,7 @@ with two pieces of TL, we can deembed it as follows:
     T2Cs1_L = 0.121
     T2Cs1_Z = 50
 
-    tsStrap = 'Antenna/Tomas-Ref_geo-R=200-Diel_eps=0500.s2p'
+    tsStrap = 'Tomas-Ref_geo-R=200-Diel_eps=0500.s2p'
 
 
     strap = rfObject(touchstone=tsStrap, ports=['cap','t'])
