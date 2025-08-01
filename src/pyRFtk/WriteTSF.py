@@ -95,6 +95,7 @@ def WriteTSF(object, path2tsf=None,
             num_format = ('8.4f', '10.7f', '10.7f')
     
     tnumfmt = f'%{num_format[1]} %{num_format[2]} '
+    leadspaces = ' '*(1 + int(num_format[0].split('.')[0]))
     
     for k,fk in enumerate(fs):
         s += (f'%{num_format[0]}' % (fk / fscale)) + ' '
@@ -106,7 +107,7 @@ def WriteTSF(object, path2tsf=None,
                     s += tnumfmt % (np.real(dij),np.imag(dij))
                     
                 elif fmt == 'DB':
-                    s += tnumfmt% (20.*np.log10(np.abs(dij)),
+                    s += tnumfmt % (20.*np.log10(np.abs(dij)),
                                                np.angle(dij,1))
                     
                 else: # can only be MA
@@ -115,12 +116,12 @@ def WriteTSF(object, path2tsf=None,
                 if (kc % 4 == 3) and (kc is not nports-1):
                     if kc == 3:
                         s += ' !    row %d' % (kr+1)
-                    s += '\n'+' '*10
+                    s += '\n' + leadspaces
                     
             if nports > 2:
                 s += '\n'
                 if kr != nports-1:
-                    s += ' '*9
+                    s += leadspaces
 
         s += '\n'      
                 
