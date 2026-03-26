@@ -1,4 +1,6 @@
-__updated__ = "2023-11-08 11:19:50"
+__updated__ = "2026-03-26 11:24:28"
+
+#TODO: add the possibility to fill doing  rfObject(fs=[ ...], Ss=[ ... ])
 
 if __name__ == '__main__':
     import sys
@@ -60,9 +62,9 @@ class rfObject():
     and 
     
     excitation = {port1:a1, ... }
-    Vamx, rfObject.maxV(fHz, excitation)
+    Vmax, rfObject.maxV(fHz, excitation)
     
-   
+    [note code partially debugged using co-pilot (GPT-5 mini)]
     """
     #===========================================================================
     #
@@ -85,6 +87,8 @@ class rfObject():
             fixme: no parameters to set the Zcs and Gms port properties
         """
         
+        self.got_args = False
+        
         if not hasattr(self,'args'):
             self.args = args
         
@@ -93,12 +97,76 @@ class rfObject():
         
         self.Id = kwargs.pop('Id',f'{type(self).__name__}_{_newID()}')
         
+        # if only an arg is given -> convert it (type cast) to an rfObject
+        # this eg to convert a list/numpy array to an rfOject
+        #
+        # obj = rfObject(numpy.array([[0,1],[1,0]])
+        # obj.getS(fs) returns [[0,1],[1,0]] for all frequenies fs
+        #
+        # what could be valid kwargs ?
+        #
+        # ports, xpos, Zbase 
+        
+        # print(f'rfObject: Nargs = {len(args)}')
+        
+        if Nargs := len(args):
+            if Nargs == 1:
+                # check type of arg
+                if not isinstance(args[0], (np.ndarray, np.matrix, list)):
+                    raise TypeError(
+                        f'rfObject: args[0] must be of type list, numpy.array or '
+                        f'numpy.matrix; got {type(args[0])}')
+                
+                arg0 = np.array(args[0], dtype=complex)
+                
+                if len(arg0.shape) != 2:
+                    raise TypeError(
+                        f'rfObject: arg[0] must must represent a square 2-dim '
+                        f'array; got {arg0.shape}')
+                 
+                if arg0.shape[0] != arg0.shape[1]:   
+                    raise TypeError(
+                        f'rfObject: arg[0] must must represent a square 2-dim '
+                        f'array; got {arg0.shape[0]} x {arg0.shape[1]}')
+                    
+                self.N = arg0.shape[0]
+                self.ports = [f'm{k:03d}' for k in range(1,self.N+1)]
+                self.Ss = np.array([arg0, arg0])
+                self.fs = np.array([0, 1e18])
+
+                self.got_args = True
+                
+            elif Nargs == 2:
+                raise NotImplementedError()
+            
+            else:
+                raise TypeError(f"rfObject: at most 2 args expected; got {Nargs}")
+        
         #TODO: validate allowed port names
-        self.ports = kwargs.get('ports',[])
-        self.alias = {}
-        if isinstance(self.ports, str):
-            self.ports = self.ports.split()
-        self.N = len(self.ports)
+
+        self.alias = {} #FIXME: what was the idea again ... does not appear to be used
+
+        _ports = kwargs.get('ports', [])
+        if isinstance(_ports, str):
+            _ports = _ports.split()
+        _N = len(_ports)
+        
+        # If the object was created from an argument (e.g. an S-matrix),
+        # self.N and self.ports may already be set. Only override ports
+        # from kwargs when the caller actually provided a non-empty ports list.
+        if hasattr(self, 'N'):
+            if _N:
+                if _N != self.N:
+                    raise ValueError(
+                        f'rfObject: the supplied args suggests a {self.N} port '
+                        f'object but the supplied port kwarg suggests a {_N} port one')
+                # override only when ports were explicitly provided
+                self.ports = _ports
+        else:
+            # no N previously set -> use provided ports count (may be zero)
+            self.N = _N
+            # assign provided ports (may be empty list)
+            self.ports = _ports
         
         self.Zbase = kwargs.get('Zbase', rcparams['Zbase'])
         self.funit = kwargs.get('funit', rcparams['funit'])
@@ -107,13 +175,17 @@ class rfObject():
         
         self.interp = kwargs.get('interp',rcparams['interp'])
         self.interpkws = kwargs.get('interpkws',rcparams['interpkws'])
-        
+            
         self.xpos = kwargs.get('xpos', [0.]*self.N)
-        
+                
         # initialize arrays and stuff
-        self.fs = np.array([],dtype=float).reshape((0,))
+        if not hasattr(self,'fs'):
+            self.fs = np.array([],dtype=float).reshape((0,))
         self.sorted = True
-        self.Ss = np.array([], dtype=complex).reshape((0, self.N, self.N))
+        
+        if not hasattr(self, 'Ss'):
+            self.Ss = np.array([], dtype=complex).reshape((0, self.N, self.N))
+            
         self.Zcs = np.array([], dtype=complex).reshape(0, self.N)
         self.Gms = np.array([], dtype=complex).reshape(0, self.N)
         self.process_kwargs()
@@ -121,13 +193,17 @@ class rfObject():
         
         self.touchstone = kwargs.get('touchstone', None)
         if self.touchstone:
-            Tkwargs = {'Zbase': self.Zbase, 'funit':'HZ'}
-            for (kw, value) in kwargs.items():
-                if kw in Tkwargs:
-                    Tkwargs[kw] = value
-            
-            self.read_tsf(self.touchstone, **Tkwargs)
-        
+            if not self.got_args:
+                Tkwargs = {'Zbase': self.Zbase, 'funit':'HZ'}
+                for (kw, value) in kwargs.items():
+                    if kw in Tkwargs:
+                        Tkwargs[kw] = value
+                
+                self.read_tsf(self.touchstone, **Tkwargs)
+            else:
+                raise ValueError(
+                    f'rfObject: touchstone is not compatible with the use of args')
+
         self.interpOK = False
         
         self.f, self.S = None, None
@@ -672,4 +748,5 @@ class rfObject():
             raise ValueError(
                 f'pyRFtk2.rfObject.deembed: port(s) {",".join([p for p in ports])}'
                 ' not found.')
+
 

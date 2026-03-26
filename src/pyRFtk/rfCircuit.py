@@ -1,4 +1,6 @@
-__updated__ = "2023-11-09 10:00:05"
+__updated__ = "2025-04-28 08:02:54"
+
+#FIXME: addblock of a np.array fails because of xpos issues (also __str__ fails)
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -692,8 +694,12 @@ class rfCircuit(rfBase):
         
         # update the self.xpos
         # self.xpos = []
-        for p, x in zip(oports, RFobj.xpos):
-            self.xpos.append(relpos + x)
+        if hasattr(RFobj,'xpos'):
+            for p, x in zip(oports, RFobj.xpos):
+                self.xpos.append(relpos + x)
+        else:
+            for p in oports:
+                self.xpos.append(relpos)
                 
         _debug_ and tLogger.debug(ident(
             f'< [circuit.addblock] (inserted a new block)', -1
