@@ -1,4 +1,4 @@
-__updated__ = "2025-01-21 15:58:36"
+__updated__ = "2026-04-24 13:51:59"
 
 import numpy as np
 import re
@@ -349,7 +349,7 @@ def ReadTSF(src, **kwargs):
     
     ## do some checking
     nZcs, nZbase = 0, 0
-    if len(Zcs) and (nZcs := Zcs.shape[1]):
+    if len(Zcs) and (nZcs := np.array(Zcs).shape[1]):
         # Zcs (and probably gammas) were present in the file
         if Zbase is not None:
             # there was also a R ... in the format
