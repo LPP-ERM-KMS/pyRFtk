@@ -59,6 +59,8 @@ class rfGTL(rfCircuit):
             
         with open(path2model,'r') as f:
             self.model = ast.literal_eval(f.read())
+            
+        pprint(self.model)
         
         try:
             self.GTL = self.model[self.objkey]['GTL']

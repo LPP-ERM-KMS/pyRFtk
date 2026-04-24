@@ -1,4 +1,4 @@
-__updated__ = "2026-04-24 13:51:59"
+__updated__ = "2026-04-24 02:09:50"
 
 import numpy as np
 import re
@@ -354,9 +354,10 @@ def ReadTSF(src, **kwargs):
         if Zbase is not None:
             # there was also a R ... in the format
             if (nZbase := len(Zbase) if hasattr(Zbase, '__iter__') else 1) != nZcs :
-                warn(f'\nInconsistent length of the Zcs ({nZcs}) comments and the '
-                     f'format supplied reference impedance R ({nZbase})',
-                     stacklevel=4)
+                if False:
+                    warn(f'\nInconsistent length of the Zcs ({nZcs}) comments and the '
+                         f'format supplied reference impedance R ({nZbase})',
+                         stacklevel=4)
             else:
                 # numbers match ... but do the values
                 if nZbase == 1:
