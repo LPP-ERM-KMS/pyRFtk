@@ -1,4 +1,4 @@
-__updated__ = "2026-05-13 21:39:43"
+__updated__ = "2026-05-20 14:58:47"
 
 import numpy as np
 import re
@@ -400,7 +400,7 @@ def ReadTSF(src, **kwargs):
                 
         elif Zbase is not None and (nZbase == 1 or nZbase == Ss.shape[1]):
             Ss = ConvertGeneral(TZbase if TZbase else 50., Ss, Zbase, 'P', 'V')
-            print(f'have converted the data from {Zbase} in the touchstone  to {TZbase}')
+            # print(f'have converted the data from {Zbase} in the touchstone  to {TZbase}')
     
         elif Zbase is None: # No Zcs and Zbase is None:
             Ss = ConvertGeneral(TZbase if TZbase else 50., Ss, Zcs, 'P', 'V')
