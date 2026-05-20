@@ -1,4 +1,4 @@
-__updated__ = "2025-04-28 08:02:54"
+__updated__ = "2026-05-19 11:11:41"
 
 #FIXME: addblock of a np.array fails because of xpos issues (also __str__ fails)
 
@@ -291,6 +291,30 @@ class rfCircuit(rfBase):
             obj = None
             
         debug and logident(f'<')
+        
+        return obj
+    
+    #==============================================================================================
+    #
+    # o b j e c t
+    #
+    def object(self,path):
+        """object
+            
+            returns the object pointed to by path
+            
+            eg. rfCircuit_object = self.object('block1.block2. ... .blockN')
+            
+            is equivalent to
+            
+            rfCircuit_object = \
+               self.blocks['block1']['object'].blocks['block2']['object']. ... .blocks['blockN']['object']
+               
+            Note this is similar to findObj 
+        """
+        obj = self
+        for blk in path.split('.'):
+            obj = obj.blocks[blk]['object']
         
         return obj
     

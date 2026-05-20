@@ -1,4 +1,4 @@
-__updated__ = "2026-03-26 11:24:28"
+__updated__ = "2026-05-20 14:05:43"
 
 #TODO: add the possibility to fill doing  rfObject(fs=[ ...], Ss=[ ... ])
 
@@ -193,16 +193,21 @@ class rfObject():
         
         self.touchstone = kwargs.get('touchstone', None)
         if self.touchstone:
-            if not self.got_args:
-                Tkwargs = {'Zbase': self.Zbase, 'funit':'HZ'}
-                for (kw, value) in kwargs.items():
-                    if kw in Tkwargs:
-                        Tkwargs[kw] = value
-                
-                self.read_tsf(self.touchstone, **Tkwargs)
-            else:
+            if self.got_args:
                 raise ValueError(
                     f'rfObject: touchstone is not compatible with the use of args')
+                
+            Tkwargs = {'Zbase': self.Zbase, 'funit':'HZ'}
+            # FIXME: if Zbase is not supplied it defaults to 50 Ohm but that is
+            #        not taking into account the information supplied in the 
+            #        touchstone !
+            
+            for (kw, value) in kwargs.items():
+                if kw in Tkwargs:
+                    Tkwargs[kw] = value
+            
+            self.read_tsf(self.touchstone, **Tkwargs)
+
 
         self.interpOK = False
         
@@ -290,7 +295,10 @@ class rfObject():
         for kw, val in self.kwargs.items():
             s += ',\n'
             s += '  %s = %r' % (kw,val)
+        if 'Zbase' not in self.kwargs:
+            s += f'\n  Zbase = {self.Zbase} [default]'
         s += '\n)'
+       
         return s
     
     #===========================================================================

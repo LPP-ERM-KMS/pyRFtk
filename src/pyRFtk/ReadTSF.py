@@ -1,4 +1,4 @@
-__updated__ = "2026-04-24 02:09:50"
+__updated__ = "2026-05-13 21:39:43"
 
 import numpy as np
 import re
@@ -377,7 +377,9 @@ def ReadTSF(src, **kwargs):
             if nZbase == 1 and nZcs != 1:
                 err = []
     
-            
+    else: # this should be the case when no Zcs or gammas are present
+        nZbase = len(Zlist)
+                
         
     # if the data type is Z or Y we need to convert to S
                 
@@ -398,6 +400,7 @@ def ReadTSF(src, **kwargs):
                 
         elif Zbase is not None and (nZbase == 1 or nZbase == Ss.shape[1]):
             Ss = ConvertGeneral(TZbase if TZbase else 50., Ss, Zbase, 'P', 'V')
+            print(f'have converted the data from {Zbase} in the touchstone  to {TZbase}')
     
         elif Zbase is None: # No Zcs and Zbase is None:
             Ss = ConvertGeneral(TZbase if TZbase else 50., Ss, Zcs, 'P', 'V')
@@ -405,6 +408,7 @@ def ReadTSF(src, **kwargs):
         else:
             logit['ERROR'] and tLogger.error(f'len(Zcs)[{len(Zcs)}] != N[{N}]')
             logit['ERROR'] and tLogger.error(f'Zcs={Zcs}')
+            raise ValueError('in ReadTSF: please specify Zbase')
         
                 
     # set the portnames
@@ -441,6 +445,7 @@ def ReadTSF(src, **kwargs):
         debug and tLogger.debug(ident(f'set ports to {ports}'))
     
     debug and tLogger.debug(ident(f'< [CommonLib.ReadTSF]',-1))
+    
     return {        
         "ports"     : ports,
         "fs"        : fs,
