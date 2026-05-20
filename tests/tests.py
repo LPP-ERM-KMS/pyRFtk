@@ -8,7 +8,7 @@ Created on 12 Feb 2021
 
 @author: frederic
 """
-__updated__ = "2023-11-09 11:13:43"
+__updated__ = "2026-02-27 16:36:55"
 
 import numpy as np
 import matplotlib.pyplot as pl
@@ -20,12 +20,13 @@ sys.path.insert(0, '../src')
 from pyRFtk.findpath import findpath                                            # @UnresolvedImport
 from pyRFtk import rfBase, rfCircuit, rfTRL, rfGTL, rfRLC, rfArcObj             # @UnresolvedImport
 from pyRFtk.config import setLogLevel                                           # @UnresolvedImport
-from pyRFtk import printMA, printRI                                                      # @UnresolvedImport
+from pyRFtk import printMA, printRI                                             # @UnresolvedImport
 from pyRFtk import plotVSWs, strVSW                                             # @UnresolvedImport
+from pyRFtk import rfObject                                                     
 
 alltests = False
 tests = [
-    'connect_issue',
+#     'connect_issue',
 #     'rfRLC',
 #     'DEMO_KoM',
 #     'deembed',
@@ -37,6 +38,7 @@ tests = [
 #     'rfBase-basic',
 #     'plotVSWs',
 #     'rfGTL',
+    'rfObject',
 ]
 
 setLogLevel('DEBUG')
@@ -48,6 +50,15 @@ def testhdr(t):
         print('#'*100 +f'\n#\n# t e s t -- {t1}\n#\n')
     return testit
 
+#===============================================================================
+#
+# rfObject
+#
+if testhdr('rfObject'):
+    obj = rfObject([[0,1],[1,0]], ports = ['a','b'], xpos=[0,1], Zbase=20)
+    print(obj)
+    print(obj.getS(1.))
+    
 #===============================================================================
 #
 # connect_issue

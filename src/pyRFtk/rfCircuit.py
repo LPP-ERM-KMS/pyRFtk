@@ -1,4 +1,6 @@
-__updated__ = "2023-11-09 10:00:05"
+__updated__ = "2026-05-19 11:11:41"
+
+#FIXME: addblock of a np.array fails because of xpos issues (also __str__ fails)
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -289,6 +291,30 @@ class rfCircuit(rfBase):
             obj = None
             
         debug and logident(f'<')
+        
+        return obj
+    
+    #==============================================================================================
+    #
+    # o b j e c t
+    #
+    def object(self,path):
+        """object
+            
+            returns the object pointed to by path
+            
+            eg. rfCircuit_object = self.object('block1.block2. ... .blockN')
+            
+            is equivalent to
+            
+            rfCircuit_object = \
+               self.blocks['block1']['object'].blocks['block2']['object']. ... .blocks['blockN']['object']
+               
+            Note this is similar to findObj 
+        """
+        obj = self
+        for blk in path.split('.'):
+            obj = obj.blocks[blk]['object']
         
         return obj
     
@@ -692,8 +718,12 @@ class rfCircuit(rfBase):
         
         # update the self.xpos
         # self.xpos = []
-        for p, x in zip(oports, RFobj.xpos):
-            self.xpos.append(relpos + x)
+        if hasattr(RFobj,'xpos'):
+            for p, x in zip(oports, RFobj.xpos):
+                self.xpos.append(relpos + x)
+        else:
+            for p in oports:
+                self.xpos.append(relpos)
                 
         _debug_ and tLogger.debug(ident(
             f'< [circuit.addblock] (inserted a new block)', -1
