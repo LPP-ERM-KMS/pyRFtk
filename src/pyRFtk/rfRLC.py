@@ -1,4 +1,4 @@
-__updated__ = "2023-09-21 15:29:27"
+__updated__ = "2026-05-21 11:17:12"
 
 import numpy as np
 import copy
@@ -80,6 +80,13 @@ class rfRLC():
         self.S = np.array([[0,1],[1,0]], dtype=complex)
         self.xpos = kwargs.pop('xpos',[0., 0.])
         self.attrs = ['Rs', 'Ls', 'Cs', 'Rp', 'Lp', 'Cp']
+    
+    #===========================================================================
+    #
+    # c o n t e n t
+    #
+    def content(self):
+        return f"rfRLC(**{self.kwargs})"
     
     #===========================================================================
     #
@@ -192,6 +199,10 @@ class rfRLC():
             if f != 0:
                 jw = 2j * np.pi * f
                 zs = (self.Rs + jw * self.Ls + 1/jw/self.Cs)/Zbase
+                #fixme: this will explode as Rp is 0
+                #       but in fact this is not really a good case as the p side 
+                #       would be like a short and the s side the Rs Cs Ls branch
+                #       on a short ciruit
                 yp = (1/self.Rp + 1/jw/self.Lp + jw * self.Cp)*Zbase
                 
                 self.S = np.linalg.inv(

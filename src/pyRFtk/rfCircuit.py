@@ -1,4 +1,4 @@
-__updated__ = "2026-05-19 11:11:41"
+__updated__ = "2026-05-21 09:34:20"
 
 #FIXME: addblock of a np.array fails because of xpos issues (also __str__ fails)
 
@@ -317,6 +317,23 @@ class rfCircuit(rfBase):
             obj = obj.blocks[blk]['object']
         
         return obj
+    
+    #===========================================================================
+    #
+    # c o n t e n t
+    #
+    def content(self):
+        """content
+        
+            returns a dict with as keys the blocks in the circuit: the associated
+            values are dict's of the nested contents
+        """
+        cnt = {blk: self.object(blk).content() 
+                    if hasattr(self.object(blk),'content') 
+                    else type(self.object(blk))
+                    for blk in self.blocks
+        }
+        return cnt
     
     #===========================================================================
     #

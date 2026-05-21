@@ -1,4 +1,4 @@
-__updated__ = "2022-05-16 14:00:49"
+__updated__ = "2026-05-21 11:13:11"
 
 import numpy as np
 from scipy.integrate import odeint
@@ -256,6 +256,13 @@ class rfTRL():
         
         self.solved = {}
         
+    #===========================================================================
+    #
+    # c o n t e n t
+    #
+    def content(self):
+        return f"rfTRL(**{self.kwargs})"
+    
     #===========================================================================
     #
     # c o p y
