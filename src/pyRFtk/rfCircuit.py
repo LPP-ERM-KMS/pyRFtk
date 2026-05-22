@@ -1,4 +1,4 @@
-__updated__ = "2026-05-21 09:34:20"
+__updated__ = "2026-05-22 03:00:11"
 
 #FIXME: addblock of a np.array fails because of xpos issues (also __str__ fails)
 
@@ -327,6 +327,10 @@ class rfCircuit(rfBase):
         
             returns a dict with as keys the blocks in the circuit: the associated
             values are dict's of the nested contents
+            
+            FIXME: the parameters shown are the ones when the object was created
+                   (kwargs of the call), but these could have been modidied with
+                   a set call.
         """
         cnt = {blk: self.object(blk).content() 
                     if hasattr(self.object(blk),'content') 
