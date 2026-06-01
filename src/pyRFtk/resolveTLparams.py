@@ -1,4 +1,4 @@
-__updated__ = "2023-11-09 11:11:56"
+__updated__ = "2026-06-01 08:26:04"
 
 from inspect import signature
 
@@ -6,7 +6,11 @@ import numpy as np
 from scipy.interpolate import interp1d
 from scipy.constants import speed_of_light as c0, mu_0 as mu0, epsilon_0 as e0
 
-from .whoami import whoami
+if __name__ == '__main__':
+    # avoid relative imports when called directly
+    from whoami import whoami
+else:
+    from .whoami import whoami
 
 #===============================================================================
 
@@ -113,7 +117,7 @@ class TLresolver():
             return self.rTL(w,x) - self.rTLI(w,x)
         
         def _rTLO__qTLO_RsO_(w,x=0):                                         #21
-            return self.qTLO(w,x) * self.RsI(w,x)
+            return self.qTLO(w,x) * self.RsO(w,x)
         
         def _rTL__A_CTL_gTL_LTL_(w,x=0):
             wL = w * self.LTL(w,x)
@@ -516,7 +520,8 @@ if __name__ == '__main__':
 #         {'Z0TL':30, 'A': 3.1437675233744445e-05, 'tand': 1e-4},
 #         {'Z0TL':30, 'tand': 1e-4},
 #         {'Z0TL':30, 'OD':0.230, 'rho':2e-8},
-        {'OD': 223.0, 'ID': 140.0, 'epsr': 1.640, 'tand': 6.000E-5, 'rho': 0.},    
+        # {'OD': 223.0, 'ID': 140.0, 'epsr': 1.640, 'tand': 6.000E-5, 'rho': 0.},   
+        {'Z0TL':50, 'OD':0.230, 'rhoO': 4.432e-08, 'rhoI':0.} 
     ]
     
     for kwarg in kwargs[-1:]:

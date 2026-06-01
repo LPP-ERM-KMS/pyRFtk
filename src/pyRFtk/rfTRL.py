@@ -1,4 +1,4 @@
-__updated__ = "2026-05-21 11:13:11"
+__updated__ = "2026-05-28 03:12:40"
 
 import numpy as np
 from scipy.integrate import odeint
@@ -261,7 +261,14 @@ class rfTRL():
     # c o n t e n t
     #
     def content(self):
-        return f"rfTRL(**{self.kwargs})"
+        R = {}
+        for kw in self.kwargs:
+            try:
+                R[kw] = getattr(self, kw)
+            except:
+                # print(f'missing {kw}')
+                R[kw] = self.kwargs[kw]
+        return f"rfTRL(**{R})"
     
     #===========================================================================
     #

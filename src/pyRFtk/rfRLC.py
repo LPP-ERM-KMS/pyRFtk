@@ -1,4 +1,4 @@
-__updated__ = "2026-05-21 11:17:12"
+__updated__ = "2026-05-28 03:12:13"
 
 import numpy as np
 import copy
@@ -86,7 +86,13 @@ class rfRLC():
     # c o n t e n t
     #
     def content(self):
-        return f"rfRLC(**{self.kwargs})"
+        R = {}
+        for kw in self.kwargs:
+            try:
+                R[kw] = getattr(self, kw)
+            except:
+                R[kw] = self.kwargs[kw]
+        return f"rfRLC(**{R})"
     
     #===========================================================================
     #
