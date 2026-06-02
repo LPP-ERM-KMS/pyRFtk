@@ -1,4 +1,4 @@
-__updated__ = "2026-06-01 11:15:06"
+__updated__ = "2026-06-02 07:11:45"
 
 #FIXME: addblock of a np.array fails because of xpos issues (also __str__ fails)
 
@@ -762,14 +762,23 @@ class rfCircuit(rfBase):
 
         :param node: The node
         """
+        
+        _debug_ = logit['DEBUG'] 
+        _debug_ and tLogger.debug(
+            ident(f'> [rfCircuit.getpos]: node= {node}', 1)
+        )
+        
         relpos, obj = 0., self
 
         if '.' not in node and node not in self.ports:
-            # the node was connected and resolved: it no longer appears in ports/xpos
-            warnings.warn(
-                "this is a bug in pyRFtk where a node was connected, removing it "
-                "from the port list and the reference to its position was lost."
-            )
+            if _debug_:
+                # the node was connected and resolved: it no longer appears 
+                # in ports/xpos
+                warnings.warn(
+                    "this is a bug in pyRFtk where a node was connected, "
+                    "removing it from the port list and the reference to "
+                    "its position was lost."
+                )
             return relpos
 
         while '.' in node:
@@ -789,6 +798,8 @@ class rfCircuit(rfBase):
             kp =block['ports'].index(node)
         except:
             kp = obj.ports.index(node)
+            
+        _debug_ and tLogger.debug(ident(f'< [rfCircuit.getpos] ', -1))
             
         return relpos + obj.xpos[kp]
                 
