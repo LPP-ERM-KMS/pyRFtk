@@ -1,4 +1,4 @@
-__updated__ = "2026-05-22 03:00:11"
+__updated__ = "2026-06-01 11:15:06"
 
 #FIXME: addblock of a np.array fails because of xpos issues (also __str__ fails)
 
@@ -763,6 +763,15 @@ class rfCircuit(rfBase):
         :param node: The node
         """
         relpos, obj = 0., self
+
+        if '.' not in node and node not in self.ports:
+            # the node was connected and resolved: it no longer appears in ports/xpos
+            warnings.warn(
+                "this is a bug in pyRFtk where a node was connected, removing it "
+                "from the port list and the reference to its position was lost."
+            )
+            return relpos
+
         while '.' in node:
             try:
                 onode = node # belts and braces :)
