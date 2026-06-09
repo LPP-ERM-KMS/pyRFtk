@@ -1,4 +1,4 @@
-__updated__ = "2026-05-19 11:11:41"
+__updated__ = "2026-06-02 07:11:45"
 
 #FIXME: addblock of a np.array fails because of xpos issues (also __str__ fails)
 
@@ -317,6 +317,27 @@ class rfCircuit(rfBase):
             obj = obj.blocks[blk]['object']
         
         return obj
+    
+    #===========================================================================
+    #
+    # c o n t e n t
+    #
+    def content(self):
+        """content
+        
+            returns a dict with as keys the blocks in the circuit: the associated
+            values are dict's of the nested contents
+            
+            FIXME: the parameters shown are the ones when the object was created
+                   (kwargs of the call), but these could have been modidied with
+                   a set call.
+        """
+        cnt = {blk: self.object(blk).content() 
+                    if hasattr(self.object(blk),'content') 
+                    else type(self.object(blk))
+                    for blk in self.blocks
+        }
+        return cnt
     
     #===========================================================================
     #
@@ -741,7 +762,25 @@ class rfCircuit(rfBase):
 
         :param node: The node
         """
+        
+        _debug_ = logit['DEBUG'] 
+        _debug_ and tLogger.debug(
+            ident(f'> [rfCircuit.getpos]: node= {node}', 1)
+        )
+        
         relpos, obj = 0., self
+
+        if '.' not in node and node not in self.ports:
+            if _debug_:
+                # the node was connected and resolved: it no longer appears 
+                # in ports/xpos
+                warnings.warn(
+                    "this is a bug in pyRFtk where a node was connected, "
+                    "removing it from the port list and the reference to "
+                    "its position was lost."
+                )
+            return relpos
+
         while '.' in node:
             try:
                 onode = node # belts and braces :)
@@ -759,6 +798,8 @@ class rfCircuit(rfBase):
             kp =block['ports'].index(node)
         except:
             kp = obj.ports.index(node)
+            
+        _debug_ and tLogger.debug(ident(f'< [rfCircuit.getpos] ', -1))
             
         return relpos + obj.xpos[kp]
                 

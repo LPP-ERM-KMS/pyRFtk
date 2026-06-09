@@ -1,4 +1,4 @@
-__updated__ = "2026-05-20 14:05:43"
+__updated__ = "2026-05-21 11:12:45"
 
 #TODO: add the possibility to fill doing  rfObject(fs=[ ...], Ss=[ ... ])
 
@@ -213,6 +213,13 @@ class rfObject():
         
         self.f, self.S = None, None
                 
+    #===========================================================================
+    #
+    # c o n t e n t
+    #
+    def content(self):
+        return(f"rfObject(**{self.kwargs})")
+    
     #===========================================================================
     #
     # c o p y
