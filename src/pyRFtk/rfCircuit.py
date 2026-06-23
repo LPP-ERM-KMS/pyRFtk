@@ -107,7 +107,7 @@ class rfCircuit(rfBase):
         self.S = None # set in rfBase to None
         
         if sNp:
-            self.sNp = rfObject(touchtone=sNp)
+            self.sNp = rfObject(touchstone=sNp)
         
         _debug_ and logident('<')
     
