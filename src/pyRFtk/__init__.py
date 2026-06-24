@@ -1,6 +1,6 @@
-__updated__ = "2026-06-23 02:38:29"
+__updated__ = "2026-06-24 13:39:50"
 
-print('\n*** using local copy of pyRFtk !! ***\n')
+print('\n*** using local copy of pyRFtk ***\n')
 
 from .config import tLogger, setLogLevel, logit, ident, _newID, logident
 from .rfBase import rfBase
