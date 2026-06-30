@@ -1,4 +1,4 @@
-__updated__ = "2026-05-20 14:58:47"
+__updated__ = "2026-05-20 23:09:17"
 
 import numpy as np
 import re
@@ -6,13 +6,13 @@ import os
 from warnings import warn
 _warn_skips = (os.path.dirname(__file__),)
 
-from .getlines import getlines 
-from .config import tLogger, logit, ident
-from .config import fscale
+from .getlines import getlines                               # @UnresolvedImport
+from .config import tLogger, logit, ident                    # @UnresolvedImport
+from .config import fscale                                   # @UnresolvedImport
 
-from .ConvertGeneral import ConvertGeneral
-from .S_from_Z import S_from_Z
-from .S_from_Y import S_from_Y
+from .ConvertGeneral import ConvertGeneral                   # @UnresolvedImport
+from .S_from_Z import S_from_Z                               # @UnresolvedImport
+from .S_from_Y import S_from_Y                               # @UnresolvedImport
 
 #===============================================================================
 #
@@ -42,7 +42,7 @@ def ReadTSF(src, **kwargs):
     TZbase = kwargs.pop('Zbase', None)
     Tfunit = kwargs.get('funit', 'GHz')
     Tports = kwargs.get('ports', 'port-%03d')
-    Tcomments = kwargs.get('comments',[])
+    Tcomments = kwargs.get('comments',[]) # why would we need comments when reading a tsf ?
     
     if debug:
         tLogger.debug(ident(f'TZbase = {TZbase}'))

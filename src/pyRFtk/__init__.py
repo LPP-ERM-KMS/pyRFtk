@@ -1,4 +1,4 @@
-__updated__ = "2026-04-24 09:20:26"
+__updated__ = "2026-06-24 13:39:50"
 
 print('\n*** using local copy of pyRFtk ***\n')
 

@@ -19,7 +19,7 @@ from .S_from_VI import S_from_VI
 from .maxfun import maxfun
 from .ReadTSF import ReadTSF
 
-from .resolveTLparams import TLresolver
+from .resolveTLparams import TLresolver, __updated__ as resolveTLparams_updated
 
 from .whoami import whoami
 
@@ -319,7 +319,8 @@ class rfTRL():
     #
     def __str__(self, full=False):
         
-        s = f'{self.Id}: rfTRL at {id(self)} (version {__updated__}) \n'
+        s = f'{self.Id}: rfTRL at {id(self)} (version {__updated__}; '
+        s += f'resolveTLparams version {resolveTLparams_updated})\n'
         s += f'| Zbase: {self.Zbase} Ohm \n'
         s += f'| ports: {self.ports} \n'
         s += f'| length: {self.L:.3f}m; '
